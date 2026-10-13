@@ -19,8 +19,8 @@ build_apk:
   image: ghcr.io/cirruslabs/flutter:3.24.0
   timeout: 45 minutes
   rules:
-    # Every push to master, and "Run pipeline" by hand from the web.
-    - if: $CI_COMMIT_BRANCH == "master"
+    # Every push to main, and "Run pipeline" by hand from the web.
+    - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_PIPELINE_SOURCE == "web"
   variables:
     PUB_CACHE: $CI_PROJECT_DIR/.pub-cache
