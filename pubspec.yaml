@@ -47,8 +47,10 @@ dependencies:
   # Fonts
   google_fonts: ^6.2.1
 
-  # Utilities
-  intl: 0.20.3
+  # Utilities — pinned to 0.19.0 because 0.20.x requires Dart ^3.9.0 and
+  # Flutter 3.24.0 (the CI image) ships Dart 3.5.x. The app only uses
+  # Intl.shortCurrency / number formatting, which 0.19.0 has.
+  intl: ^0.19.0
 
   # HTTP calls (for future API integration)
   http: ^1.2.1
