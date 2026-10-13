@@ -1,0 +1,14 @@
+# Copy this to android/key.properties and fill it in. That file is ignored by
+# git -- the keystore and its passwords must never be committed.
+#
+# Make the keystore once with:
+#   keytool -genkey -v -keystore ~/duggu-release.jks \
+#     -keyalg RSA -keysize 2048 -validity 10000 -alias duggu
+#
+# Without android/key.properties the release build falls back to the debug
+# key, which the Play Store rejects.
+
+storePassword=
+keyPassword=
+keyAlias=duggu
+storeFile=/absolute/path/to/duggu-release.jks

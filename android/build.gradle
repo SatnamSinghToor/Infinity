@@ -1,0 +1,32 @@
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    // Gradle 9 removed jcenter(), but some older plugins (e.g. speech_to_text)
+    // still call it in their own build.gradle. Their artifacts live on Maven
+    // Central now, so jcenter() is reinstated as an alias to it. This keeps
+    // those plugins resolvable without editing files in the pub cache.
+    repositories.metaClass.jcenter = { -> mavenCentral() }
+
+    // Push notifications: an old dependency still requests the long-retired
+    // firebase-iid artifact, whose classes have since moved into
+    // firebase-messaging. Two copies of FirebaseInstanceIdReceiver fail the
+    // duplicate-class check, so nobody gets the old one.
+    configurations.all {
+        exclude group: 'com.google.firebase', module: 'firebase-iid'
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

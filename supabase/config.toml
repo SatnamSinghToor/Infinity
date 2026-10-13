@@ -1,0 +1,13 @@
+# The Supabase project this repo deploys to. `supabase link` and the
+# Deploy-edge-functions workflow read it; the project ref also appears in
+# lib/services/supabase_service.dart (that one the app ships with).
+project_id = "rtceqrzicxrxaajfrerl"
+
+[functions.generate-product-description]
+# The app always sends the signed-in user's token; the function checks it
+# again itself and answers with JSON either way.
+verify_jwt = true
+
+[functions.send-push]
+# Called by a Database Webhook with the x-push-secret header instead.
+verify_jwt = false

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Matches the Flutter splash background (see SplashScreen) so there
+         is no flash of another colour before the first Flutter frame. -->
+    <color name="launch_background_color">#FFFFFF</color>
+</resources>

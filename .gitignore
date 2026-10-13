@@ -1,0 +1,61 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Release signing -- the keystore and its passwords never go in git.
+android/key.properties
+*.jks
+*.keystore
+
+# Supabase CLI local state. `supabase/.env` is what `supabase secrets set
+# --env-file` reads: the Firebase service-account JSON and the AI provider key.
+# It sits next to committed SQL and a README that tells people to fill it in,
+# so ignoring it has to be the repo's job, not whoever's holding the terminal's.
+supabase/.env
+supabase/.env.*
+!supabase/.env.example
+# `supabase link` and `supabase db *` write the project's local state here.
+supabase/.temp/
+supabase/.branches/
+# Widget Preview related
+.widget_preview/
