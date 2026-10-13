@@ -402,7 +402,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                                   child: (imageUrl == null || imageUrl.isEmpty)
                                       ? Container(
                                           color: AppConstants.accentColor
-                                              .withValues(alpha: 0.3),
+                                              .withOpacity(0.3),
                                         )
                                       : ColoredBox(
                                           color: Colors.white,
@@ -412,7 +412,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                                             errorBuilder: (_, __, ___) =>
                                                 Container(
                                               color: AppConstants.accentColor
-                                                  .withValues(alpha: 0.3),
+                                                  .withOpacity(0.3),
                                             ),
                                           ),
                                         ),
@@ -567,7 +567,7 @@ class _StatTile extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: tint.withValues(alpha: 0.12),
+                  color: tint.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(icon, color: tint, size: 22),
@@ -694,7 +694,7 @@ class _WeekSalesCard extends StatelessWidget {
                                 color: i == 6
                                     ? AppConstants.primaryColor
                                     : AppConstants.primaryColor
-                                        .withValues(alpha: 0.35),
+                                        .withOpacity(0.35),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),

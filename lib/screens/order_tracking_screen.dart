@@ -96,7 +96,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.06),
+                      color: Colors.black.withOpacity(0.06),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -439,7 +439,7 @@ class _LiveTrackingMapState extends State<_LiveTrackingMap> {
                                   boxShadow: [
                                     BoxShadow(
                                       color: AppConstants.primaryColor
-                                          .withValues(alpha: 0.35),
+                                          .withOpacity(0.35),
                                       blurRadius: 10,
                                     ),
                                   ],
@@ -538,7 +538,7 @@ class _RiderCardState extends State<_RiderCard> {
               CircleAvatar(
                 radius: 22,
                 backgroundColor:
-                    AppConstants.primaryColor.withValues(alpha: 0.12),
+                    AppConstants.primaryColor.withOpacity(0.12),
                 child: const Icon(Iconsax.truck_fast,
                     color: AppConstants.primaryColor),
               ),

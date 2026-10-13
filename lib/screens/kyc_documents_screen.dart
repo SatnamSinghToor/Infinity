@@ -319,7 +319,7 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
         color: Colors.white,
         borderRadius: AppRadius.card,
         border: status == 'REJECTED'
-            ? Border.all(color: AppConstants.dangerColor.withValues(alpha: 0.4))
+            ? Border.all(color: AppConstants.dangerColor.withOpacity(0.4))
             : null,
       ),
       child: Row(
@@ -329,7 +329,7 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
+              color: color.withOpacity(0.1),
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             child: Icon(
@@ -380,7 +380,7 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.12),
+                    color: color.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(

@@ -338,14 +338,14 @@ class _DeliveryAddressSheetState extends State<_DeliveryAddressSheet> {
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
+            border: Border.all(color: Colors.black.withOpacity(0.08)),
           ),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(9),
                 decoration: BoxDecoration(
-                  color: AppConstants.primaryColor.withValues(alpha: 0.1),
+                  color: AppConstants.primaryColor.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
                 child: busy

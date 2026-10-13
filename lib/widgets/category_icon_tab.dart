@@ -51,7 +51,7 @@ class CategoryIconTab extends StatelessWidget {
                       : null,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
+                      color: Colors.black.withOpacity(0.08),
                       blurRadius: 8,
                       offset: const Offset(0, 3),
                     ),
@@ -62,7 +62,7 @@ class CategoryIconTab extends StatelessWidget {
                   size: 24,
                   color: isSelected
                       ? Colors.white
-                      : AppConstants.primaryColor.withValues(alpha: 0.85),
+                      : AppConstants.primaryColor.withOpacity(0.85),
                 ),
               ),
               const SizedBox(height: 6),

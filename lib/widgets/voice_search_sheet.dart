@@ -681,7 +681,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
           mainAxisSize: MainAxisSize.min,
           children: [
             if (index > 0)
-              Divider(height: 1, color: Colors.black.withValues(alpha: 0.08)),
+              Divider(height: 1, color: Colors.black.withOpacity(0.08)),
             _rowBody(index, item, image),
           ],
         ),
@@ -775,7 +775,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: AppConstants.primaryColor.withValues(alpha: 0.35),
+                color: AppConstants.primaryColor.withOpacity(0.35),
                 blurRadius: 14,
                 offset: const Offset(0, 6),
               ),
@@ -852,11 +852,11 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.85),
+        color: Colors.white.withOpacity(0.85),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: Colors.black.withOpacity(0.06),
             blurRadius: 14,
             offset: const Offset(0, 5),
           ),
@@ -977,7 +977,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: AppConstants.primaryColor
-                                .withValues(alpha: 0.16 * (1 - v)),
+                                .withOpacity(0.16 * (1 - v)),
                           ),
                         );
                       },
@@ -1020,7 +1020,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.10),
+                color: Colors.black.withOpacity(0.10),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               ),
@@ -1065,7 +1065,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
               margin: const EdgeInsets.symmetric(horizontal: 1.2),
               decoration: BoxDecoration(
                 color: AppConstants.primaryColor
-                    .withValues(alpha: 0.35 + 0.65 * level),
+                    .withOpacity(0.35 + 0.65 * level),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -1111,12 +1111,12 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
           color: color,
           border: border
               ? Border.all(
-                  color: Colors.black.withValues(alpha: 0.08), width: 1.5)
+                  color: Colors.black.withOpacity(0.08), width: 1.5)
               : null,
           boxShadow: border
               ? [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
+                    color: Colors.black.withOpacity(0.08),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -1158,8 +1158,8 @@ class _ListeningGlowPainter extends CustomPainter {
       final paint = Paint()
         ..shader = RadialGradient(
           colors: [
-            color.withValues(alpha: 0.42 + 0.25 * level.clamp(0.0, 1.0)),
-            color.withValues(alpha: 0),
+            color.withOpacity(0.42 + 0.25 * level.clamp(0.0, 1.0)),
+            color.withOpacity(0),
           ],
         ).createShader(Rect.fromCircle(center: center, radius: r));
       canvas.drawCircle(center, r, paint);

@@ -565,7 +565,7 @@ class _HomeScreenState extends State<HomeScreen> {
           fontSize: 12,
           height: 1.2,
           fontWeight: FontWeight.w500,
-          color: ink.withValues(alpha: _dark ? 0.85 : 0.7),
+          color: ink.withOpacity(_dark ? 0.85 : 0.7),
         ),
       ),
       const SizedBox(height: 2),
@@ -590,8 +590,8 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
                 color: _dark
-                    ? Colors.white.withValues(alpha: 0.18)
-                    : const Color(0xFF1E88E5).withValues(alpha: 0.14),
+                    ? Colors.white.withOpacity(0.18)
+                    : const Color(0xFF1E88E5).withOpacity(0.14),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -777,7 +777,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: _dark
                               ? Colors.white
                               : AppConstants.textPrimaryColor
-                                  .withValues(alpha: 0.85),
+                                  .withOpacity(0.85),
                         ),
                       ),
                     ),
@@ -911,8 +911,8 @@ class _HomeScreenState extends State<HomeScreen> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: _dark
-                  ? Colors.white.withValues(alpha: 0.16)
-                  : Colors.white.withValues(alpha: 0.55),
+                  ? Colors.white.withOpacity(0.16)
+                  : Colors.white.withOpacity(0.55),
             ),
             child: Icon(
               icon,
@@ -1091,7 +1091,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           boxShadow: [
                             BoxShadow(
                               color: AppConstants.primaryColor
-                                  .withValues(alpha: 0.2),
+                                  .withOpacity(0.2),
                               blurRadius: 16,
                               offset: const Offset(0, 8),
                             ),
@@ -1121,7 +1121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       boxShadow: [
                         BoxShadow(
                           color:
-                              AppConstants.primaryColor.withValues(alpha: 0.35),
+                              AppConstants.primaryColor.withOpacity(0.35),
                           blurRadius: 20,
                           offset: const Offset(0, 10),
                         ),
@@ -1142,7 +1142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 100,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Colors.white.withValues(alpha: 0.35),
+                                  color: Colors.white.withOpacity(0.35),
                                 ),
                               ),
                             ),
@@ -1171,7 +1171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         slide.subtitle,
                                         style: GoogleFonts.poppins(
                                           color: Colors.white
-                                              .withValues(alpha: 0.9),
+                                              .withOpacity(0.9),
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -1184,7 +1184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.22),
+                                    color: Colors.white.withOpacity(0.22),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: const Icon(
@@ -1220,7 +1220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                   color: isActive
                       ? AppConstants.primaryColor
-                      : AppConstants.primaryColor.withValues(alpha: 0.25),
+                      : AppConstants.primaryColor.withOpacity(0.25),
                   borderRadius: BorderRadius.circular(3),
                 ),
               );
@@ -1299,7 +1299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis),
               onDeleted: () => productProvider.setBrand(null),
-              backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
+              backgroundColor: AppConstants.primaryColor.withOpacity(0.1),
             ),
         ],
       ),

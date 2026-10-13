@@ -56,10 +56,10 @@ class BottomNavWidget extends StatelessWidget {
           color: tokens.card,
           borderRadius: AppRadius.card,
           border:
-              Border.all(color: Colors.black.withValues(alpha: 0.25), width: 1),
+              Border.all(color: Colors.black.withOpacity(0.25), width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
+              color: Colors.black.withOpacity(0.12),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),

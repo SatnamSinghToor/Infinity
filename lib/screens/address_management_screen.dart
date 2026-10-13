@@ -205,7 +205,7 @@ class _AddressManagementScreenState extends State<AddressManagementScreen> {
             : null,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -247,7 +247,7 @@ class _AddressManagementScreenState extends State<AddressManagementScreen> {
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: AppConstants.primaryColor.withValues(alpha: 0.12),
+                    color: AppConstants.primaryColor.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(

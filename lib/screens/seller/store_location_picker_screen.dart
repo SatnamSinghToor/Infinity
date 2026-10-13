@@ -374,7 +374,7 @@ class _StoreLocationPickerScreenState extends State<StoreLocationPickerScreen> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
+            color: Colors.black.withOpacity(0.12),
             blurRadius: 16,
             offset: const Offset(0, -4),
           ),

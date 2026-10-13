@@ -79,7 +79,7 @@ class _Stop extends StatelessWidget {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.12),
+                    color: color.withOpacity(0.12),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(icon, size: 17, color: color),

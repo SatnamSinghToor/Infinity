@@ -340,11 +340,11 @@ class _Row extends StatelessWidget {
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       selected: selected,
-      selectedTileColor: t.primary.withValues(alpha: 0.07),
+      selectedTileColor: t.primary.withOpacity(0.07),
       leading: CircleAvatar(
         radius: 18,
         backgroundColor:
-            selected ? t.primary : t.primary.withValues(alpha: 0.1),
+            selected ? t.primary : t.primary.withOpacity(0.1),
         child: Text(
           title.isEmpty ? '?' : title[0].toUpperCase(),
           style: TextStyle(

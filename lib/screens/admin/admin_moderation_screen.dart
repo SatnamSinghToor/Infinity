@@ -220,7 +220,7 @@ class _QueueTile extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: AppConstants.primaryColor.withValues(alpha: 0.12),
+            color: AppConstants.primaryColor.withOpacity(0.12),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(icon, color: AppConstants.primaryColor),

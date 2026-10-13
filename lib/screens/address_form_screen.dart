@@ -226,7 +226,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: AppConstants.successColor.withValues(alpha: 0.1),
+                    color: AppConstants.successColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
@@ -280,7 +280,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                             maxLines: 1, overflow: TextOverflow.ellipsis),
                         selected: _label == label,
                         selectedColor:
-                            AppConstants.primaryColor.withValues(alpha: 0.15),
+                            AppConstants.primaryColor.withOpacity(0.15),
                         onSelected: (_) => setState(() => _label = label),
                       ),
                   ],

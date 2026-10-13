@@ -552,10 +552,10 @@ class _DeliveryOrdersScreenState extends State<DeliveryOrdersScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
-                color: AppConstants.primaryColor.withValues(alpha: 0.08),
+                color: AppConstants.primaryColor.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                  color: AppConstants.primaryColor.withValues(alpha: 0.45),
+                  color: AppConstants.primaryColor.withOpacity(0.45),
                 ),
               ),
               child: Row(

@@ -64,7 +64,7 @@ class PartnerProfileHeader extends StatelessWidget {
             height: 68,
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              color: tokens.primary.withValues(alpha: 0.12),
+              color: tokens.primary.withOpacity(0.12),
               shape: BoxShape.circle,
             ),
             child: url != null && url.isNotEmpty
@@ -184,7 +184,7 @@ class PartnerRow extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.12),
+          color: color.withOpacity(0.12),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(icon, color: color, size: 20),

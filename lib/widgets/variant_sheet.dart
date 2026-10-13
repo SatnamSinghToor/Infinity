@@ -310,7 +310,7 @@ class _VariantRow extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: soldOut
-                          ? tokens.primary.withValues(alpha: 0.35)
+                          ? tokens.primary.withOpacity(0.35)
                           : tokens.primary,
                       width: 1.5,
                     ),
@@ -319,7 +319,7 @@ class _VariantRow extends StatelessWidget {
                     Iconsax.add_copy,
                     size: 22,
                     color: soldOut
-                        ? tokens.primary.withValues(alpha: 0.35)
+                        ? tokens.primary.withOpacity(0.35)
                         : tokens.primary,
                   ),
                 ),

@@ -330,7 +330,7 @@ class _StoreCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.16),
+              color: Colors.black.withOpacity(0.16),
               blurRadius: 12,
               offset: const Offset(0, 6),
             ),
@@ -403,7 +403,7 @@ class _StoreCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
                         fontSize: 11.5,
-                        color: Colors.white.withValues(alpha: 0.65),
+                        color: Colors.white.withOpacity(0.65),
                       ),
                     ),
                 ],
@@ -444,7 +444,7 @@ class _StoreCard extends StatelessWidget {
                       color: (isOpen
                               ? AppConstants.successColor
                               : AppConstants.dangerColor)
-                          .withValues(alpha: 0.25),
+                          .withOpacity(0.25),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -512,7 +512,7 @@ class _StoreCard extends StatelessWidget {
             ),
           ),
         ),
-        ColoredBox(color: Colors.black.withValues(alpha: 0.12)),
+        ColoredBox(color: Colors.black.withOpacity(0.12)),
         AppNetworkImage(
           url,
           fit: BoxFit.contain,

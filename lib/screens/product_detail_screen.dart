@@ -765,7 +765,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             product.name.isNotEmpty ? product.name[0] : '?',
             style: TextStyle(
               fontSize: 80,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: Colors.white.withOpacity(0.5),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -774,7 +774,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             product.category,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: Colors.white.withOpacity(0.7),
             ),
           ),
         ],
@@ -1070,7 +1070,7 @@ class _BuyButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppConstants.primaryColor.withValues(alpha: 0.35),
+              color: AppConstants.primaryColor.withOpacity(0.35),
               blurRadius: 14,
               offset: const Offset(0, 6),
             ),

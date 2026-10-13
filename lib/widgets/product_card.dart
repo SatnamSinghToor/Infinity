@@ -216,7 +216,7 @@ class _ProductCardState extends State<ProductCard> {
           style: GoogleFonts.poppins(
             fontSize: dense ? 26 : 42,
             fontWeight: FontWeight.w700,
-            color: Colors.white.withValues(alpha: 0.6),
+            color: Colors.white.withOpacity(0.6),
           ),
         ),
       ),
@@ -273,7 +273,7 @@ class _ProductCardState extends State<ProductCard> {
         vertical: dense ? 3 : 3.5,
       ),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.94),
+        color: Colors.white.withOpacity(0.94),
         borderRadius: BorderRadius.circular(7),
         boxShadow: const [
           BoxShadow(

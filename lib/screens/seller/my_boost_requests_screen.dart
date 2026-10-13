@@ -128,7 +128,7 @@ class _MyBoostRequestsScreenState extends State<MyBoostRequestsScreen> {
                                 decoration: BoxDecoration(
                                   color: _statusColor(
                                     status,
-                                  ).withValues(alpha: 0.15),
+                                  ).withOpacity(0.15),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(

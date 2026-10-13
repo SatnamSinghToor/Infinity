@@ -262,7 +262,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppConstants.primaryColor.withValues(alpha: 0.30),
+              color: AppConstants.primaryColor.withOpacity(0.30),
               blurRadius: 14,
               offset: const Offset(0, 6),
             ),

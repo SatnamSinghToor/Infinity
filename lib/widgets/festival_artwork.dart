@@ -63,7 +63,7 @@ class PoojaThaliCard extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF8A5A1C).withValues(alpha: 0.28),
+                    color: const Color(0xFF8A5A1C).withOpacity(0.28),
                     blurRadius: 12,
                     offset: const Offset(0, 5),
                   ),
@@ -314,7 +314,7 @@ class _FeastTile extends StatelessWidget {
                           size: 34,
                         )
                       : Container(
-                          color: Colors.white.withValues(alpha: 0.92),
+                          color: Colors.white.withOpacity(0.92),
                           padding: const EdgeInsets.all(6),
                           child: AppNetworkImage(
                             imageUrl!,

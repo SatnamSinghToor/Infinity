@@ -140,7 +140,7 @@ class _AddressRow extends StatelessWidget {
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color:
-                selected ? tokens.primary.withValues(alpha: 0.06) : tokens.card,
+                selected ? tokens.primary.withOpacity(0.06) : tokens.card,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: selected ? tokens.primary : tokens.border,
@@ -193,7 +193,7 @@ class _AddressRow extends StatelessWidget {
                               vertical: 1,
                             ),
                             decoration: BoxDecoration(
-                              color: tokens.primary.withValues(alpha: 0.12),
+                              color: tokens.primary.withOpacity(0.12),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(

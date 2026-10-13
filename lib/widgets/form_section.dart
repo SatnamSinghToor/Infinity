@@ -50,7 +50,7 @@ class FormSection extends StatelessWidget {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: t.primary.withValues(alpha: 0.1),
+                  color: t.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(AppRadius.md - 2),
                 ),
                 child: Icon(icon, size: 18, color: t.primary),

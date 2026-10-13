@@ -496,7 +496,7 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color.withOpacity(0.12),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -620,10 +620,10 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppConstants.primaryColor.withValues(alpha: 0.06),
+        color: AppConstants.primaryColor.withOpacity(0.06),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: AppConstants.primaryColor.withValues(alpha: 0.25),
+          color: AppConstants.primaryColor.withOpacity(0.25),
         ),
       ),
       child: Column(
@@ -665,7 +665,7 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: Colors.black.withOpacity(0.06),
               blurRadius: 12,
               offset: const Offset(0, -2),
             ),
@@ -726,7 +726,7 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
 
   Widget _placeholder(String name) {
     return Container(
-      color: AppConstants.accentColor.withValues(alpha: 0.3),
+      color: AppConstants.accentColor.withOpacity(0.3),
       alignment: Alignment.center,
       child: Text(
         name.isNotEmpty ? name[0].toUpperCase() : '?',

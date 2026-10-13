@@ -86,7 +86,7 @@ class _StoreHeader extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: const Color(0xFFF2F2F2),
                     border:
-                        Border.all(color: Colors.black.withValues(alpha: 0.06)),
+                        Border.all(color: Colors.black.withOpacity(0.06)),
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: (logo != null && logo.isNotEmpty)
@@ -205,7 +205,7 @@ class _StoreHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color.withOpacity(0.12),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

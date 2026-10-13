@@ -106,7 +106,7 @@ ThemeData buildAppTheme() {
       filled: true,
       fillColor: AppConstants.cardColor,
       hintStyle: GoogleFonts.poppins(
-        color: AppConstants.textSecondaryColor.withValues(alpha: 0.78),
+        color: AppConstants.textSecondaryColor.withOpacity(0.78),
         fontSize: 13.5,
       ),
       labelStyle: GoogleFonts.poppins(
@@ -152,7 +152,7 @@ ButtonStyle _primaryButton() => ElevatedButton.styleFrom(
       backgroundColor: AppConstants.primaryColor,
       foregroundColor: Colors.white,
       disabledBackgroundColor:
-          AppConstants.primaryColor.withValues(alpha: 0.35),
+          AppConstants.primaryColor.withOpacity(0.35),
       disabledForegroundColor: Colors.white,
       elevation: 0,
       minimumSize: const Size(64, AppControl.md),

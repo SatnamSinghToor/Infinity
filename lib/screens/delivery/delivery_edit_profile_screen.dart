@@ -206,10 +206,10 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
               height: size,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                color: tokens.primary.withValues(alpha: 0.12),
+                color: tokens.primary.withOpacity(0.12),
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: tokens.primary.withValues(alpha: 0.35),
+                  color: tokens.primary.withOpacity(0.35),
                   width: size > 80 ? 4 : 2,
                 ),
               ),
@@ -330,7 +330,7 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
               ),
               selected: _vehicle == v,
               showCheckmark: false,
-              selectedColor: tokens.primary.withValues(alpha: 0.15),
+              selectedColor: tokens.primary.withOpacity(0.15),
               onSelected: (_) => setState(() => _vehicle = v),
             ),
         ],

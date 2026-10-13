@@ -153,7 +153,7 @@ class _CategoryListingScreenState extends State<CategoryListingScreen> {
                 padding: const EdgeInsets.fromLTRB(6, 10, 6, 10),
                 decoration: BoxDecoration(
                   color: selected
-                      ? AppConstants.primaryColor.withValues(alpha: 0.07)
+                      ? AppConstants.primaryColor.withOpacity(0.07)
                       : Colors.transparent,
                   border: Border(
                     left: BorderSide(

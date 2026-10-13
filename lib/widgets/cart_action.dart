@@ -181,7 +181,7 @@ class CartAction extends StatelessWidget {
       boxShadow: bagButton
           ? [
               BoxShadow(
-                color: AppConstants.accentColor.withValues(alpha: 0.45),
+                color: AppConstants.accentColor.withOpacity(0.45),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -213,7 +213,7 @@ class CartAction extends StatelessWidget {
             border: Border.all(
               color: enabled
                   ? AppConstants.primaryColor
-                  : AppConstants.primaryColor.withValues(alpha: 0.35),
+                  : AppConstants.primaryColor.withOpacity(0.35),
               width: 1.5,
             ),
             boxShadow: const [
@@ -253,7 +253,7 @@ class CartAction extends StatelessWidget {
                   size: _large ? 22 : 20,
                   color: enabled
                       ? AppConstants.primaryColor
-                      : AppConstants.primaryColor.withValues(alpha: 0.35),
+                      : AppConstants.primaryColor.withOpacity(0.35),
                 ),
         ),
       );
@@ -266,7 +266,7 @@ class CartAction extends StatelessWidget {
         width: buttonWidth,
         decoration: !enabled
             ? BoxDecoration(
-                color: _fill.withValues(alpha: 0.25),
+                color: _fill.withOpacity(0.25),
                 borderRadius:
                     BorderRadius.circular(_large ? 14 : _borderRadius),
               )

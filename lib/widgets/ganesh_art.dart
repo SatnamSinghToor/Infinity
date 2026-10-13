@@ -88,7 +88,7 @@ class _GaneshPainter extends CustomPainter {
     canvas.scale(0.78);
     canvas.drawPath(
       outer,
-      Paint()..color = _earDeep.withValues(alpha: 0.45),
+      Paint()..color = _earDeep.withOpacity(0.45),
     );
     canvas.restore();
     canvas.restore();
@@ -130,7 +130,7 @@ class _GaneshPainter extends CustomPainter {
       dot,
       16,
       Paint()
-        ..color = _gold.withValues(alpha: 0.18 + 0.22 * glow)
+        ..color = _gold.withOpacity(0.18 + 0.22 * glow)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8),
     );
     canvas.drawCircle(dot, 8, Paint()..color = _gold);

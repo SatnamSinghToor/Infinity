@@ -469,7 +469,7 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
 
   Widget _productPlaceholder(String name) {
     return Container(
-      color: AppConstants.accentColor.withValues(alpha: 0.3),
+      color: AppConstants.accentColor.withOpacity(0.3),
       alignment: Alignment.center,
       child: Text(
         name.isNotEmpty ? name[0].toUpperCase() : '?',
@@ -489,7 +489,7 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
       child: ChoiceChip(
         label: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
         selected: isSelected,
-        selectedColor: AppConstants.primaryColor.withValues(alpha: 0.15),
+        selectedColor: AppConstants.primaryColor.withOpacity(0.15),
         labelStyle: TextStyle(
           color: isSelected
               ? AppConstants.primaryColor

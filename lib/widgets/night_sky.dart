@@ -141,14 +141,14 @@ class NightSkyPainter extends CustomPainter {
           Paint()
             ..shader = RadialGradient(
               colors: [
-                tint.withValues(alpha: 0.22 * level),
-                tint.withValues(alpha: 0),
+                tint.withOpacity(0.22 * level),
+                tint.withOpacity(0),
               ],
             ).createShader(halo),
         );
       }
       canvas.drawCircle(
-          at, radius, Paint()..color = tint.withValues(alpha: level));
+          at, radius, Paint()..color = tint.withOpacity(level));
     }
   }
 
@@ -198,8 +198,8 @@ class NightSkyPainter extends CustomPainter {
           Paint()
             ..shader = RadialGradient(
               colors: [
-                colour.withValues(alpha: alpha * (0.7 + 0.5 * near)),
-                colour.withValues(alpha: 0),
+                colour.withOpacity(alpha * (0.7 + 0.5 * near)),
+                colour.withOpacity(0),
               ],
             ).createShader(rect),
         );
@@ -220,9 +220,9 @@ class NightSkyPainter extends CustomPainter {
       Paint()
         ..shader = RadialGradient(
           colors: [
-            _moonLight.withValues(alpha: 0.20 + 0.06 * breath),
-            _moonLight.withValues(alpha: 0.06),
-            _moonLight.withValues(alpha: 0),
+            _moonLight.withOpacity(0.20 + 0.06 * breath),
+            _moonLight.withOpacity(0.06),
+            _moonLight.withOpacity(0),
           ],
           stops: const [0, 0.35, 1],
         ).createShader(halo),
@@ -245,12 +245,12 @@ class NightSkyPainter extends CustomPainter {
     canvas.save();
     canvas.clipPath(Path()..addOval(disc));
     final mark = Paint()
-      ..color = const Color(0xFFB9A874).withValues(alpha: 0.38);
+      ..color = const Color(0xFFB9A874).withOpacity(0.38);
     canvas.drawCircle(c + const Offset(-3.5, -2.5), 4.6, mark);
     canvas.drawCircle(c + const Offset(3.8, 1.5), 3.6, mark);
     canvas.drawCircle(c + const Offset(-1.5, 6.5), 2.3, mark);
     final crater = Paint()
-      ..color = const Color(0xFFA89660).withValues(alpha: 0.32);
+      ..color = const Color(0xFFA89660).withOpacity(0.32);
     canvas.drawCircle(c + const Offset(5.5, -5), 1.6, crater);
     canvas.drawCircle(c + const Offset(-7, 3.5), 1.4, crater);
     canvas.drawCircle(c + const Offset(0.5, -8), 1.1, crater);
@@ -258,7 +258,7 @@ class NightSkyPainter extends CustomPainter {
     canvas.drawCircle(
       c + const Offset(7, 6),
       r,
-      Paint()..color = const Color(0xFF151B2B).withValues(alpha: 0.22),
+      Paint()..color = const Color(0xFF151B2B).withOpacity(0.22),
     );
     canvas.restore();
   }
@@ -293,24 +293,24 @@ class NightSkyPainter extends CustomPainter {
           begin: Alignment(dir < 0 ? 1 : -1, -1),
           end: Alignment(dir < 0 ? -1 : 1, 1),
           colors: [
-            Colors.white.withValues(alpha: 0),
-            const Color(0xFFEAF1FF).withValues(alpha: 0.9 * fade),
+            Colors.white.withOpacity(0),
+            const Color(0xFFEAF1FF).withOpacity(0.9 * fade),
           ],
         ).createShader(Rect.fromPoints(tail, head).inflate(1)),
     );
     canvas.drawCircle(
       head,
       1.1,
-      Paint()..color = Colors.white.withValues(alpha: fade),
+      Paint()..color = Colors.white.withOpacity(fade),
     );
   }
 
   /// Rooftops along the bottom, a few windows lit.
   void _skyline(Canvas canvas, double w, double h) {
     final building = Paint()
-      ..color = const Color(0xFF0F1420).withValues(alpha: 0.55);
+      ..color = const Color(0xFF0F1420).withOpacity(0.55);
     final window = Paint()
-      ..color = const Color(0xFFFFD66B).withValues(alpha: 0.55);
+      ..color = const Color(0xFFFFD66B).withOpacity(0.55);
     final sky = math.Random(3);
     var x = w * 0.42;
     while (x < w) {

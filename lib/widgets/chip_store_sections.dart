@@ -520,7 +520,7 @@ class _StoreHeroState extends State<_StoreHero>
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       fontSize: 13.5,
-                      color: theme.accent.withValues(alpha: 0.85),
+                      color: theme.accent.withOpacity(0.85),
                     ),
                   ),
                 ],
@@ -576,7 +576,7 @@ class _FeaturedCards extends StatelessWidget {
                                 image: CachedNetworkImageProvider(full),
                                 fit: BoxFit.cover,
                                 colorFilter: ColorFilter.mode(
-                                  Colors.white.withValues(alpha: 0.35),
+                                  Colors.white.withOpacity(0.35),
                                   BlendMode.lighten,
                                 ),
                               ),
@@ -584,7 +584,7 @@ class _FeaturedCards extends StatelessWidget {
                         // A hairline in the page's own colour: the cards
                         // should sit on the tint, not be framed by it.
                         border:
-                            Border.all(color: accent.withValues(alpha: 0.45)),
+                            Border.all(color: accent.withOpacity(0.45)),
                       ),
                       child: Stack(
                         fit: StackFit.expand,
@@ -713,7 +713,7 @@ class _DealCards extends StatelessWidget {
                   image: CachedNetworkImageProvider(full),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                    Colors.white.withValues(alpha: 0.35),
+                    Colors.white.withOpacity(0.35),
                     BlendMode.lighten,
                   ),
                 ),
@@ -769,7 +769,7 @@ class _DealCards extends StatelessWidget {
                   : photo == null
                       ? Icon(
                           Iconsax.category,
-                          color: theme.accent.withValues(alpha: 0.5),
+                          color: theme.accent.withOpacity(0.5),
                           size: 40,
                         )
                       : Padding(

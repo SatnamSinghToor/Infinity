@@ -228,7 +228,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                     style: TextStyle(
                       fontSize: 12,
                       color: mine
-                          ? Colors.white.withValues(alpha: 0.85)
+                          ? Colors.white.withOpacity(0.85)
                           : tokens.textSecondary,
                     ),
                   ),
@@ -237,7 +237,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                     Icon(
                       read ? Icons.done_all : Icons.done,
                       size: 16,
-                      color: Colors.white.withValues(alpha: read ? 1 : 0.8),
+                      color: Colors.white.withOpacity(read ? 1 : 0.8),
                     ),
                   ],
                 ],
@@ -316,7 +316,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                       decoration: InputDecoration(
                         hintText: l10n.supportChatHint,
                         filled: true,
-                        fillColor: tokens.border.withValues(alpha: 0.6),
+                        fillColor: tokens.border.withOpacity(0.6),
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 14,

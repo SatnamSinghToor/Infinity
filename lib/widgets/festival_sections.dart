@@ -112,7 +112,7 @@ class FestivalSections extends StatelessWidget {
                         fontSize: 14,
                         letterSpacing: 5,
                         fontWeight: FontWeight.w600,
-                        color: accent.withValues(alpha: 0.75),
+                        color: accent.withOpacity(0.75),
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -314,7 +314,7 @@ class PictureCard extends StatelessWidget {
     }
 
     final deep =
-        Color.lerp(Colors.black, accent, 0.35)!.withValues(alpha: 0.92);
+        Color.lerp(Colors.black, accent, 0.35)!.withOpacity(0.92);
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
@@ -337,8 +337,8 @@ class PictureCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: card.onTap,
-          splashColor: Colors.white.withValues(alpha: 0.24),
-          highlightColor: Colors.white.withValues(alpha: 0.10),
+          splashColor: Colors.white.withOpacity(0.24),
+          highlightColor: Colors.white.withOpacity(0.10),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -363,8 +363,8 @@ class PictureCard extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withValues(alpha: 0),
-                        Colors.black.withValues(alpha: 0.55),
+                        Colors.black.withOpacity(0),
+                        Colors.black.withOpacity(0.55),
                         deep,
                       ],
                       stops: const [0.0, 0.55, 1.0],
@@ -404,7 +404,7 @@ class PictureCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                           fontSize: 12.5,
-                          color: Colors.white.withValues(alpha: 0.92),
+                          color: Colors.white.withOpacity(0.92),
                         ),
                       ),
                     ],
@@ -416,7 +416,7 @@ class PictureCard extends StatelessWidget {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.22),
+                          color: Colors.white.withOpacity(0.22),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Row(
@@ -447,7 +447,7 @@ class PictureCard extends StatelessWidget {
                         height: 36,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white.withValues(alpha: 0.3),
+                          color: Colors.white.withOpacity(0.3),
                         ),
                         child: const Icon(
                           Iconsax.arrow_right_3_copy,
@@ -624,7 +624,7 @@ class _EmptyFestival extends StatelessWidget {
       child: Column(
         children: [
           Icon(Iconsax.magic_star,
-              size: 44, color: accent.withValues(alpha: 0.7)),
+              size: 44, color: accent.withOpacity(0.7)),
           const SizedBox(height: 14),
           Text(
             name == null

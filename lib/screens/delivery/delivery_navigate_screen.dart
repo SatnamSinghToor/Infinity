@@ -216,8 +216,8 @@ class _DeliveryNavigateScreenState extends State<DeliveryNavigateScreen> {
                           [ll.LatLng(me.latitude, me.longitude), dest],
                       strokeWidth: _route == null ? 3 : 5,
                       color: _route == null
-                          ? t.primary.withValues(alpha: 0.45)
-                          : t.primary.withValues(alpha: 0.9),
+                          ? t.primary.withOpacity(0.45)
+                          : t.primary.withOpacity(0.9),
                     ),
                   ],
                 ),

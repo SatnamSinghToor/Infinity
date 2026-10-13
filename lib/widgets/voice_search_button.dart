@@ -169,7 +169,7 @@ class _WavePainter extends CustomPainter {
       path,
       Paint()
         ..color =
-            AppConstants.primaryColor.withValues(alpha: strength.clamp(0, 1)),
+            AppConstants.primaryColor.withOpacity(strength.clamp(0, 1)),
     );
   }
 

@@ -530,7 +530,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       label: Text(term,
                           maxLines: 1, overflow: TextOverflow.ellipsis),
                       backgroundColor:
-                          AppConstants.primaryColor.withValues(alpha: 0.08),
+                          AppConstants.primaryColor.withOpacity(0.08),
                       labelStyle:
                           const TextStyle(color: AppConstants.primaryColor),
                       onPressed: () => _setQuery(term),

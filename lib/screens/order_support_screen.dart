@@ -203,7 +203,7 @@ class _OrderSupportScreenState extends State<OrderSupportScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: _statusColor(status).withValues(alpha: 0.15),
+                  color: _statusColor(status).withOpacity(0.15),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(

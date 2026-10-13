@@ -305,7 +305,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       return Container(
         padding: const EdgeInsets.fromLTRB(14, 8, 6, 8),
         decoration: BoxDecoration(
-          color: AppConstants.primaryColor.withValues(alpha: 0.06),
+          color: AppConstants.primaryColor.withOpacity(0.06),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -1165,7 +1165,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         maxLines: 1, overflow: TextOverflow.ellipsis),
                     selected: !_useCompanyBrand,
                     selectedColor:
-                        AppConstants.primaryColor.withValues(alpha: 0.15),
+                        AppConstants.primaryColor.withOpacity(0.15),
                     onSelected: (_) =>
                         safeSetState(() => _useCompanyBrand = false),
                   ),
@@ -1174,7 +1174,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         maxLines: 1, overflow: TextOverflow.ellipsis),
                     selected: _useCompanyBrand,
                     selectedColor:
-                        AppConstants.primaryColor.withValues(alpha: 0.15),
+                        AppConstants.primaryColor.withOpacity(0.15),
                     onSelected: (_) =>
                         safeSetState(() => _useCompanyBrand = true),
                   ),

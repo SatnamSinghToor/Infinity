@@ -208,7 +208,7 @@ class _SplashScreenState extends State<SplashScreen>
               value: value,
               minHeight: 5,
               backgroundColor:
-                  AppConstants.primaryColor.withValues(alpha: 0.18),
+                  AppConstants.primaryColor.withOpacity(0.18),
               valueColor: const AlwaysStoppedAnimation(
                 AppConstants.primaryColor,
               ),

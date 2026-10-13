@@ -576,7 +576,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                                         decoration: BoxDecoration(
                                           color: _statusColor(
                                             status,
-                                          ).withValues(alpha: 0.15),
+                                          ).withOpacity(0.15),
                                           borderRadius:
                                               BorderRadius.circular(6),
                                         ),

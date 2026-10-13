@@ -304,7 +304,7 @@ class _StoreEditorCard extends StatelessWidget {
                   Text(
                     l10n.adminDashEditorBody,
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.85),
+                      color: Colors.white.withOpacity(0.85),
                       fontSize: 12.5,
                       height: 1.35,
                     ),
@@ -316,7 +316,7 @@ class _StoreEditorCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: Colors.white.withOpacity(0.2),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Iconsax.edit, color: Colors.white, size: 24),

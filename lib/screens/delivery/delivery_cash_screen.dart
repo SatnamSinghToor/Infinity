@@ -167,7 +167,7 @@ class _DeliveryCashScreenState extends State<DeliveryCashScreen> {
                         Container(
                           padding: const EdgeInsets.all(9),
                           decoration: BoxDecoration(
-                            color: tokens.success.withValues(alpha: 0.12),
+                            color: tokens.success.withOpacity(0.12),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(

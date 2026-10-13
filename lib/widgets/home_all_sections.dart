@@ -275,7 +275,7 @@ class _CollageCard extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color:
-                                const Color(0xFFEEF1F8).withValues(alpha: 0.95),
+                                const Color(0xFFEEF1F8).withOpacity(0.95),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(

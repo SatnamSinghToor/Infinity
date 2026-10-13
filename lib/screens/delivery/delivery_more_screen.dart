@@ -183,7 +183,7 @@ class _ProfileCard extends StatelessWidget {
             height: 74,
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              color: tokens.primary.withValues(alpha: 0.12),
+              color: tokens.primary.withOpacity(0.12),
               shape: BoxShape.circle,
             ),
             child: url != null && url.isNotEmpty

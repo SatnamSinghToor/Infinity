@@ -456,7 +456,7 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppConstants.successColor.withValues(alpha: 0.12),
+                      color: AppConstants.successColor.withOpacity(0.12),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -525,7 +525,7 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
                 height: 52,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  color: AppConstants.primaryColor.withValues(alpha: 0.12),
+                  color: AppConstants.primaryColor.withOpacity(0.12),
                   shape: BoxShape.circle,
                 ),
                 child: url != null && url.isNotEmpty
@@ -677,7 +677,7 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
                         ),
                         decoration: BoxDecoration(
                           color:
-                              AppConstants.primaryColor.withValues(alpha: 0.12),
+                              AppConstants.primaryColor.withOpacity(0.12),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -1360,7 +1360,7 @@ class _EarningsChart extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
-                    color: AppConstants.primaryColor.withValues(alpha: 0.5),
+                    color: AppConstants.primaryColor.withOpacity(0.5),
                   ),
                 ),
                 child: DropdownButtonHideUnderline(
@@ -1474,8 +1474,8 @@ class _LinePainter extends CustomPainter {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            color.withValues(alpha: 0.28),
-            color.withValues(alpha: 0.02)
+            color.withOpacity(0.28),
+            color.withOpacity(0.02)
           ],
         ).createShader(Rect.fromLTWH(left, 0, width, size.height)),
     );
@@ -1581,7 +1581,7 @@ class _PerformanceCard extends StatelessWidget {
                   value: value,
                   minHeight: 9,
                   backgroundColor:
-                      AppConstants.primaryColor.withValues(alpha: 0.12),
+                      AppConstants.primaryColor.withOpacity(0.12),
                   color: AppConstants.primaryColor,
                 ),
               ),

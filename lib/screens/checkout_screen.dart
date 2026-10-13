@@ -640,11 +640,11 @@ class OrderConfirmationScreen extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppConstants.dangerColor.withValues(alpha: 0.08),
+                        color: AppConstants.dangerColor.withOpacity(0.08),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color:
-                              AppConstants.dangerColor.withValues(alpha: 0.35),
+                              AppConstants.dangerColor.withOpacity(0.35),
                         ),
                       ),
                       child: Text(

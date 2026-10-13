@@ -265,7 +265,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
           indicatorWeight: 3,
           labelColor: AppConstants.textPrimaryColor,
           unselectedLabelColor:
-              AppConstants.textPrimaryColor.withValues(alpha: 0.55),
+              AppConstants.textPrimaryColor.withOpacity(0.55),
           labelStyle: GoogleFonts.poppins(
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -530,7 +530,7 @@ class _NotificationTile extends StatelessWidget {
     return Material(
       color: unread
           ? Color.alphaBlend(
-              AppConstants.primaryColor.withValues(alpha: 0.08),
+              AppConstants.primaryColor.withOpacity(0.08),
               Colors.white,
             )
           : Colors.white,
@@ -547,7 +547,7 @@ class _NotificationTile extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: AppConstants.primaryColor
-                      .withValues(alpha: unread ? 0.16 : 0.08),
+                      .withOpacity(unread ? 0.16 : 0.08),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(_icon, color: AppConstants.primaryColor, size: 20),

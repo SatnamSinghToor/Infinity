@@ -57,7 +57,7 @@ class _WalletScreenState extends State<WalletScreen> {
                     l10n.walletBalanceLabel,
                     style: GoogleFonts.poppins(
                       color:
-                          AppConstants.textPrimaryColor.withValues(alpha: 0.7),
+                          AppConstants.textPrimaryColor.withOpacity(0.7),
                       fontSize: 13,
                     ),
                   ),
@@ -129,7 +129,7 @@ class _TransactionTile extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color:
-                  (isCredit ? Colors.green : Colors.red).withValues(alpha: 0.1),
+                  (isCredit ? Colors.green : Colors.red).withOpacity(0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(

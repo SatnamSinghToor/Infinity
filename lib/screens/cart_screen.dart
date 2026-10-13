@@ -575,7 +575,7 @@ class _CartScreenState extends State<CartScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
-                selectedColor: context.tokens.primary.withValues(alpha: 0.15),
+                selectedColor: context.tokens.primary.withOpacity(0.15),
                 onSelected: (_) =>
                     setState(() => _tip = _tip == amount ? 0 : amount),
               ),
@@ -615,7 +615,7 @@ class _CartScreenState extends State<CartScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  selectedColor: context.tokens.primary.withValues(alpha: 0.15),
+                  selectedColor: context.tokens.primary.withOpacity(0.15),
                   onSelected: (on) => setState(() =>
                       on ? _noteChips.add(text) : _noteChips.remove(text)),
                 ),
@@ -898,10 +898,10 @@ class _SyncNotice extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
       decoration: BoxDecoration(
-        color: AppConstants.primaryColor.withValues(alpha: 0.08),
+        color: AppConstants.primaryColor.withOpacity(0.08),
         borderRadius: BorderRadius.circular(16),
         border:
-            Border.all(color: AppConstants.primaryColor.withValues(alpha: 0.3)),
+            Border.all(color: AppConstants.primaryColor.withOpacity(0.3)),
       ),
       child: Row(
         children: [
@@ -1121,7 +1121,7 @@ class _DeliveryCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppConstants.successColor.withValues(alpha: 0.12),
+              color: AppConstants.successColor.withOpacity(0.12),
               borderRadius: BorderRadius.circular(14),
             ),
             child: const Icon(Iconsax.timer_1,
@@ -1321,7 +1321,7 @@ class _BillCard extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
               decoration: BoxDecoration(
-                color: AppConstants.successColor.withValues(alpha: 0.1),
+                color: AppConstants.successColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
@@ -1444,7 +1444,7 @@ class _Thumbnail extends StatelessWidget {
           product.name.isNotEmpty ? product.name[0] : '?',
           style: TextStyle(
             fontSize: 30,
-            color: Colors.white.withValues(alpha: 0.6),
+            color: Colors.white.withOpacity(0.6),
             fontWeight: FontWeight.bold,
           ),
         ),

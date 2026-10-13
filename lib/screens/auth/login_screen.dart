@@ -366,10 +366,10 @@ class _LoginScreenState extends State<LoginScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
       decoration: BoxDecoration(
-        color: AppConstants.primaryColor.withValues(alpha: 0.08),
+        color: AppConstants.primaryColor.withOpacity(0.08),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: AppConstants.primaryColor.withValues(alpha: 0.35),
+          color: AppConstants.primaryColor.withOpacity(0.35),
         ),
       ),
       child: Row(

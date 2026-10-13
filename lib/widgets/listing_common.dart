@@ -309,13 +309,13 @@ class ListingFilterRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             color: active
-                ? AppConstants.primaryColor.withValues(alpha: 0.1)
+                ? AppConstants.primaryColor.withOpacity(0.1)
                 : Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: active
                   ? AppConstants.primaryColor
-                  : Colors.black.withValues(alpha: 0.1),
+                  : Colors.black.withOpacity(0.1),
             ),
           ),
           child: Row(
@@ -365,7 +365,7 @@ class ViewCartPill extends StatelessWidget {
             borderRadius: BorderRadius.circular(32),
             boxShadow: [
               BoxShadow(
-                color: AppConstants.primaryColor.withValues(alpha: 0.4),
+                color: AppConstants.primaryColor.withOpacity(0.4),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               ),
@@ -390,7 +390,7 @@ class ViewCartPill extends StatelessWidget {
                     l10n.homeItemCount(count),
                     style: GoogleFonts.poppins(
                       fontSize: 11.5,
-                      color: Colors.white.withValues(alpha: 0.9),
+                      color: Colors.white.withOpacity(0.9),
                     ),
                   ),
                 ],
@@ -400,7 +400,7 @@ class ViewCartPill extends StatelessWidget {
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.22),
+                  color: Colors.white.withOpacity(0.22),
                 ),
                 child: const Icon(
                   Iconsax.arrow_right_3_copy,
