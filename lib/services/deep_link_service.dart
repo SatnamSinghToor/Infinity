@@ -20,6 +20,8 @@ class DeepLinkService {
   static final AppLinks _appLinks = AppLinks();
   static StreamSubscription<Uri>? _sub;
   static bool _started = false;
+  static bool _appReady = false;
+  static final List<Uri> _pendingUris = [];
 
   /// Called once from main(), after the first frame — so
   /// PushService.navigatorKey has a context to read the AuthProvider from.
@@ -38,16 +40,35 @@ class DeepLinkService {
     );
   }
 
+  /// Called by the app when the provider tree is ready (e.g., from main.dart
+  /// after the first frame). Processes any pending deep links.
+  static void markAppReady() {
+    _appReady = true;
+    for (final uri in _pendingUris) {
+      unawaited(_handle(uri));
+    }
+    _pendingUris.clear();
+  }
+
   /// Not called in the app itself (the listener lives for the app's whole
   /// life) — here so a test can tear it down between runs.
   static Future<void> stop() async {
     await _sub?.cancel();
     _sub = null;
     _started = false;
+    _appReady = false;
+    _pendingUris.clear();
   }
 
   static Future<void> _handle(Uri uri) async {
     if (uri.host != 'reset-password') return;
+
+    // If app isn't ready yet, queue the URI and process later.
+    if (!_appReady) {
+      _pendingUris.add(uri);
+      return;
+    }
+
     final context = PushService.navigatorKey?.currentContext;
     if (context == null) return;
     try {

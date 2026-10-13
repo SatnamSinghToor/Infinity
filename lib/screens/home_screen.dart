@@ -120,8 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
   /// on the calendar ends. Chasing an empty page the rest of the year is
   /// worse than a strip one chip shorter.
   List<HomeChip> get _visibleChips {
-    if (_festivalNear) return homeChips;
-    return homeChips.where((c) => c.name != FestivalSections.category).toList();
+    final provider = context.read<ProductProvider>();
+    final chips = provider.homeChips;
+    if (_festivalNear) return chips;
+    return chips.where((c) => c.name != FestivalSections.category).toList();
   }
 
   /// The header, search bar and chip strip have a fixed height, so their text

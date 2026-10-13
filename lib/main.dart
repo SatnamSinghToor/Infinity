@@ -46,6 +46,8 @@ Future<void> main() async {
       // A link that blows up here would otherwise die silently on the phone.
       ErrorReporter.report(error, stack, source: 'deep_link_start');
     }
+    // The provider tree is now ready; process any queued deep links.
+    DeepLinkService.markAppReady();
   });
 }
 

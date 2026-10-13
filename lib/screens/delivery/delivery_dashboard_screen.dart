@@ -70,7 +70,8 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
   /// told they have nothing to do.
   bool _loadFailed = false;
 
-  final _locationTracking = LocationTrackingService();
+  /// Use the singleton instance so it can be disposed on logout from anywhere.
+  final _locationTracking = LocationTrackingService.instance;
   final Set<String> _seenIds = {};
   StreamSubscription<List<Map<String, dynamic>>>? _availableWatch;
   StreamSubscription<List<Map<String, dynamic>>>? _mineWatch;

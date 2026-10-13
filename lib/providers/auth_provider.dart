@@ -16,6 +16,7 @@ import 'package:supabase/supabase.dart'
 
 import '../models/address.dart';
 import '../services/google_auth_service.dart';
+import '../services/location_tracking_service.dart';
 import '../services/push_service.dart';
 import '../services/supabase_service.dart';
 
@@ -471,6 +472,8 @@ class AuthProvider extends ChangeNotifier {
     // While the session still exists: stop this phone getting the pushes
     // of the account that is leaving.
     await PushService.releaseForSignOut();
+    // Stop location tracking if the user was a delivery partner.
+    await LocationTrackingService.instance.dispose();
     try {
       await SupabaseService.client.auth.signOut();
     } catch (_) {

@@ -10,6 +10,9 @@ import 'supabase_service.dart';
 /// long as they have orders `out_for_delivery`. Customers watch the same
 /// table via Realtime on the order tracking screen.
 class LocationTrackingService {
+  LocationTrackingService._();
+  static final LocationTrackingService instance = LocationTrackingService._();
+
   StreamSubscription<Position>? _positionSub;
   Set<String> _trackedOrderIds = {};
   String? _partnerId;
@@ -99,8 +102,12 @@ class LocationTrackingService {
     }
   }
 
+  /// Stops location tracking and cleans up resources. Call when the partner
+  /// logs out or the app no longer needs to track location.
   Future<void> dispose() async {
     await _positionSub?.cancel();
     _positionSub = null;
+    _trackedOrderIds.clear();
+    _partnerId = null;
   }
 }

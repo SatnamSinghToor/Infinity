@@ -35,12 +35,30 @@ class PaymentService {
   }) {
     final completer = Completer<RazorpayPaymentResult>();
     final razorpay = Razorpay();
+    bool _cleanedUp = false;
 
-    void cleanup() => razorpay.clear();
+    void cleanup() {
+      if (!_cleanedUp) {
+        _cleanedUp = true;
+        razorpay.clear();
+      }
+    }
+
+    // Safety timeout: if no event fires within 5 minutes, clean up.
+    // (User may have closed the checkout sheet without completing/abandoning.)
+    final timeout = Timer(const Duration(minutes: 5), () {
+      if (!completer.isCompleted) {
+        completer.complete(
+          const RazorpayPaymentResult.failure('Payment timed out.'),
+        );
+        cleanup();
+      }
+    });
 
     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, (
       PaymentSuccessResponse response,
     ) async {
+      timeout.cancel();
       try {
         final verifyResponse = await SupabaseService.client.functions.invoke(
           'verify-razorpay-payment',
@@ -78,6 +96,7 @@ class PaymentService {
     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (
       PaymentFailureResponse response,
     ) {
+      timeout.cancel();
       completer.complete(
         RazorpayPaymentResult.failure(
           response.message ?? 'Payment was not completed.',
@@ -89,6 +108,7 @@ class PaymentService {
     razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, (
       ExternalWalletResponse response,
     ) {
+      timeout.cancel();
       completer.complete(
         const RazorpayPaymentResult.failure(
           'External wallet payments are not supported yet.',
@@ -124,6 +144,7 @@ class PaymentService {
         };
         razorpay.open(options);
       } on FunctionException catch (e) {
+        timeout.cancel();
         final message = e.details is Map ? e.details['error'] as String? : null;
         completer.complete(
           RazorpayPaymentResult.failure(
@@ -132,6 +153,7 @@ class PaymentService {
         );
         cleanup();
       } catch (_) {
+        timeout.cancel();
         completer.complete(
           const RazorpayPaymentResult.failure('Could not start the payment.'),
         );
