@@ -1,6 +1,6 @@
 # GitLab CI: builds the Android APK people install on a phone.
 #
-# Uses Flutter 3.27.x (stable) with Java 17 + Android SDK pre-installed.
+# Uses Flutter stable (matches local 3.47.x) with Java 17 + Android SDK pre-installed.
 # Builds a release APK signed with the project's own key, held in the four
 # ANDROID_* variables under Settings → CI/CD → Variables (masked, protected).
 # One key for every build is what lets a new APK install over the last one.
@@ -13,7 +13,7 @@ stages:
 
 build_apk:
   stage: build
-  image: ghcr.io/cirruslabs/flutter:3.27.1
+  image: ghcr.io/cirruslabs/flutter:stable
   timeout: 60 minutes
   tags:
     - saas-linux-medium-amd64
