@@ -1,23 +1,22 @@
 # GitLab CI: builds the Android APK people install on a phone.
 #
-# The same Flutter as the GitHub workflow (3.24.0), in an image that already
-# carries the Android SDK and Java 17. It builds a release APK signed with the
-# project's own key, held in the four ANDROID_* variables under Settings →
-# CI/CD → Variables (masked, protected). One key for every build is what lets
-# a new APK install over the last one: a build signed with a throwaway debug
-# key (each CI machine makes its own) is refused as "package conflicts with
-# an existing package", and the app had to be uninstalled every time.
+# Uses Flutter 3.27.x (stable) with Java 17 + Android SDK pre-installed.
+# Builds a release APK signed with the project's own key, held in the four
+# ANDROID_* variables under Settings → CI/CD → Variables (masked, protected).
+# One key for every build is what lets a new APK install over the last one.
 #
-# Download the latest APK from master (you must be signed in):
-#   https://gitlab.com/wildster78/DUGGUSTORE/-/jobs/artifacts/master/raw/build/app/outputs/flutter-apk/app-release.apk?job=build_apk
+# Download the latest APK from main (you must be signed in):
+#   https://gitlab.com/hauntstunt13/DUGGUSTORE-master/-/jobs/artifacts/main/raw/build/app/outputs/flutter-apk/app-release.apk?job=build_apk
 
 stages:
   - build
 
 build_apk:
   stage: build
-  image: ghcr.io/cirruslabs/flutter:3.24.0
-  timeout: 45 minutes
+  image: ghcr.io/cirruslabs/flutter:3.27.1
+  timeout: 60 minutes
+  tags:
+    - saas-linux-medium-amd64
   rules:
     # Every push to main, and "Run pipeline" by hand from the web.
     - if: $CI_COMMIT_BRANCH == "main"
@@ -25,14 +24,24 @@ build_apk:
   variables:
     PUB_CACHE: $CI_PROJECT_DIR/.pub-cache
     GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle-home
+    # Gradle memory tuned for CI runner (medium = ~8GB RAM)
+    GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=1g -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false -Dorg.gradle.configureondemand=false -Dorg.gradle.caching=true"
+    # Accept Android SDK licenses non-interactively
+    ANDROID_SDK_ROOT: /opt/android-sdk
+    JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
   cache:
-    key: flutter-3.24.0
+    key: "flutter-${CI_COMMIT_REF_SLUG}-${CI_JOB_NAME}"
     paths:
       - .pub-cache/
       - .gradle-home/caches/
       - .gradle-home/wrapper/
-  script:
+    policy: pull-push
+  before_script:
     - flutter --version
+    - dart --version
+    - java -version
+    - echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null 2>&1 || true
+  script:
     - flutter pub get
     # A keystore only when all four variables are set; otherwise the build
     # falls back to the debug key and says so in the log.
@@ -62,7 +71,9 @@ build_apk:
         --dart-define=GOOGLE_SERVER_CLIENT_ID="$GOOGLE_SERVER_CLIENT_ID"
     - ls -lh build/app/outputs/flutter-apk/
   artifacts:
-    name: duggustore-$CI_COMMIT_SHORT_SHA
+    name: duggustore-${CI_COMMIT_SHORT_SHA}
     paths:
       - build/app/outputs/flutter-apk/app-release.apk
     expire_in: 30 days
+  after_script:
+    - echo "Build completed. APK size:" && ls -lh build/app/outputs/flutter-apk/app-release.apk 2>/dev/null || echo "APK not found"
