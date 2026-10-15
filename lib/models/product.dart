@@ -219,4 +219,18 @@ class Product {
     }
     return discount;
   }
+
+  /// Whether another unit of this product (or a specific variant) can be
+  /// added to the cart, based on available stock.
+  /// If [variantId] is provided, checks that variant's stock; otherwise
+  /// uses the product's base [stock].
+  bool canAddMore({String? variantId}) {
+    if (variantId != null) {
+      final variant = getVariant(variantId);
+      if (variant != null) {
+        return variant.stock > 0;
+      }
+    }
+    return stock > 0;
+  }
 }

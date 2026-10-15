@@ -6815,5 +6815,38 @@
   "adminSupportEmptyBody": "When someone writes to support, their chat shows up here.",
   "@adminSupportEmptyBody": {
     "description": "Admin support: empty state body."
+  },
+  "variantSheetAddToCart": "Add to Cart",
+  "@variantSheetAddToCart": {
+    "description": "Variant sheet: the bottom button that adds the selected variant to the cart."
+  },
+  "variantSheetSelectOption": "Select an option",
+  "@variantSheetSelectOption": {
+    "description": "Variant sheet: message shown when no variant is selected yet."
+  },
+  "variantSheetNoOptions": "No options available",
+  "@variantSheetNoOptions": {
+    "description": "Variant sheet: shown when the product has no variants to choose from."
+  },
+  "productAddedToCart": "added to cart",
+  "@productAddedToCart": {
+    "description": "Variant sheet: shown in the snackbar after adding a product to cart, e.g. '500g added to cart'."
+  },
+  "productDeliveryETA": "Delivery in {eta}",
+  "@productDeliveryETA": {
+    "description": "Product card: delivery time estimate. The eta placeholder is already formatted.",
+    "placeholders": {
+      "eta": {
+        "type": "String"
+      }
+    }
+  },
+  "productNoProductsFound": "No products found",
+  "@productNoProductsFound": {
+    "description": "Product grid: heading when the search or filter matched nothing."
+  },
+  "productTryDifferentSearch": "Try a different search or category",
+  "@productTryDifferentSearch": {
+    "description": "Product grid: line under the empty heading suggesting to broaden the search."
   }
 }
