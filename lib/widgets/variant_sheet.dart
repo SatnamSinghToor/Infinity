@@ -275,10 +275,10 @@ class _VariantSheetState extends State<_VariantSheet> {
     );
   }
 
-  Widget _buildAddToCartButton(List<ProductVariant> availableVariants) {
+Widget _buildAddToCartButton(List<ProductVariant> availableVariants) {
     final selected = _selectedVariant;
-    final canAdd = selected != null && 
-        widget.product.canAddMore(widget.product, variantId: selected.id);
+    final canAdd = selected != null &&
+        widget.product.canAddMore(variantId: selected.id);
     
     return SizedBox(
       width: double.infinity,
