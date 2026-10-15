@@ -155,7 +155,7 @@ class _AdminCategoriesScreenState extends State<AdminCategoriesScreen> {
                 contentPadding: EdgeInsets.zero,
                 title: Text(l10n.adminCategoriesShowInApp),
                 value: active,
-                activeThumbColor: AppConstants.primaryColor,
+                activeColor: AppConstants.primaryColor,
                 onChanged: (v) => setSheet(() => active = v),
               ),
               const SizedBox(height: 8),
@@ -395,7 +395,7 @@ class _AdminCategoriesScreenState extends State<AdminCategoriesScreen> {
                 const Spacer(),
                 Switch(
                   value: active,
-                  activeThumbColor: AppConstants.primaryColor,
+                  activeColor: AppConstants.primaryColor,
                   onChanged: (v) => _setActive(main, v),
                 ),
                 Pressable(
@@ -441,7 +441,7 @@ class _AdminCategoriesScreenState extends State<AdminCategoriesScreen> {
         children: [
           Switch(
             value: active,
-            activeThumbColor: AppConstants.primaryColor,
+            activeColor: AppConstants.primaryColor,
             onChanged: (v) => _setActive(sub, v),
           ),
           Pressable(

@@ -205,7 +205,7 @@ class _LoggedInView extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
-                  initialValue: vehicleType,
+                  value: vehicleType,
                   decoration:
                       InputDecoration(labelText: l10n.profileVehicleType),
                   items: [

@@ -50,17 +50,19 @@ class _LiveEntranceState extends State<LiveEntrance>
   Widget build(BuildContext context) {
     final curved =
         CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic);
-    return SizeTransition(
-      sizeFactor: curved,
+    return Align(
       alignment: Alignment.bottomCenter,
-      child: FadeTransition(
-        opacity: curved,
-        child: SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -0.08),
-            end: Offset.zero,
-          ).animate(curved),
-          child: widget.child,
+      child: SizeTransition(
+        sizeFactor: curved,
+        child: FadeTransition(
+          opacity: curved,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, -0.08),
+              end: Offset.zero,
+            ).animate(curved),
+            child: widget.child,
+          ),
         ),
       ),
     );

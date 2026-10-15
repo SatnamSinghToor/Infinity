@@ -144,7 +144,7 @@ class _AdminBannersScreenState extends State<AdminBannersScreen> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String?>(
-                initialValue: link,
+                value: link,
                 isExpanded: true,
                 decoration: InputDecoration(
                   labelText: l10n.adminBannersLinkLabel,
@@ -427,7 +427,7 @@ class _AdminBannersScreenState extends State<AdminBannersScreen> {
                 )),
                 Switch(
                   value: active,
-                  activeThumbColor: AppConstants.primaryColor,
+                  activeColor: AppConstants.primaryColor,
                   onChanged: (v) => _setActive(row, v),
                 ),
                 Pressable(

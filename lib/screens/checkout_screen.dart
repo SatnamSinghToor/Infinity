@@ -326,7 +326,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                         Switch(
                           value: _useWallet,
-                          activeThumbColor: context.tokens.primary,
+                          activeColor: context.tokens.primary,
                           onChanged: (value) =>
                               setState(() => _useWallet = value),
                         ),

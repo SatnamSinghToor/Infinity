@@ -65,7 +65,7 @@ ThemeData buildAppTheme() {
         TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       },
     ),
-    cardTheme: CardThemeData(
+    cardTheme: CardTheme(
       elevation: 0,
       color: AppConstants.cardColor,
       shape: RoundedRectangleBorder(

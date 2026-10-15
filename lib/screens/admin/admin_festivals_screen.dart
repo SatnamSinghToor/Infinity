@@ -317,14 +317,14 @@ class _AdminFestivalsScreenState extends State<AdminFestivalsScreen> {
                     title: Text(l10n.adminFestivalsShowPooja),
                     subtitle: Text(l10n.adminFestivalsShowPoojaSub),
                     value: pooja,
-                    activeThumbColor: AppConstants.primaryColor,
+                    activeColor: AppConstants.primaryColor,
                     onChanged: (v) => setSheet(() => pooja = v),
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(l10n.adminFestivalsActive),
                     value: active,
-                    activeThumbColor: AppConstants.primaryColor,
+                    activeColor: AppConstants.primaryColor,
                     onChanged: (v) => setSheet(() => active = v),
                   ),
                   if (error != null)

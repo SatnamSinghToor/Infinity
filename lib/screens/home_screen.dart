@@ -120,8 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// on the calendar ends. Chasing an empty page the rest of the year is
   /// worse than a strip one chip shorter.
   List<HomeChip> get _visibleChips {
-    final provider = context.read<ProductProvider>();
-    final chips = provider.homeChips;
+    final chips = homeChips;
     if (_festivalNear) return chips;
     return chips.where((c) => c.name != FestivalSections.category).toList();
   }

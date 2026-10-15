@@ -517,7 +517,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
                   style: const TextStyle(fontSize: 12.5),
                 ),
                 value: _isOpen,
-                activeThumbColor: AppConstants.primaryColor,
+                activeColor: AppConstants.primaryColor,
                 onChanged: (v) => setState(() => _isOpen = v),
               ),
             ),

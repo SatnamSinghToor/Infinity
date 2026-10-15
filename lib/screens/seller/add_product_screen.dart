@@ -1124,7 +1124,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                   value: _removeBackground,
-                  activeThumbColor: AppConstants.primaryColor,
+                  activeColor: AppConstants.primaryColor,
                   onChanged: _isRemovingBackground
                       ? null
                       : (value) {
