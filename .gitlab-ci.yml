@@ -1,6 +1,6 @@
 # GitLab CI: builds the Android APK people install on a phone.
 #
-# Uses Flutter stable (matches local 3.47.x) with Java 17 + Android SDK pre-installed.
+# Uses Flutter stable (matches local 3.47.x) with Java 21 + Android SDK pre-installed.
 # Builds a release APK signed with the project's own key, held in the four
 # ANDROID_* variables under Settings → CI/CD → Variables (masked, protected).
 # One key for every build is what lets a new APK install over the last one.
@@ -28,7 +28,8 @@ build_apk:
     GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=1g -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false -Dorg.gradle.configureondemand=false -Dorg.gradle.caching=true"
     # Accept Android SDK licenses non-interactively
     ANDROID_SDK_ROOT: /opt/android-sdk
-    JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+    # Java 21 in current stable image
+    JAVA_HOME: /usr/lib/jvm/java-21-openjdk-amd64
   cache:
     key: "flutter-${CI_COMMIT_REF_SLUG}-${CI_JOB_NAME}"
     paths:
