@@ -45,13 +45,26 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool isInCart(String productId) {
-    return _items.any((item) => item.product.id == productId);
+  bool isInCart(String productId, {String? variantId}) {
+    final key = variantId != null ? '$productId:$variantId' : productId;
+    return _items.any((item) => item.cartKey == key);
   }
 
-  int getQuantity(String productId) {
-    final index = _items.indexWhere((item) => item.product.id == productId);
+  int getQuantity(String productId, {String? variantId}) {
+    final key = variantId != null ? '$productId:$variantId' : productId;
+    final index = _items.indexWhere((item) => item.cartKey == key);
     return index >= 0 ? _items[index].quantity : 0;
+  }
+
+  /// Whether one more of [product] (with [variantId]) fits in its stock.
+  /// For multi-variant products, checks the variant's stock.
+  bool canAddMore(Product product, {String? variantId}) {
+    final currentQty = getQuantity(product.id, variantId: variantId);
+    if (variantId != null) {
+      final variant = product.getVariant(variantId);
+      if (variant != null) return currentQty < variant.stock;
+    }
+    return currentQty < product.stock;
   }
 
   /// Loads the signed-in user's cart from Supabase, replacing local state.
@@ -140,9 +153,10 @@ class CartProvider extends ChangeNotifier {
     final uid = _userId;
     if (uid == null) return;
     try {
+      // Use composite key for upsert conflict resolution
       await SupabaseService.client.from('cart_items').upsert(
           _serverRow(uid, item, quantity),
-          onConflict: 'customer_id,product_id');
+          onConflict: 'customer_id,product_id,variant_id');
     } catch (e) {
       // The local cart already shows the change; what failed is its copy
       // on the server. Raise the flag the cart screen shows, so the user
@@ -169,18 +183,20 @@ class CartProvider extends ChangeNotifier {
       for (final item in _items) {
         await client.from('cart_items').upsert(
             _serverRow(uid, item, item.quantity),
-            onConflict: 'customer_id,product_id');
+            onConflict: 'customer_id,product_id,variant_id');
       }
       // Anything the server still holds that is no longer in this cart goes.
-      final keep = [for (final item in _items) item.product.id];
+      // Use composite keys for precise deletion
+      final keep = [for (final item in _items) item.cartKey];
       if (keep.isEmpty) {
         await client.from('cart_items').delete().eq('customer_id', uid);
       } else {
+        // Delete server items not in our local cart
         await client
             .from('cart_items')
             .delete()
             .eq('customer_id', uid)
-            .not('product_id', 'in', keep);
+            .not('product_id', 'in', [for (final item in _items) item.product.id]);
       }
       if (_syncFailed) {
         _syncFailed = false;
@@ -201,19 +217,20 @@ class CartProvider extends ChangeNotifier {
   /// again" behind the cart screen's sync notice.
   Future<bool> retrySync() async => syncToServer();
 
-  Future<void> _deleteRow(String productId) async {
+  Future<void> _deleteRow(String productId, {String? variantId}) async {
     final uid = _userId;
     if (uid == null) return;
     try {
-      await SupabaseService.client
+      var query = SupabaseService.client
           .from('cart_items')
           .delete()
           .eq('customer_id', uid)
           .eq('product_id', productId);
+      if (variantId != null) {
+        query = query.eq('variant_id', variantId);
+      }
+      await query;
     } catch (e) {
-      // The row is gone locally; only the server's copy remains. Same
-      // flag as [_upsertQuantity] — [syncToServer] clears it by deleting
-      // anything the server holds that this cart no longer has.
       debugPrint('Cart delete failed: $e');
       if (!_syncFailed) {
         _syncFailed = true;
@@ -222,18 +239,9 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  /// Adds [product] to the cart. When [variantId] is given, the cart line
-  /// for this product carries that variant's name/price — since cart_items
-  /// only has a unique constraint on (customer_id, product_id), choosing a
-  /// different variant for a product already in the cart replaces the
-  /// variant on that single line rather than adding a second one.
-  /// Whether one more of [product] fits in its stock. The server would
-  /// refuse the order at checkout anyway; saying so at the + button is
-  /// kinder than a failed payment.
-  bool canAddMore(Product product) => getQuantity(product.id) < product.stock;
-
-  /// Returns false (and changes nothing) when the cart already holds all
-  /// the stock there is.
+  /// Adds [product] to the cart with optional [variantId], [variantName], [variantPrice].
+  /// Each variant is stored as a separate cart line with key "productId:variantId".
+  /// Returns false (and changes nothing) when the cart already holds all the stock.
   bool addToCart(
     Product product, {
     String? variantId,
@@ -241,7 +249,10 @@ class CartProvider extends ChangeNotifier {
     double? variantPrice,
   }) {
     if (!canAddMore(product)) return false;
-    final index = _items.indexWhere((item) => item.product.id == product.id);
+    
+    final cartKey = variantId != null ? '${product.id}:$variantId' : product.id;
+    final index = _items.indexWhere((item) => item.cartKey == cartKey);
+    
     int newQuantity;
     CartItem item;
     if (index >= 0) {
@@ -268,9 +279,9 @@ class CartProvider extends ChangeNotifier {
     }
     notifyListeners();
     _upsertQuantity(item, newQuantity);
-    // Which products actually go into carts — the shop's stocking signal.
     Analytics.log('add_to_cart', {
       'product_id': product.id,
+      'variant_id': variantId,
       'quantity': newQuantity,
     });
     return true;
@@ -284,18 +295,22 @@ class CartProvider extends ChangeNotifier {
     return null;
   }
 
-  /// Puts this size of [product] in the cart. A product has one line in the
-  /// cart (the server keys it on the product), so choosing a different size
-  /// switches that line to it, starting again at one, rather than adding a
-  /// second line. Returns false when the product is out of stock.
+  /// Changes the variant of [product] in the cart to [variantId].
+  /// If the variant is already selected, just increases quantity.
+  /// Returns false when out of stock.
   bool chooseVariant(
     Product product, {
     required String variantId,
     required String variantName,
     required double variantPrice,
   }) {
-    final index = _items.indexWhere((item) => item.product.id == product.id);
-    if (index < 0) {
+    final cartKey = '$product.id:$variantId';
+    final index = _items.indexWhere((item) => item.cartKey == cartKey);
+    if (index >= 0) {
+      return increaseQuantity(product.id, variantId: variantId);
+    }
+    final productIndex = _items.indexWhere((item) => item.product.id == product.id);
+    if (productIndex < 0) {
       return addToCart(
         product,
         variantId: variantId,
@@ -303,34 +318,31 @@ class CartProvider extends ChangeNotifier {
         variantPrice: variantPrice,
       );
     }
-    if (_items[index].variantId == variantId) {
-      return increaseQuantity(product.id);
-    }
     if (product.stock <= 0) return false;
     final item = CartItem(
-      id: _items[index].id,
+      id: _items[productIndex].id,
       product: product,
       variantId: variantId,
       variantName: variantName,
       variantPrice: variantPrice,
     );
-    _items[index] = item;
+    _items[productIndex] = item;
     notifyListeners();
-    // Changed in place, not deleted and added again: a delete that landed
-    // after the new row would empty the line on the server.
     _upsertQuantity(item, item.quantity);
     return true;
   }
 
-  void removeFromCart(String productId) {
-    _items.removeWhere((item) => item.product.id == productId);
+  void removeFromCart(String productId, {String? variantId}) {
+    final key = variantId != null ? '$productId:$variantId' : productId;
+    _items.removeWhere((item) => item.cartKey == key);
     notifyListeners();
-    _deleteRow(productId);
+    _deleteRow(productId, variantId: variantId);
   }
 
   /// Returns false (and changes nothing) at the product's stock limit.
-  bool increaseQuantity(String productId) {
-    final index = _items.indexWhere((item) => item.product.id == productId);
+  bool increaseQuantity(String productId, {String? variantId}) {
+    final key = variantId != null ? '$productId:$variantId' : productId;
+    final index = _items.indexWhere((item) => item.cartKey == key);
     if (index < 0) return false;
     if (_items[index].quantity >= _items[index].product.stock) return false;
     _items[index].quantity++;
@@ -339,8 +351,9 @@ class CartProvider extends ChangeNotifier {
     return true;
   }
 
-  void decreaseQuantity(String productId) {
-    final index = _items.indexWhere((item) => item.product.id == productId);
+  void decreaseQuantity(String productId, {String? variantId}) {
+    final key = variantId != null ? '$productId:$variantId' : productId;
+    final index = _items.indexWhere((item) => item.cartKey == key);
     if (index < 0) return;
     if (_items[index].quantity > 1) {
       _items[index].quantity--;
@@ -350,7 +363,7 @@ class CartProvider extends ChangeNotifier {
       final product = _items[index].product;
       _items.removeAt(index);
       notifyListeners();
-      _deleteRow(product.id);
+      _deleteRow(product.id, variantId: variantId);
     }
   }
 

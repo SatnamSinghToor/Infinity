@@ -1,4 +1,5 @@
 import '../utils/format.dart';
+import 'product_variant.dart';
 
 class Product {
   final String id;
@@ -32,6 +33,10 @@ class Product {
   /// "About this item". Empty when the seller added none.
   final List<String> highlights;
 
+  /// Product variants (e.g., different weights/pack sizes).
+  /// Empty list means single-option product.
+  final List<ProductVariant> variants;
+
   const Product({
     required this.id,
     required this.name,
@@ -52,6 +57,7 @@ class Product {
     this.brand,
     this.storeName,
     this.highlights = const [],
+    this.variants = const [],
   });
 
   static final _foodCategory = RegExp(
@@ -83,6 +89,27 @@ class Product {
     return (url == null || url.isEmpty) ? const [] : [url];
   }
 
+  /// Whether this product has multiple variants.
+  bool get hasVariants => variants.isNotEmpty;
+
+  /// Number of available variants.
+  int get variantCount => variants.length;
+
+  /// Get a variant by its ID.
+  ProductVariant? getVariant(String variantId) {
+    try {
+      return variants.firstWhere((v) => v.id == variantId);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// First available variant (for single-option display).
+  ProductVariant? get firstAvailableVariant {
+    final available = variants.where((v) => v.isAvailable).toList();
+    return available.isNotEmpty ? available.first : (variants.isNotEmpty ? variants.first : null);
+  }
+
   /// A copy of this product with the seller's store name filled in.
   Product withStoreName(String? store) {
     return Product(
@@ -105,6 +132,7 @@ class Product {
       brand: brand,
       storeName: store,
       highlights: highlights,
+      variants: variants,
     );
   }
 
@@ -134,6 +162,19 @@ class Product {
     final categoryName = categoryMap?['name'] as String? ?? 'Grocery';
     final stock = (row['stock'] as num?)?.toInt() ?? 999;
 
+    // Parse variants if present (from product_variants join)
+    final List<ProductVariant> variants = [];
+    final variantsData = row['product_variants'] as List?;
+    if (variantsData != null) {
+      for (final v in variantsData) {
+        if (v is Map<String, dynamic>) {
+          try {
+            variants.add(ProductVariant.fromMap(v));
+          } catch (_) {}
+        }
+      }
+    }
+
     return Product(
       id: id,
       name: row['name'] as String? ?? '',
@@ -162,6 +203,7 @@ class Product {
         for (final h in (row['about_highlights'] as List?) ?? const [])
           if (h is String && h.trim().isNotEmpty) h.trim(),
       ],
+      variants: variants,
     );
   }
 

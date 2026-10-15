@@ -4,16 +4,23 @@ class AppConstants {
   static const String appName = 'Duggu';
   static const String tagline = 'Store me same day delivery';
 
-  // Colors — premium orange / cream / black / white glass theme
-  static const Color primaryColor = Color(0xFFFF6A00); // vivid orange
-  static const Color accentColor = Color(0xFFF2711C); // brand orange
+  // Colors — Orange grocery theme
+  static const Color primaryColor = Color(0xFFFF5A00); // Mirinda orange
+  static const Color accentColor = Color(0xFFFF5A00); // Same as primary
   static const Color blackColor = Color(0xFF0B0B0F);
   static const Color backgroundColor = Color(0xFFF7F7F7); // light neutral grey
   static const Color cardColor = Colors.white;
-  static const Color textPrimaryColor = Color(0xFF1A1A1A);
+  static const Color textPrimaryColor = Color(0xFF20252E); // Near-black
   static const Color textSecondaryColor = Color(0xFF6E6E6E);
   static const Color dangerColor = Color(0xFFE53935);
   static const Color successColor = Color(0xFF43A047);
+
+  // Grocery-specific colors
+  static const Color vegGreen = Color(0xFF237A35); // Vegetarian badge
+  static const Color nonVegRed = Color(0xFFD32F2F); // Non-vegetarian
+  static const Color discountBlue = Color(0xFF2F6FC9); // Discount text
+  static const Color cardBorder = Color(0xFFE3E6EB); // Light grey hairline
+  static const Color imageBackground = Color(0xFFF8F8F8); // Very light neutral
 
   static const LinearGradient headerGradient = LinearGradient(
     begin: Alignment.topCenter,
@@ -78,4 +85,13 @@ class AppConstants {
     'Bisleri',
     'Red Bull',
   ];
+
+  // Card radii
+  static const double cardRadius = 20.0;
+  static const double buttonRadius = 16.0;
+  static const double imageRadius = 20.0;
+
+  // Breakpoints
+  static const double mobileBreakpoint = 500;
+  static const double tabletBreakpoint = 899;
 }

@@ -17,6 +17,9 @@ class CartItem {
     this.variantPrice,
   });
 
+  /// Composite key for cart storage: "productId:variantId" (or just "productId" for no variant)
+  String get cartKey => variantId != null ? '${product.id}:$variantId' : product.id;
+
   double get unitPrice => variantPrice ?? product.price;
 
   double get totalPrice => unitPrice * quantity;
