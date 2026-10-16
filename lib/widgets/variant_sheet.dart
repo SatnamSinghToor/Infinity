@@ -16,12 +16,12 @@ import 'pressable.dart';
 /// Orange grocery "Select an option" bottom sheet.
 /// Matches spec: drag handle, close button, product image/name, radio selection,
 /// price/MRP/discount per option, full-width orange "Add to cart" button.
-Future<void> showVariantSheet(
+Future<ProductVariant?> showVariantSheet(
   BuildContext context,
   Product product, {
   ProductVariant? initialVariant,
 }) {
-  return showModalBottomSheet<void>(
+  return showModalBottomSheet<ProductVariant>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.white,
@@ -294,7 +294,7 @@ Widget _buildAddToCartButton(List<ProductVariant> availableVariants) {
                   variantName: selected.label,
                   variantPrice: selected.price,
                 );
-                Navigator.pop(context);
+                Navigator.pop(context, selected);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
