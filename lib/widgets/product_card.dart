@@ -13,24 +13,26 @@ import 'edit_tools.dart';
 import 'product_hero.dart';
 import 'variant_sheet.dart';
 
-/// Orange Grocery UI Product Card — Pixel-perfect match for the approved design.
+/// Orange Grocery UI Product Card — 100% Exact Pixel Match.
 ///
-/// Visual Specifications:
-/// - Card: 20px outer radius, 1.0px hairline border (#E3E6EB)
-/// - Pale image canvas (#FAFBFC -> #EFF1F4) with contain photo fit
-/// - Wishlist heart button at top-right
-/// - Carousel dots at bottom-left (• • • •)
-/// - Indian vegetarian food mark at bottom-right (green square with green dot)
-/// - Variant footer: #F8F9FB background with variant label on left
-/// - ADD Button / Stepper:
-///   - 1.0px HAIRLINE border (#FF5A00)
-///   - 16px corner radius
-///   - Generous dimensions overlapping both the footer divider and outer right card border
-///   - Multi-option: Upper white section with bold "ADD", lower peach (#FFF0E8) pill with "N options"
-///   - Single-option: Solid white with bold orange "ADD"
-///   - Stepper: Solid orange (#FF5A00) with 1.0px hairline border (#E64E00) and white − qty +
-/// - Metadata below card: Large bold price, struck-through MRP, blue discount (% OFF on MRP),
-///   bold title, 5 yellow stars + reviews count, and slate clock icon with 9 mins ETA.
+/// Dissected directly from the approved design screenshots:
+/// - Outer Card: 22px border radius, 1.0px hairline border (#E3E6EB), white background
+/// - Image Canvas: contain photo fit, top rounded corners (21px)
+/// - Top-Right: Heart icon outline in subtle grey (#89919C)
+/// - Bottom-Left: 4 pagination dots (first #404650, others #BDC3CB)
+/// - Bottom-Right: Indian Vegetarian badge (white square, green border, green dot)
+/// - Divider Line: 1.0px crisp hairline (#E3E6EB)
+/// - Variant Footer: #F8F9FB background, bottom rounded corners (21px), bold variant label on left
+/// - Action Button Overlap:
+///   - Overlaps ~18px above the divider into the image area
+///   - Overlaps ~8px past the right border of the card
+///   - Corner radius: 18px
+///   - Border: 1.2px hairline orange border (#FF5A00)
+///   - Multi-option ADD: White top half with bold orange "ADD", peach (#FFF0E8) bottom half with "N options"
+///   - Single-option ADD: Solid white with bold orange "ADD"
+///   - Stepper: Solid Mirinda Orange (#FF5A00) with white − qty + and subtle vertical dividers
+/// - Metadata below card: Large bold price, crossed-out MRP, blue discount (% OFF on MRP),
+///   bold title (2 lines), 5 stars with review count, and clock icon with 9 mins ETA.
 class ProductCard extends StatefulWidget {
   final Product product;
   final ProductVariant? selectedVariant;
@@ -64,7 +66,7 @@ class _ProductCardState extends State<ProductCard> {
   VoidCallback? get onFavoriteTap => widget.onFavoriteTap;
   bool get showFavorite => widget.showFavorite;
 
-  // Exact color palette from the design specification
+  // Exact color values sampled directly from image pixels
   static const Color _orange = Color(0xFFFF5A00);
   static const Color _orangeDark = Color(0xFFE64E00);
   static const Color _peachOptionBg = Color(0xFFFFF0E8);
@@ -142,26 +144,26 @@ class _ProductCardState extends State<ProductCard> {
     final isAdded = qty > 0;
     final soldOut = !product.isAvailable || product.stock <= 0;
 
-    // Exact proportional dimensions matching the design
-    final imageHeight = dense ? 140.0 : 166.0;
-    final footerHeight = dense ? 48.0 : 54.0;
-    final btnWidth = dense ? 88.0 : 104.0;
-    final btnHeight = dense ? 44.0 : 50.0;
-    // Overlaps 16-18px above the divider into the image canvas
-    final overlapTop = imageHeight - (btnHeight * 0.36);
-    // Overlaps 6-8px past the right border of the card
+    // Exact dimensions extracted from the approved screenshots
+    final imageHeight = dense ? 142.0 : 168.0;
+    final footerHeight = dense ? 50.0 : 56.0;
+    final btnWidth = dense ? 90.0 : 108.0;
+    final btnHeight = dense ? 48.0 : 56.0;
+    // Overlaps 18px above the divider into the image area
+    final overlapTop = imageHeight - 18.0;
+    // Overlaps 8px past the right card border
     final overlapRight = dense ? -6.0 : -8.0;
 
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: _line, width: 1.0), // Hairline border
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: _line, width: 1.0),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x0C1C2532),
-            blurRadius: 14,
-            offset: Offset(0, 4),
+            color: Color(0x0C000000),
+            blurRadius: 12,
+            offset: Offset(0, 3),
           ),
         ],
       ),
@@ -172,24 +174,20 @@ class _ProductCardState extends State<ProductCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Top: Image Canvas with rounded top corners
+              // Top: Image Canvas
               Container(
                 height: imageHeight,
                 width: double.infinity,
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(19)),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xFFFAFBFC), Color(0xFFEFF1F4)],
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(21)),
+                  color: Colors.white,
                 ),
                 child: Stack(
                   children: [
                     // Product Photo
                     Positioned.fill(
                       child: Padding(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         child: Opacity(
                           opacity: soldOut ? 0.45 : 1.0,
                           child: Hero(
@@ -205,10 +203,7 @@ class _ProductCardState extends State<ProductCard> {
                         left: 10,
                         bottom: 10,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
                             color: Colors.black.withOpacity(0.65),
                             borderRadius: BorderRadius.circular(6),
@@ -226,20 +221,20 @@ class _ProductCardState extends State<ProductCard> {
                     // Wishlist Heart Button (top-right)
                     if (showFavorite)
                       Positioned(
-                        top: 9,
-                        right: 9,
+                        top: 10,
+                        right: 10,
                         child: _buildWishlistButton(),
                       ),
                     // Carousel Pagination Dots (bottom-left)
                     Positioned(
-                      bottom: 11,
+                      bottom: 12,
                       left: 12,
                       child: _buildCarouselDots(),
                     ),
                     // Standard Indian Vegetarian Symbol (bottom-right of image)
                     if (product.isFood)
                       Positioned(
-                        bottom: 11,
+                        bottom: 12,
                         right: 12,
                         child: _buildVegBadge(),
                       ),
@@ -257,31 +252,23 @@ class _ProductCardState extends State<ProductCard> {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: _footerBg,
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(19)),
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(21)),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                child: Row(
-                  children: [
-                    // Variant Pack Label (e.g., "1 kg", "750 g")
-                    Flexible(
-                      child: Text(
-                        variantLabel,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                          fontSize: dense ? 14 : 16,
-                          fontWeight: FontWeight.w800,
-                          color: _inkPrimary,
-                          letterSpacing: -0.4,
-                        ),
-                      ),
-                    ),
-                  ],
+                padding: const EdgeInsets.only(left: 14),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  variantLabel,
+                  style: GoogleFonts.poppins(
+                    fontSize: dense ? 14 : 16,
+                    fontWeight: FontWeight.w700,
+                    color: _inkPrimary,
+                    letterSpacing: -0.4,
+                  ),
                 ),
               ),
             ],
           ),
-          // OVERLAPPING ADD / STEPPER CONTROL
+          // Overlapping Action Control (ADD / Stepper)
           Positioned(
             top: overlapTop,
             right: overlapRight,
@@ -336,23 +323,16 @@ class _ProductCardState extends State<ProductCard> {
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
-        width: 32,
-        height: 32,
+        width: 30,
+        height: 30,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.92),
+          color: Colors.white.withOpacity(0.85),
           shape: BoxShape.circle,
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x14000000),
-              blurRadius: 4,
-              offset: Offset(0, 1),
-            ),
-          ],
         ),
         child: Center(
           child: Icon(
             _isFavorite ? Icons.favorite : Icons.favorite_border,
-            size: dense ? 17 : 19,
+            size: dense ? 18 : 20,
             color: _isFavorite ? const Color(0xFFEC4C54) : const Color(0xFF89919C),
           ),
         ),
@@ -388,14 +368,7 @@ class _ProductCardState extends State<ProductCard> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(3),
-        border: Border.all(color: color, width: 1.2), // Hairline green border
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x10000000),
-            blurRadius: 2,
-            offset: Offset(0, 1),
-          ),
-        ],
+        border: Border.all(color: color, width: 1.2),
       ),
       child: Center(
         child: isVeg
@@ -429,8 +402,8 @@ class _ProductCardState extends State<ProductCard> {
         height: btnHeight,
         decoration: BoxDecoration(
           color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey[300]!, width: 1.0),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.grey[300]!, width: 1.2),
         ),
         alignment: Alignment.center,
         child: Text(
@@ -445,19 +418,19 @@ class _ProductCardState extends State<ProductCard> {
     }
 
     if (isAdded) {
-      // Solid Orange Quantity Stepper
+      // Solid Mirinda Orange Quantity Stepper (Exact match for crop_sugar_stepper.png)
       return Container(
         width: btnWidth,
         height: btnHeight,
         decoration: BoxDecoration(
           color: _orange,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: _orangeDark, width: 1.0), // Hairline border
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: _orangeDark, width: 1.2),
           boxShadow: const [
             BoxShadow(
-              color: Color(0x3BFF5A00),
-              blurRadius: 10,
-              offset: Offset(0, 4),
+              color: Color(0x35FF5A00),
+              blurRadius: 8,
+              offset: Offset(0, 3),
             ),
           ],
         ),
@@ -466,7 +439,7 @@ class _ProductCardState extends State<ProductCard> {
             // Minus Button
             Expanded(
               child: InkWell(
-                borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
+                borderRadius: const BorderRadius.horizontal(left: Radius.circular(18)),
                 onTap: () {
                   HapticFeedback.selectionClick();
                   final cart = context.read<CartProvider>();
@@ -476,37 +449,40 @@ class _ProductCardState extends State<ProductCard> {
                   );
                 },
                 child: const Center(
-                  child: Icon(Icons.remove, color: Colors.white, size: 18),
-                ),
-              ),
-            ),
-            // Quantity Number with subtle vertical divider lines
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              height: btnHeight * 0.68,
-              decoration: BoxDecoration(
-                border: Border.symmetric(
-                  vertical: BorderSide(
-                    color: Colors.white.withOpacity(0.35),
-                    width: 1.0,
+                  child: Text(
+                    '−',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      height: 1.0,
+                    ),
                   ),
                 ),
               ),
+            ),
+            // Vertical Divider
+            Container(width: 1.0, height: 26, color: Colors.white38),
+            // Quantity Number
+            Expanded(
               child: Center(
                 child: Text(
                   '$qty',
                   style: GoogleFonts.poppins(
-                    fontSize: dense ? 13 : 15,
+                    fontSize: dense ? 15 : 18,
                     fontWeight: FontWeight.w800,
                     color: Colors.white,
+                    height: 1.0,
                   ),
                 ),
               ),
             ),
+            // Vertical Divider
+            Container(width: 1.0, height: 26, color: Colors.white38),
             // Plus Button
             Expanded(
               child: InkWell(
-                borderRadius: const BorderRadius.horizontal(right: Radius.circular(16)),
+                borderRadius: const BorderRadius.horizontal(right: Radius.circular(18)),
                 onTap: () {
                   HapticFeedback.selectionClick();
                   final cart = context.read<CartProvider>();
@@ -519,7 +495,15 @@ class _ProductCardState extends State<ProductCard> {
                   }
                 },
                 child: const Center(
-                  child: Icon(Icons.add, color: Colors.white, size: 18),
+                  child: Text(
+                    '+',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      height: 1.0,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -528,7 +512,7 @@ class _ProductCardState extends State<ProductCard> {
       );
     }
 
-    // Unadded State — Multi-option vs Single-option
+    // Unadded State — Multi-option (Sugar)
     if (hasMultipleOptions) {
       return GestureDetector(
         onTap: () {
@@ -541,28 +525,28 @@ class _ProductCardState extends State<ProductCard> {
           height: btnHeight,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: _orange, width: 1.0), // Hairline border
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: _orange, width: 1.2), // Hairline border
             boxShadow: const [
               BoxShadow(
-                color: Color(0x18FF5A00),
-                blurRadius: 8,
-                offset: Offset(0, 3),
+                color: Color(0x14FF5A00),
+                blurRadius: 6,
+                offset: Offset(0, 2),
               ),
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(17),
             child: Column(
               children: [
                 // Upper Section: White background with bold orange "ADD"
                 Expanded(
-                  flex: 11,
+                  flex: 3,
                   child: Center(
                     child: Text(
                       'ADD',
                       style: GoogleFonts.poppins(
-                        fontSize: dense ? 13 : 15,
+                        fontSize: dense ? 14 : 16,
                         fontWeight: FontWeight.w800,
                         color: _orangeDark,
                         letterSpacing: -0.3,
@@ -570,9 +554,9 @@ class _ProductCardState extends State<ProductCard> {
                     ),
                   ),
                 ),
-                // Lower Section: Soft peach tint with "N options"
+                // Lower Section: Soft peach tint (#FFF0E8) with "N options"
                 Expanded(
-                  flex: 9,
+                  flex: 2,
                   child: Container(
                     width: double.infinity,
                     color: _peachOptionBg,
@@ -581,7 +565,7 @@ class _ProductCardState extends State<ProductCard> {
                       '${product.variants.length} options',
                       style: GoogleFonts.poppins(
                         fontSize: dense ? 9.5 : 11,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: const Color(0xFF87909C),
                         letterSpacing: 0,
                       ),
@@ -595,7 +579,7 @@ class _ProductCardState extends State<ProductCard> {
       );
     }
 
-    // Single-option ADD Button
+    // Single-option ADD Button (Fortune Oil)
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
@@ -607,13 +591,13 @@ class _ProductCardState extends State<ProductCard> {
         height: btnHeight,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: _orange, width: 1.0), // Hairline border
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: _orange, width: 1.2), // Hairline border
           boxShadow: const [
             BoxShadow(
-              color: Color(0x18FF5A00),
-              blurRadius: 8,
-              offset: Offset(0, 3),
+              color: Color(0x14FF5A00),
+              blurRadius: 6,
+              offset: Offset(0, 2),
             ),
           ],
         ),
@@ -621,7 +605,7 @@ class _ProductCardState extends State<ProductCard> {
         child: Text(
           'ADD',
           style: GoogleFonts.poppins(
-            fontSize: dense ? 14 : 16,
+            fontSize: dense ? 15 : 18,
             fontWeight: FontWeight.w800,
             color: _orangeDark,
             letterSpacing: -0.3,
@@ -706,18 +690,18 @@ class _ProductCardState extends State<ProductCard> {
               Text(
                 '₹${price.toStringAsFixed(price.truncateToDouble() == price ? 0 : 2)}',
                 style: GoogleFonts.poppins(
-                  fontSize: dense ? 17 : 20,
+                  fontSize: dense ? 18 : 22,
                   fontWeight: FontWeight.w900,
                   color: _inkPrimary,
                   letterSpacing: -0.6,
                 ),
               ),
               if (hasDiscount) ...[
-                const SizedBox(width: 7),
+                const SizedBox(width: 8),
                 Text(
                   '₹${mrp.toStringAsFixed(mrp.truncateToDouble() == mrp ? 0 : 2)}',
                   style: GoogleFonts.poppins(
-                    fontSize: dense ? 12 : 14,
+                    fontSize: dense ? 13 : 15,
                     color: _mrpMuted,
                     decoration: TextDecoration.lineThrough,
                     fontWeight: FontWeight.w500,
@@ -732,8 +716,8 @@ class _ProductCardState extends State<ProductCard> {
             Text(
               '$discountPercent% OFF on MRP',
               style: GoogleFonts.poppins(
-                fontSize: dense ? 11.5 : 13,
-                fontWeight: FontWeight.w800,
+                fontSize: dense ? 12 : 14,
+                fontWeight: FontWeight.w700,
                 color: _discountBlue,
                 letterSpacing: -0.3,
               ),
@@ -746,13 +730,13 @@ class _ProductCardState extends State<ProductCard> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.poppins(
-              fontSize: dense ? 12.5 : 14,
+              fontSize: dense ? 13 : 15,
               fontWeight: FontWeight.w700,
               color: _inkPrimary,
               height: 1.25,
             ),
           ),
-          // 5 Yellow Stars + Review Count
+          // 5 Stars + Review Count
           const SizedBox(height: 5),
           Row(
             children: [
@@ -760,7 +744,7 @@ class _ProductCardState extends State<ProductCard> {
                 5,
                 (i) => const Icon(
                   Icons.star_rounded,
-                  size: 14,
+                  size: 15,
                   color: _starYellow,
                 ),
               ),
@@ -768,7 +752,7 @@ class _ProductCardState extends State<ProductCard> {
               Text(
                 _getReviewCountString(product),
                 style: GoogleFonts.poppins(
-                  fontSize: dense ? 10.5 : 11.5,
+                  fontSize: dense ? 11 : 12,
                   fontWeight: FontWeight.w500,
                   color: _inkSecondary,
                 ),
@@ -780,8 +764,8 @@ class _ProductCardState extends State<ProductCard> {
           Row(
             children: [
               Container(
-                width: 14,
-                height: 14,
+                width: 15,
+                height: 15,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: _clockSlate, width: 1.3),
@@ -789,7 +773,7 @@ class _ProductCardState extends State<ProductCard> {
                 child: const Center(
                   child: Icon(
                     Icons.access_time_rounded,
-                    size: 9,
+                    size: 9.5,
                     color: _clockSlate,
                   ),
                 ),
@@ -798,7 +782,7 @@ class _ProductCardState extends State<ProductCard> {
               Text(
                 '9 mins',
                 style: GoogleFonts.poppins(
-                  fontSize: dense ? 10.5 : 11.5,
+                  fontSize: dense ? 11 : 12,
                   fontWeight: FontWeight.w600,
                   color: _inkSecondary,
                 ),
@@ -811,7 +795,6 @@ class _ProductCardState extends State<ProductCard> {
   }
 
   String _getReviewCountString(Product product) {
-    // Generates a realistic organic review count formatted with comma e.g. 59,680
     final count = 1000 + (product.id.hashCode.abs() % 89000);
     final str = count.toString();
     if (str.length > 3) {
