@@ -218,25 +218,28 @@ class _CategoryListingScreenState extends State<CategoryListingScreen> {
         Expanded(
           child: products.isEmpty
               ? ListingEmpty(filtered: _offersOnly || _inStockOnly)
-              : GridView.builder(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 120),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 14,
-                    childAspectRatio: 0.55,
-                  ),
-                  itemCount: products.length,
-                  itemBuilder: (context, i) => ProductCard(
-                    product: products[i],
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ProductDetailScreen(productId: products[i].id),
+              : LayoutBuilder(
+                  builder: (context, constraints) {
+                    return GridView.builder(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 120),
+                      clipBehavior: Clip.none,
+                      gridDelegate: ProductCardMetrics.delegate(
+                        width: constraints.maxWidth - 20,
                       ),
-                    ),
-                  ),
+                      itemCount: products.length,
+                      itemBuilder: (context, i) => ProductCard(
+                        product: products[i],
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ProductDetailScreen(
+                              productId: products[i].id,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
         ),
       ],

@@ -174,29 +174,31 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   ),
                 ),
                 Expanded(
-                  child: GridView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.55,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      final product = products[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  ProductDetailScreen(productId: product.id),
-                            ),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return GridView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        clipBehavior: Clip.none,
+                        gridDelegate: ProductCardMetrics.delegate(
+                          width: constraints.maxWidth - 24,
+                        ),
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          final product = products[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ProductDetailScreen(
+                                    productId: product.id,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: ProductCard(product: product),
                           );
                         },
-                        child: ProductCard(product: product),
                       );
                     },
                   ),

@@ -726,7 +726,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: 210,
+          height: ProductCardMetrics.cellHeight(148, dense: false),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -734,18 +734,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             itemBuilder: (context, i) {
               final product = similar[i];
               return SizedBox(
-                width: 148,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ProductDetailScreen(productId: product.id),
-                      ),
-                    );
-                  },
-                  child: ProductCard(product: product),
+                width: 160,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              ProductDetailScreen(productId: product.id),
+                        ),
+                      );
+                    },
+                    child: ProductCard(product: product),
+                  ),
                 ),
               );
             },

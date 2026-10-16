@@ -1371,17 +1371,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.55,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (_, index) => _productCell(products[index]),
-          childCount: products.length,
-        ),
+      sliver: SliverLayoutBuilder(
+        builder: (context, constraints) {
+          return SliverGrid(
+            gridDelegate: ProductCardMetrics.delegate(
+              width: constraints.crossAxisExtent,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (_, index) => _productCell(products[index]),
+              childCount: products.length,
+            ),
+          );
+        },
       ),
     );
   }

@@ -428,6 +428,7 @@ class ProductShelf extends StatelessWidget {
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),
+                clipBehavior: Clip.none,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 12,
                 childAspectRatio: w / h,
@@ -500,7 +501,7 @@ class ProductShelf extends StatelessWidget {
   /// rest, so a cell is never a pixel short.
   static (double, double) _cellSize(double width, int columns) {
     final w = (width - 10 * (columns - 1)) / columns;
-    return (w, w + (columns > 2 ? 130 : 112));
+    return (w, ProductCardMetrics.cellHeight(w, dense: columns > 2));
   }
 }
 

@@ -96,28 +96,29 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         else
                           SliverPadding(
                             padding: const EdgeInsets.fromLTRB(12, 4, 12, 120),
-                            sliver: SliverGrid(
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 14,
-                                childAspectRatio: 0.55,
-                              ),
-                              delegate: SliverChildBuilderDelegate(
-                                childCount: products.length,
-                                (context, i) => ProductCard(
-                                  product: products[i],
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => ProductDetailScreen(
-                                        productId: products[i].id,
+                            sliver: SliverLayoutBuilder(
+                              builder: (context, constraints) {
+                                return SliverGrid(
+                                  gridDelegate:
+                                      ProductCardMetrics.delegate(
+                                    width: constraints.crossAxisExtent,
+                                  ),
+                                  delegate: SliverChildBuilderDelegate(
+                                    childCount: products.length,
+                                    (context, i) => ProductCard(
+                                      product: products[i],
+                                      onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => ProductDetailScreen(
+                                            productId: products[i].id,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
                           ),
                       ],

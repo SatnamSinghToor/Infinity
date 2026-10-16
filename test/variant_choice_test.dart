@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 import 'package:duggu/models/product.dart';
+import 'package:duggu/models/product_variant.dart';
 import 'package:duggu/providers/auth_provider.dart';
 import 'package:duggu/providers/cart_provider.dart';
 import 'package:duggu/providers/edit_mode_provider.dart';
@@ -21,6 +22,34 @@ const _oats = Product(
   rating: 4,
   unit: '900 gm',
   stock: 20,
+);
+
+const _oatsTwoSizes = Product(
+  id: 'oats',
+  name: 'Quaker Oats',
+  description: 'd',
+  price: 176.4,
+  originalPrice: 199.5,
+  category: 'Breakfast',
+  rating: 4,
+  unit: '900 gm',
+  stock: 20,
+  variants: [
+    ProductVariant(
+      id: 'v900',
+      label: '900 GM',
+      price: 176.4,
+      mrp: 199.5,
+      stock: 20,
+    ),
+    ProductVariant(
+      id: 'v400',
+      label: '400 GM',
+      price: 88.2,
+      mrp: 99.0,
+      stock: 20,
+    ),
+  ],
 );
 
 /// A catalogue that says the oats come in two sizes.
@@ -67,7 +96,7 @@ void main() {
     });
   });
 
-  testWidgets('a product in two sizes says so under its +', (tester) async {
+  testWidgets('a product in two sizes says so under ADD', (tester) async {
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -77,13 +106,13 @@ void main() {
           ChangeNotifierProvider(create: (_) => EditModeProvider()),
           ChangeNotifierProvider(create: (_) => AuthProvider()),
         ],
-        child: const MaterialApp(
+        child: MaterialApp(
           home: Scaffold(
             body: Center(
               child: SizedBox(
                 width: 163,
-                height: 296,
-                child: ProductCard(product: _oats),
+                height: ProductCardMetrics.cellHeight(163, dense: false),
+                child: const ProductCard(product: _oatsTwoSizes),
               ),
             ),
           ),
@@ -91,7 +120,8 @@ void main() {
       ),
     );
     expect(tester.takeException(), isNull);
-    expect(find.text('2 Opt'), findsOneWidget);
+    expect(find.text('ADD'), findsOneWidget);
+    expect(find.text('2 options'), findsOneWidget);
     SupabaseService.client.auth.stopAutoRefresh();
   });
 }
