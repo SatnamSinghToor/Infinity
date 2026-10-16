@@ -13,27 +13,31 @@ import 'edit_tools.dart';
 import 'product_hero.dart';
 import 'variant_sheet.dart';
 
-/// Sizes taken from DugguStoreProductCardPlan.pdf so a 2-column phone
-/// grid can show the same card as the two reference photos: tall image
-/// canvas, variant footer, overlapping ADD / stepper, then price copy.
+/// Measurements for the two-column mobile product grid.
+///
+/// At a card width of about 164-166 dp these values reproduce the reference:
+/// a ~190 dp image canvas, a 44 dp unit footer and a 89 x 52 dp action button.
 class ProductCardMetrics {
   ProductCardMetrics._();
 
   static const double cardRadius = 20;
   static const double controlRadius = 16;
-  static const double overlapRight = 10;
-  static const double overlapIntoImage = 19;
+  static const double overlapRight = 8;
+  static const double overlapIntoImage = 8;
   static const double gridSpacing = 16;
   static const double gridRunSpacing = 18;
 
   static double imageHeight(double cardWidth, {required bool dense}) {
-    final h = cardWidth * (dense ? 1.16 : 1.28);
-    return dense ? h.clamp(132.0, 200.0) : h.clamp(188.0, 280.0);
+    final double height = cardWidth * (dense ? 1.16 : 1.28);
+    return (dense
+            ? height.clamp(132.0, 200.0)
+            : height.clamp(188.0, 280.0))
+        .toDouble();
   }
 
-  static double footerHeight({required bool dense}) => dense ? 56.0 : 72.0;
+  static double footerHeight({required bool dense}) => dense ? 44.0 : 72.0;
 
-  /// Price, discount, 2-line name, stars, ETA, and "Change option".
+  /// Space for price, offer, two-line title, rating and delivery time.
   static double metadataHeight({required bool dense}) => dense ? 132.0 : 154.0;
 
   static double cellHeight(double cardWidth, {required bool dense}) {
@@ -46,22 +50,26 @@ class ProductCardMetrics {
   static SliverGridDelegate delegate({
     required double width,
     int columns = 2,
-    bool dense = false,
+    bool dense = true,
   }) {
-    final spacing = columns > 2 ? 12.0 : gridSpacing;
-    final run = columns > 2 ? 14.0 : gridRunSpacing;
-    final cardWidth = (width - spacing * (columns - 1)) / columns;
+    final double spacing = columns > 2 ? 12.0 : gridSpacing;
+    final double runSpacing = columns > 2 ? 14.0 : gridRunSpacing;
+    final double cardWidth = (width - spacing * (columns - 1)) / columns;
+
     return SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: columns,
       crossAxisSpacing: spacing,
-      mainAxisSpacing: run,
+      mainAxisSpacing: runSpacing,
       mainAxisExtent: cellHeight(cardWidth, dense: dense),
     );
   }
 }
 
-/// Orange Grocery UI product card — matches the two photos in the plan:
-/// A) outlined ADD (+ "N options") and B) filled orange − 1 + stepper.
+/// Grocery product card with the two states from the supplied designs:
+///
+/// * Not in cart: outlined ADD button, with a small options footer for
+///   multi-variant products.
+/// * In cart: filled orange minus / quantity / plus stepper.
 class ProductCard extends StatefulWidget {
   static const addKey = Key('product-card-add');
   static const stepperKey = Key('product-card-stepper');
@@ -77,7 +85,7 @@ class ProductCard extends StatefulWidget {
     super.key,
     required this.product,
     this.selectedVariant,
-    this.dense = false,
+    this.dense = true,
     this.onTap,
     this.onFavoriteTap,
     this.showFavorite = true,
@@ -120,7 +128,7 @@ class _ProductCardState extends State<ProductCard> {
   }
 
   @override
-  void didUpdateWidget(ProductCard oldWidget) {
+  void didUpdateWidget(covariant ProductCard oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.selectedVariant != oldWidget.selectedVariant) {
       _activeVariant = widget.selectedVariant ?? product.firstAvailableVariant;
@@ -134,17 +142,17 @@ class _ProductCardState extends State<ProductCard> {
 
   int get currentQuantity {
     final cart = context.watch<CartProvider>();
-    final vid = currentVariant?.id;
-    return cart.getQuantity(product.id, variantId: vid);
+    return cart.getQuantity(product.id, variantId: currentVariant?.id);
   }
 
   @override
   Widget build(BuildContext context) {
     Widget card = LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth.isFinite && constraints.maxWidth > 0
-            ? constraints.maxWidth
-            : 163.0;
+        final double width =
+            constraints.maxWidth.isFinite && constraints.maxWidth > 0
+                ? constraints.maxWidth
+                : 163.0;
         return _buildCardContent(context, width);
       },
     );
@@ -163,7 +171,6 @@ class _ProductCardState extends State<ProductCard> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildVisualCard(context, width),
-        if (hasMultipleOptions && currentQuantity > 0) _buildChangeOption(),
         GestureDetector(
           onTap: onTap,
           behavior: HitTestBehavior.opaque,
@@ -175,28 +182,30 @@ class _ProductCardState extends State<ProductCard> {
 
   Widget _buildVisualCard(BuildContext context, double width) {
     final variant = currentVariant;
-    final variantLabel = variant?.label ?? product.unit;
-    final qty = currentQuantity;
-    final isAdded = qty > 0;
-    final soldOut = !product.isAvailable || product.stock <= 0;
+    final String variantLabel = variant?.label ?? product.unit;
+    final int qty = currentQuantity;
+    final bool isAdded = qty > 0;
+    final bool soldOut = !product.isAvailable || product.stock <= 0;
 
-    final imageHeight =
+    final double imageHeight =
         ProductCardMetrics.imageHeight(width, dense: dense);
-    final footerHeight = ProductCardMetrics.footerHeight(dense: dense);
-    final btnWidth = (width * (dense ? 0.58 : 0.55)).clamp(88.0, 205.0);
-    final btnHeight = dense ? 50.0 : 64.0;
-    final overlapTop = imageHeight - ProductCardMetrics.overlapIntoImage;
+    final double footerHeight = ProductCardMetrics.footerHeight(dense: dense);
+    final double btnWidth =
+        (width * (dense ? 0.54 : 0.55)).clamp(88.0, 205.0).toDouble();
+    final double btnHeight = dense ? 52.0 : 64.0;
+    final double overlapTop =
+        imageHeight - ProductCardMetrics.overlapIntoImage;
 
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(ProductCardMetrics.cardRadius),
-        border: Border.all(color: _line, width: 1),
+        border: Border.all(color: _line),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x1F1C2532),
-            blurRadius: 16,
-            offset: Offset(0, 6),
+            color: Color(0x0F1C2532),
+            blurRadius: 7,
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -340,9 +349,11 @@ class _ProductCardState extends State<ProductCard> {
   Widget _buildPhoto() {
     final gallery = product.gallery;
     final url = gallery.isNotEmpty ? gallery.first : (product.imageUrl ?? '');
+
     if (url.isEmpty) {
       return _buildPlaceholder();
     }
+
     return AppNetworkImage(
       url,
       fit: BoxFit.contain,
@@ -366,7 +377,10 @@ class _ProductCardState extends State<ProductCard> {
   }
 
   Widget _buildWishlistButton() {
-    final wished = context.watch<WishlistProvider>().isWishlisted(product.id);
+    final bool wished = context.watch<WishlistProvider>().isWishlisted(
+          product.id,
+        );
+
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
@@ -390,9 +404,12 @@ class _ProductCardState extends State<ProductCard> {
   }
 
   Widget _buildCarouselDots() {
-    final n = product.gallery.length;
-    final count = n > 1 ? n.clamp(2, 4) : 4;
-    final size = dense ? 6.0 : 8.0;
+    final int galleryCount = product.gallery.length;
+    final int count = galleryCount > 1
+        ? galleryCount.clamp(2, 4).toInt()
+        : 4;
+    final double size = dense ? 6.0 : 8.0;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(
@@ -402,7 +419,9 @@ class _ProductCardState extends State<ProductCard> {
           height: size,
           margin: EdgeInsets.only(right: dense ? 4 : 6),
           decoration: BoxDecoration(
-            color: index == 0 ? const Color(0xFF404650) : const Color(0xFFBDC3CB),
+            color: index == 0
+                ? const Color(0xFF404650)
+                : const Color(0xFFBDC3CB),
             shape: BoxShape.circle,
           ),
         ),
@@ -411,9 +430,10 @@ class _ProductCardState extends State<ProductCard> {
   }
 
   Widget _buildVegBadge() {
-    final isVeg = product.isVeg;
-    final color = isVeg ? _vegGreen : _nonVegRed;
-    final side = dense ? 18.0 : 24.0;
+    final bool isVeg = product.isVeg;
+    final Color color = isVeg ? _vegGreen : _nonVegRed;
+    final double side = dense ? 18.0 : 24.0;
+
     return Container(
       width: side,
       height: side,
@@ -427,7 +447,10 @@ class _ProductCardState extends State<ProductCard> {
             ? Container(
                 width: side * 0.42,
                 height: side * 0.42,
-                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                ),
               )
             : Icon(
                 Icons.change_history,
@@ -476,12 +499,12 @@ class _ProductCardState extends State<ProductCard> {
         decoration: BoxDecoration(
           color: _orange,
           borderRadius: BorderRadius.circular(ProductCardMetrics.controlRadius),
-          border: Border.all(color: _orangeDark, width: 1),
+          border: Border.all(color: _orangeDark),
           boxShadow: const [
             BoxShadow(
-              color: Color(0x2EFF5A00),
-              blurRadius: 12,
-              offset: Offset(0, 5),
+              color: Color(0x1AFF5A00),
+              blurRadius: 8,
+              offset: Offset(0, 3),
             ),
           ],
         ),
@@ -514,7 +537,11 @@ class _ProductCardState extends State<ProductCard> {
                 ),
               ),
             ),
-            Container(width: 1, height: 26, color: Colors.white38),
+            Container(
+              width: 1,
+              height: dense ? 22 : 26,
+              color: Colors.white38,
+            ),
             Expanded(
               child: Center(
                 child: Text(
@@ -530,7 +557,11 @@ class _ProductCardState extends State<ProductCard> {
                 ),
               ),
             ),
-            Container(width: 1, height: 26, color: Colors.white38),
+            Container(
+              width: 1,
+              height: dense ? 22 : 26,
+              color: Colors.white38,
+            ),
             Expanded(
               child: InkWell(
                 borderRadius: const BorderRadius.horizontal(
@@ -538,11 +569,13 @@ class _ProductCardState extends State<ProductCard> {
                 ),
                 onTap: () {
                   HapticFeedback.selectionClick();
-                  final ok = context.read<CartProvider>().increaseQuantity(
+                  final bool ok = context.read<CartProvider>().increaseQuantity(
                         product.id,
                         variantId: currentVariant?.id,
                       );
-                  if (!ok) _showStockLimitToast();
+                  if (!ok) {
+                    _showStockLimitToast();
+                  }
                 },
                 child: const Center(
                   child: Text(
@@ -577,8 +610,7 @@ class _ProductCardState extends State<ProductCard> {
           height: btnHeight,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius:
-                BorderRadius.circular(ProductCardMetrics.controlRadius),
+            borderRadius: BorderRadius.circular(ProductCardMetrics.controlRadius),
             border: Border.all(color: _orange, width: 1.5),
             boxShadow: const [
               BoxShadow(
@@ -672,65 +704,44 @@ class _ProductCardState extends State<ProductCard> {
     );
   }
 
-  Widget _buildChangeOption() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 6),
-      child: GestureDetector(
-        onTap: () {
-          HapticFeedback.lightImpact();
-          _openVariantSheet();
-        },
-        child: Text(
-          'Change option',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.poppins(
-            fontSize: dense ? 11 : 12,
-            fontWeight: FontWeight.w800,
-            color: _orangeDark,
-            decoration: TextDecoration.underline,
-            decorationColor: _orangeDark,
-          ),
-        ),
-      ),
-    );
-  }
-
   void _quickAdd() {
     final cart = context.read<CartProvider>();
     final variant = currentVariant;
-    final ok = cart.addToCart(
+    final bool ok = cart.addToCart(
       product,
       variantId: variant?.id,
       variantName: variant?.label,
       variantPrice: variant?.price,
     );
-    if (ok) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            content: Text(
-              '${product.name} added to cart',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            duration: const Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: _orange,
-          ),
-        );
-    } else {
+
+    if (!ok) {
       _showStockLimitToast();
+      return;
     }
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            '${product.name} added to cart',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: _orange,
+        ),
+      );
   }
 
   Future<void> _openVariantSheet() async {
-    final chosen = await showVariantSheet(
+    final ProductVariant? chosen = await showVariantSheet(
       context,
       product,
       initialVariant: currentVariant,
     );
+
     if (chosen != null && mounted) {
       setState(() => _activeVariant = chosen);
     }
@@ -754,12 +765,12 @@ class _ProductCardState extends State<ProductCard> {
 
   Widget _buildMetadata(BuildContext context) {
     final variant = currentVariant;
-    final price = variant?.price ?? product.price;
-    final mrp = variant?.mrp ?? product.originalPrice;
-    final discountPercent = variant != null && variant.mrp > variant.price
+    final double price = variant?.price ?? product.price;
+    final double mrp = variant?.mrp ?? product.originalPrice;
+    final int discountPercent = variant != null && variant.mrp > variant.price
         ? variant.discountPercent
         : product.discountPercent;
-    final hasDiscount = mrp > price;
+    final bool hasDiscount = mrp > price;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(2, 12, 4, 0),
@@ -830,7 +841,7 @@ class _ProductCardState extends State<ProductCard> {
             children: [
               ...List.generate(
                 5,
-                (i) => Icon(
+                (index) => Icon(
                   Icons.star_rounded,
                   size: dense ? 14 : 16,
                   color: _starYellow,
@@ -887,8 +898,8 @@ class _ProductCardState extends State<ProductCard> {
       value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 2);
 
   String _reviewCountLabel(Product product) {
-    final count = 1000 + (product.id.hashCode.abs() % 89000);
-    final str = count.toString();
+    final int count = 1000 + (product.id.hashCode.abs() % 89000);
+    final String str = count.toString();
     if (str.length > 3) {
       return '${str.substring(0, str.length - 3)},${str.substring(str.length - 3)}';
     }
