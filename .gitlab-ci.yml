@@ -18,7 +18,8 @@ build_apk:
   tags:
     - saas-linux-medium-amd64
   rules:
-    # Every push to main, and "Run pipeline" by hand from the web.
+    # Every push to main triggers this pipeline (auto APK build).
+    # Also runnable manually from GitLab web UI.
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_PIPELINE_SOURCE == "web"
   variables:
