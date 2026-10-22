@@ -41,23 +41,23 @@ class AppSpacing {
   static const double sectionGap = md;
 }
 
-/// Corner radii. The sizes match what the app already draws: buttons 14,
-/// cards 16, fields 12.
+/// Corner radii. Every surface uses the product card's radius (10) so
+/// buttons, fields, cards, bottom navs — every corner — reads as one look.
 class AppRadius {
   const AppRadius._();
 
   static const double sm = 8;
-  static const double md = 12;
-  static const double lg = 16;
+  static const double md = 10;
+  static const double lg = 10;
   static const double xl = 20;
-  static const double button = 14;
+  static const double button = 10;
 
   /// Fully round, for chips and pills.
   static const double pill = 999;
 
-  static const BorderRadius card = BorderRadius.all(Radius.circular(lg));
-  static const BorderRadius field = BorderRadius.all(Radius.circular(md));
-  static const BorderRadius action = BorderRadius.all(Radius.circular(button));
+  static const BorderRadius card = BorderRadius.all(Radius.circular(10));
+  static const BorderRadius field = BorderRadius.all(Radius.circular(10));
+  static const BorderRadius action = BorderRadius.all(Radius.circular(10));
   static const BorderRadius sheet =
       BorderRadius.vertical(top: Radius.circular(xl));
 }

@@ -13,7 +13,7 @@ stages:
 
 build_apk:
   stage: build
-  image: ghcr.io/cirruslabs/flutter:3.47
+  image: ghcr.io/cirruslabs/flutter:stable
   timeout: 60 minutes
   tags:
     - saas-linux-medium-amd64
