@@ -120,7 +120,7 @@ class _AddressManagementScreenState extends State<AddressManagementScreen> {
                       l10n.addressEmptyTitle,
                       style: GoogleFonts.poppins(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: Colors.grey[600],
                       ),
                     ),
@@ -149,7 +149,7 @@ class _AddressManagementScreenState extends State<AddressManagementScreen> {
               padding: const EdgeInsets.all(16),
               children: [
                 ...addresses.map(_buildAddressCard),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 SizedBox(
                   height: 48,
                   child: Pressable(
@@ -199,7 +199,7 @@ class _AddressManagementScreenState extends State<AddressManagementScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(10),
         border: address.isDefault
             ? Border.all(color: AppConstants.primaryColor, width: 1.5)
             : null,
@@ -227,7 +227,7 @@ class _AddressManagementScreenState extends State<AddressManagementScreen> {
                   _labelText(l10n, address.label),
                   style: GoogleFonts.poppins(
                     fontSize: 15,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -248,14 +248,14 @@ class _AddressManagementScreenState extends State<AddressManagementScreen> {
                   ),
                   decoration: BoxDecoration(
                     color: AppConstants.primaryColor.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     l10n.addressDefaultBadge,
                     style: GoogleFonts.poppins(
                       color: AppConstants.primaryColor,
-                      fontSize: 9,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

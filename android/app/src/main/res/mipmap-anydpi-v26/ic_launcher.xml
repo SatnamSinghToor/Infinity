@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- The launcher icon the Android way (API 26+): the phone's own shape masks
      this, and everything inside the safe zone stays visible. The mark is
-     cropped to its own bounds and set to 66% of the layer — big enough to
-     read at actual launcher size, small enough that a round or squircle mask
-     never clips the cap or the wheel. (An earlier version padded it down to
-     41%, which is why the icon looked like a faint smudge on the phone.) -->
+     the Infinity wordmark cropped to its own bounds and set to 66% of the
+     layer on a flat brand-orange background — big enough to read at actual
+     launcher size, small enough that a round or squircle mask never clips
+     the letters. -->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
     <background android:drawable="@color/ic_launcher_background" />
     <foreground android:drawable="@mipmap/ic_launcher_foreground" />

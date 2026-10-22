@@ -54,7 +54,7 @@ class DeliveryMoreScreen extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 24,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: tokens.textPrimary,
                         ),
                       ),
@@ -164,17 +164,17 @@ class _ProfileCard extends StatelessWidget {
             name.isEmpty ? '?' : name[0].toUpperCase(),
             style: TextStyle(
               fontSize: 30,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: tokens.primary,
             ),
           ),
         );
     return Container(
-      margin: const EdgeInsets.only(bottom: 14),
+      margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: tokens.card,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: AppRadius.card,
       ),
       child: Row(
         children: [
@@ -205,7 +205,7 @@ class _ProfileCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 19,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: tokens.textPrimary,
                   ),
                 ),
@@ -238,7 +238,8 @@ class _ProfileCard extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius:
+                      BorderRadius.circular(AppRadius.md),
                 ),
               ),
             ),
@@ -261,10 +262,10 @@ class _Section extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = context.tokens;
     return Container(
-      margin: const EdgeInsets.only(bottom: 14),
+      margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
       decoration: BoxDecoration(
         color: tokens.card,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: AppRadius.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,7 +278,7 @@ class _Section extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: tokens.textPrimary,
               ),
             ),

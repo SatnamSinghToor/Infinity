@@ -18,12 +18,13 @@ class CartProvider extends ChangeNotifier {
   /// prices an order from its own copy — so the cart screen says so and
   /// offers to resend everything ([retrySync]) instead of letting checkout
   /// quietly charge for an older cart.
-  bool _syncFailed = false;
+  @protected
+  bool syncFailedInternal = false;
 
   List<CartItem> get items => List.unmodifiable(_items);
   bool get isLoading => _isLoading;
   bool get loadFailed => _loadFailed;
-  bool get syncFailed => _syncFailed;
+  bool get syncFailed => syncFailedInternal;
 
   int get itemCount => _items.fold(0, (sum, item) => sum + item.quantity);
 
@@ -41,7 +42,7 @@ class CartProvider extends ChangeNotifier {
   void resetLocal() {
     _items.clear();
     _loadedFor = null;
-    _syncFailed = false;
+    syncFailedInternal = false;
     notifyListeners();
   }
 
@@ -83,7 +84,7 @@ class CartProvider extends ChangeNotifier {
     // A fresh read replaces whatever the server held, so any earlier sync
     // failure no longer applies — the guest merges below will re-raise the
     // flag if their writes fail.
-    _syncFailed = false;
+    syncFailedInternal = false;
     notifyListeners();
 
     try {
@@ -98,22 +99,30 @@ class CartProvider extends ChangeNotifier {
 
       _items.clear();
       for (final row in rows) {
-        final productRow = row['products'] as Map<String, dynamic>?;
-        if (productRow == null) continue;
-        final qty = (row['qty'] as num?)?.toInt() ??
-            (row['quantity'] as num?)?.toInt() ??
-            1;
-        final variantRow = row['product_variants'] as Map<String, dynamic>?;
-        _items.add(
-          CartItem(
-            id: row['id'] as String,
-            product: Product.fromSupabaseRow(productRow),
-            quantity: qty,
-            variantId: row['variant_id'] as String?,
-            variantName: variantRow?['name'] as String?,
-            variantPrice: (variantRow?['price'] as num?)?.toDouble(),
-          ),
-        );
+        // Parse defensively: one malformed row must not abort the whole
+        // load and wipe the cart view.
+        try {
+          final productRow = row['products'] as Map<String, dynamic>?;
+          if (productRow == null) continue;
+          final id = row['id'] as String?;
+          if (id == null) continue;
+          final qty = (row['qty'] as num?)?.toInt() ??
+              (row['quantity'] as num?)?.toInt() ??
+              1;
+          final variantRow = row['product_variants'] as Map<String, dynamic>?;
+          _items.add(
+            CartItem(
+              id: id,
+              product: Product.fromSupabaseRow(productRow),
+              quantity: qty,
+              variantId: row['variant_id'] as String?,
+              variantName: variantRow?['name'] as String?,
+              variantPrice: (variantRow?['price'] as num?)?.toDouble(),
+            ),
+          );
+        } catch (e) {
+          debugPrint('Skipping malformed cart row: $e');
+        }
       }
       _loadedFor = uid;
 
@@ -128,7 +137,7 @@ class CartProvider extends ChangeNotifier {
           _items.add(guest);
           merged = guest;
         }
-        await _upsertQuantity(merged, merged.quantity);
+        await upsertQuantity(merged, merged.quantity);
       }
     } catch (e) {
       debugPrint('Cart load failed: $e');
@@ -149,7 +158,8 @@ class CartProvider extends ChangeNotifier {
         'variant_id': item.variantId,
       };
 
-  Future<void> _upsertQuantity(CartItem item, int quantity) async {
+  @protected
+  Future<void> upsertQuantity(CartItem item, int quantity) async {
     final uid = _userId;
     if (uid == null) return;
     try {
@@ -162,8 +172,8 @@ class CartProvider extends ChangeNotifier {
       // on the server. Raise the flag the cart screen shows, so the user
       // can resend instead of paying for an older cart later.
       debugPrint('Cart sync failed: $e');
-      if (!_syncFailed) {
-        _syncFailed = true;
+      if (!syncFailedInternal) {
+        syncFailedInternal = true;
         notifyListeners();
       }
     }
@@ -186,27 +196,39 @@ class CartProvider extends ChangeNotifier {
             onConflict: 'customer_id,product_id,variant_id');
       }
       // Anything the server still holds that is no longer in this cart goes.
-      // Use composite keys for precise deletion
+      // Reconcile per composite key: a product may legitimately keep one
+      // variant while another variant of the same product was removed, so a
+      // product_id-only delete would wrongly keep stale variant rows (which
+      // the server would then price at checkout).
       final keep = [for (final item in _items) item.cartKey];
-      if (keep.isEmpty) {
-        await client.from('cart_items').delete().eq('customer_id', uid);
-      } else {
-        // Delete server items not in our local cart
+      final serverRows = await client
+          .from('cart_items')
+          .select('id, product_id, variant_id')
+          .eq('customer_id', uid);
+      final serverId = <String>[];
+      for (final row in serverRows) {
+        final rowKey = row['variant_id'] == null
+            ? (row['product_id'] as String?)
+            : '${row['product_id']}:${row['variant_id']}';
+        if (!keep.contains(rowKey) && row['id'] is String) {
+          serverId.add(row['id'] as String);
+        }
+      }
+      if (serverId.isNotEmpty) {
         await client
             .from('cart_items')
             .delete()
-            .eq('customer_id', uid)
-            .not('product_id', 'in', [for (final item in _items) item.product.id]);
+            .filter('id', 'in', serverId);
       }
-      if (_syncFailed) {
-        _syncFailed = false;
+      if (syncFailedInternal) {
+        syncFailedInternal = false;
         notifyListeners();
       }
       return true;
     } catch (e) {
       debugPrint('Cart sync to server failed: $e');
-      if (!_syncFailed) {
-        _syncFailed = true;
+      if (!syncFailedInternal) {
+        syncFailedInternal = true;
         notifyListeners();
       }
       return false;
@@ -232,8 +254,8 @@ class CartProvider extends ChangeNotifier {
       await query;
     } catch (e) {
       debugPrint('Cart delete failed: $e');
-      if (!_syncFailed) {
-        _syncFailed = true;
+      if (!syncFailedInternal) {
+        syncFailedInternal = true;
         notifyListeners();
       }
     }
@@ -248,11 +270,11 @@ class CartProvider extends ChangeNotifier {
     String? variantName,
     double? variantPrice,
   }) {
-    if (!canAddMore(product)) return false;
-    
+    if (!canAddMore(product, variantId: variantId)) return false;
+
     final cartKey = variantId != null ? '${product.id}:$variantId' : product.id;
     final index = _items.indexWhere((item) => item.cartKey == cartKey);
-    
+
     int newQuantity;
     CartItem item;
     if (index >= 0) {
@@ -278,7 +300,9 @@ class CartProvider extends ChangeNotifier {
       newQuantity = 1;
     }
     notifyListeners();
-    _upsertQuantity(item, newQuantity);
+    debugPrint(
+        '[cart] add ${item.cartKey} -> $newQuantity (notify done, card should rebuild)');
+    upsertQuantity(item, newQuantity);
     Analytics.log('add_to_cart', {
       'product_id': product.id,
       'variant_id': variantId,
@@ -304,7 +328,7 @@ class CartProvider extends ChangeNotifier {
     required String variantName,
     required double variantPrice,
   }) {
-    final cartKey = '$product.id:$variantId';
+    final cartKey = '${product.id}:$variantId';
     final index = _items.indexWhere((item) => item.cartKey == cartKey);
     if (index >= 0) {
       return increaseQuantity(product.id, variantId: variantId);
@@ -328,7 +352,7 @@ class CartProvider extends ChangeNotifier {
     );
     _items[productIndex] = item;
     notifyListeners();
-    _upsertQuantity(item, item.quantity);
+    upsertQuantity(item, item.quantity);
     return true;
   }
 
@@ -339,15 +363,17 @@ class CartProvider extends ChangeNotifier {
     _deleteRow(productId, variantId: variantId);
   }
 
-  /// Returns false (and changes nothing) at the product's stock limit.
+  /// Returns false (and changes nothing) at the stock limit.
+  /// For variant lines the variant's own stock is the limit.
   bool increaseQuantity(String productId, {String? variantId}) {
     final key = variantId != null ? '$productId:$variantId' : productId;
     final index = _items.indexWhere((item) => item.cartKey == key);
     if (index < 0) return false;
-    if (_items[index].quantity >= _items[index].product.stock) return false;
+    if (!canAddMore(_items[index].product, variantId: variantId)) return false;
     _items[index].quantity++;
+    debugPrint('[cart] inc ${_items[index].cartKey} -> ${_items[index].quantity} (notify next)');
     notifyListeners();
-    _upsertQuantity(_items[index], _items[index].quantity);
+    upsertQuantity(_items[index], _items[index].quantity);
     return true;
   }
 
@@ -358,7 +384,7 @@ class CartProvider extends ChangeNotifier {
     if (_items[index].quantity > 1) {
       _items[index].quantity--;
       notifyListeners();
-      _upsertQuantity(_items[index], _items[index].quantity);
+      upsertQuantity(_items[index], _items[index].quantity);
     } else {
       final product = _items[index].product;
       _items.removeAt(index);

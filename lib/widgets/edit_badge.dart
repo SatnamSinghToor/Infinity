@@ -122,7 +122,7 @@ Future<void> showEditSheet(
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 17,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),

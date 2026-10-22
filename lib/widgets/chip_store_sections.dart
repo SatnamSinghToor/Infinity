@@ -308,7 +308,7 @@ class ChipStoreSections extends StatelessWidget {
                   fontSize: 23,
                   fontStyle: FontStyle.italic,
                   // Bold, not semi-bold: it is the italic face the app ships.
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: theme.accent,
                 ),
               ),
@@ -509,7 +509,7 @@ class _StoreHeroState extends State<_StoreHero>
                   style: GoogleFonts.poppins(
                     fontSize: 30,
                     height: 1.15,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: theme.accent,
                   ),
                 ),
@@ -580,7 +580,7 @@ class _FeaturedCards extends StatelessWidget {
                                   BlendMode.lighten,
                                 ),
                               ),
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(10),
                         // A hairline in the page's own colour: the cards
                         // should sit on the tint, not be framed by it.
                         border:
@@ -611,7 +611,7 @@ class _FeaturedCards extends StatelessWidget {
                               style: GoogleFonts.poppins(
                                 fontSize: 12.5,
                                 height: 1.2,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 color: AppConstants.textPrimaryColor,
                               ),
                             ),
@@ -632,13 +632,13 @@ class _FeaturedCards extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           l10n.chipFeatured,
                           style: GoogleFonts.poppins(
                             fontSize: 10.5,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             color: accent,
                           ),
                         ),
@@ -704,7 +704,7 @@ class _DealCards extends StatelessWidget {
       child: Container(
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(10),
           // A photo set for the whole card is its background, lightened so
           // the title and tag on top stay readable.
           image: full == null
@@ -741,7 +741,7 @@ class _DealCards extends StatelessWidget {
                   l10n.chipUpToOff(off),
                   style: GoogleFonts.poppins(
                     fontSize: 11.5,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppConstants.textPrimaryColor,
                   ),
                 ),

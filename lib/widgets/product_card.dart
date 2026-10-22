@@ -16,14 +16,17 @@ import 'variant_sheet.dart';
 /// Measurements for the two-column mobile product grid.
 ///
 /// At a card width of about 164-166 dp these values reproduce the reference:
-/// a ~190 dp image canvas, a 44 dp unit footer and a 89 x 52 dp action button.
+/// a ~190 dp image canvas, a 44 dp unit footer and a compact 72 x 36 dp
+/// action button that straddles the card's bottom-right corner, the way the
+/// reference app's chip hangs half out of the card.
 class ProductCardMetrics {
   ProductCardMetrics._();
 
-  static const double cardRadius = 20;
-  static const double controlRadius = 16;
-  static const double overlapRight = 8;
-  static const double overlapIntoImage = 8;
+  static const double cardRadius = 10;
+  // The ADD/stepper control shares the card's corner rounding so every
+  // squared-off surface reads at the same radius.
+  static const double controlRadius = 10;
+  static const double actionButtonHeight = 48.0;
   static const double gridSpacing = 16;
   static const double gridRunSpacing = 18;
 
@@ -35,16 +38,21 @@ class ProductCardMetrics {
         .toDouble();
   }
 
-  static double footerHeight({required bool dense}) => dense ? 44.0 : 72.0;
+  static double footerHeight({required bool dense}) => dense ? 36.0 : 60.0;
 
   /// Space for price, offer, two-line title, rating and delivery time.
   static double metadataHeight({required bool dense}) => dense ? 132.0 : 154.0;
+
+  /// The action chip pokes ~4dp below the card's bottom edge, plus a small
+  /// air gap.
+  static double actionOverhang(bool dense) => 10;
 
   static double cellHeight(double cardWidth, {required bool dense}) {
     return imageHeight(cardWidth, dense: dense) +
         footerHeight(dense: dense) +
         metadataHeight(dense: dense) +
-        8;
+        8 +
+        actionOverhang(dense);
   }
 
   static SliverGridDelegate delegate({
@@ -147,6 +155,8 @@ class _ProductCardState extends State<ProductCard> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(
+        '[pcard] build ${product.name} qty=${context.watch<CartProvider>().getQuantity(product.id, variantId: currentVariant?.id)} variant=${currentVariant?.id}');
     Widget card = LayoutBuilder(
       builder: (context, constraints) {
         final double width =
@@ -191,10 +201,12 @@ class _ProductCardState extends State<ProductCard> {
         ProductCardMetrics.imageHeight(width, dense: dense);
     final double footerHeight = ProductCardMetrics.footerHeight(dense: dense);
     final double btnWidth =
-        (width * (dense ? 0.54 : 0.55)).clamp(88.0, 205.0).toDouble();
-    final double btnHeight = dense ? 52.0 : 64.0;
-    final double overlapTop =
-        imageHeight - ProductCardMetrics.overlapIntoImage;
+        (width * 0.5).clamp(84.0, 100.0).toDouble();
+    // Blinkit-style 3-way overlap: the chip rises 3px into the photo above
+    // the footer line and pokes below the card's bottom edge (+7 bottom out).
+    // Stack is Clip.none so the overhang renders freely.
+    final double btnHeight = footerHeight + 10;
+    final double controlTop = imageHeight - 3.75;
 
     return Container(
       decoration: BoxDecoration(
@@ -226,11 +238,10 @@ class _ProductCardState extends State<ProductCard> {
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(ProductCardMetrics.cardRadius),
                     ),
-                    gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [_canvasTop, _canvasBottom],
-                    ),
+                    // The canvas went flat grey-white — the exact tone the
+                    // variant strip used before — so the photo floats on a
+                    // plain field while the strip keeps its wash.
+                    color: _footerBg,
                   ),
                   child: Stack(
                     children: [
@@ -262,7 +273,7 @@ class _ProductCardState extends State<ProductCard> {
                             ),
                             decoration: BoxDecoration(
                               color: Colors.black.withOpacity(0.65),
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
                               'Sold out',
@@ -305,14 +316,20 @@ class _ProductCardState extends State<ProductCard> {
                   height: footerHeight,
                   width: double.infinity,
                   decoration: const BoxDecoration(
-                    color: _footerBg,
                     borderRadius: BorderRadius.vertical(
                       bottom: Radius.circular(ProductCardMetrics.cardRadius),
+                    ),
+                    // The footer wears the same wash as the photo canvas, so
+                    // card reads as one surface instead of two tones.
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [_canvasTop, _canvasBottom],
                     ),
                   ),
                   padding: EdgeInsets.only(
                     left: dense ? 12 : 16,
-                    right: btnWidth * 0.55,
+                    right: btnWidth + 10,
                   ),
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -321,7 +338,7 @@ class _ProductCardState extends State<ProductCard> {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       fontSize: dense ? 14 : 18,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: _inkPrimary,
                       letterSpacing: -0.4,
                     ),
@@ -331,8 +348,8 @@ class _ProductCardState extends State<ProductCard> {
             ],
           ),
           Positioned(
-            top: overlapTop,
-            right: -ProductCardMetrics.overlapRight,
+            top: controlTop,
+            right: -5,
             child: _buildActionControl(
               btnWidth: btnWidth,
               btnHeight: btnHeight,
@@ -369,7 +386,7 @@ class _ProductCardState extends State<ProductCard> {
         overflow: TextOverflow.ellipsis,
         style: GoogleFonts.poppins(
           fontSize: dense ? 32 : 44,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: Colors.grey.withOpacity(0.5),
         ),
       ),
@@ -404,10 +421,11 @@ class _ProductCardState extends State<ProductCard> {
   }
 
   Widget _buildCarouselDots() {
+    // Dots mean "more photos to swipe". A single-photo product has nothing
+    // to swipe, so showing four dead dots there is just noise.
     final int galleryCount = product.gallery.length;
-    final int count = galleryCount > 1
-        ? galleryCount.clamp(2, 4).toInt()
-        : 4;
+    if (galleryCount <= 1) return const SizedBox.shrink();
+    final int count = galleryCount.clamp(2, 4).toInt();
     final double size = dense ? 6.0 : 8.0;
 
     return Row(
@@ -439,7 +457,7 @@ class _ProductCardState extends State<ProductCard> {
       height: side,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: color, width: 1.6),
       ),
       child: Center(
@@ -475,7 +493,7 @@ class _ProductCardState extends State<ProductCard> {
         decoration: BoxDecoration(
           color: Colors.grey[200],
           borderRadius: BorderRadius.circular(ProductCardMetrics.controlRadius),
-          border: Border.all(color: Colors.grey[300]!, width: 1.2),
+          border: Border.all(color: Colors.grey[300]!, width: 1),
         ),
         alignment: Alignment.center,
         child: Text(
@@ -483,8 +501,8 @@ class _ProductCardState extends State<ProductCard> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: GoogleFonts.poppins(
-            fontSize: dense ? 13 : 16,
-            fontWeight: FontWeight.w700,
+            fontSize: dense ? 12 : 14,
+            fontWeight: FontWeight.w600,
             color: Colors.grey[400],
           ),
         ),
@@ -497,16 +515,9 @@ class _ProductCardState extends State<ProductCard> {
         width: btnWidth,
         height: btnHeight,
         decoration: BoxDecoration(
-          color: _orange,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(ProductCardMetrics.controlRadius),
-          border: Border.all(color: _orangeDark),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x1AFF5A00),
-              blurRadius: 8,
-              offset: Offset(0, 3),
-            ),
-          ],
+          border: Border.all(color: _orange, width: 1),
         ),
         child: Row(
           children: [
@@ -528,9 +539,9 @@ class _ProductCardState extends State<ProductCard> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
+                      color: Color(0xFFE64E00),
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
                       height: 1,
                     ),
                   ),
@@ -539,8 +550,8 @@ class _ProductCardState extends State<ProductCard> {
             ),
             Container(
               width: 1,
-              height: dense ? 22 : 26,
-              color: Colors.white38,
+              height: dense ? 20 : 24,
+              color: const Color(0x33FF5A00),
             ),
             Expanded(
               child: Center(
@@ -549,9 +560,9 @@ class _ProductCardState extends State<ProductCard> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.poppins(
-                    fontSize: dense ? 15 : 17,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    fontSize: dense ? 13 : 15,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFFE64E00),
                     height: 1,
                   ),
                 ),
@@ -559,8 +570,8 @@ class _ProductCardState extends State<ProductCard> {
             ),
             Container(
               width: 1,
-              height: dense ? 22 : 26,
-              color: Colors.white38,
+              height: dense ? 20 : 24,
+              color: const Color(0x33FF5A00),
             ),
             Expanded(
               child: InkWell(
@@ -583,9 +594,9 @@ class _ProductCardState extends State<ProductCard> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
+                      color: Color(0xFFE64E00),
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
                       height: 1,
                     ),
                   ),
@@ -610,15 +621,9 @@ class _ProductCardState extends State<ProductCard> {
           height: btnHeight,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(ProductCardMetrics.controlRadius),
-            border: Border.all(color: _orange, width: 1.5),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x14FF5A00),
-                blurRadius: 6,
-                offset: Offset(0, 2),
-              ),
-            ],
+            borderRadius:
+                BorderRadius.circular(ProductCardMetrics.controlRadius),
+            border: Border.all(color: _orange, width: 1),
           ),
           child: ClipRRect(
             borderRadius:
@@ -633,10 +638,10 @@ class _ProductCardState extends State<ProductCard> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
-                        fontSize: dense ? 14 : 17,
-                        fontWeight: FontWeight.w800,
+                        fontSize: dense ? 13 : 15,
+                        fontWeight: FontWeight.w600,
                         color: _orangeDark,
-                        letterSpacing: -0.3,
+                        letterSpacing: -0.2,
                       ),
                     ),
                   ),
@@ -679,14 +684,7 @@ class _ProductCardState extends State<ProductCard> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(ProductCardMetrics.controlRadius),
-          border: Border.all(color: _orange, width: 1.5),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x14FF5A00),
-              blurRadius: 6,
-              offset: Offset(0, 2),
-            ),
-          ],
+          border: Border.all(color: _orange, width: 1),
         ),
         alignment: Alignment.center,
         child: Text(
@@ -694,10 +692,10 @@ class _ProductCardState extends State<ProductCard> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: GoogleFonts.poppins(
-            fontSize: dense ? 15 : 20,
-            fontWeight: FontWeight.w800,
+            fontSize: dense ? 13 : 15,
+            fontWeight: FontWeight.w600,
             color: _orangeDark,
-            letterSpacing: -0.35,
+            letterSpacing: -0.2,
           ),
         ),
       ),
@@ -787,23 +785,23 @@ class _ProductCardState extends State<ProductCard> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.poppins(
-                  fontSize: dense ? 18 : 24,
-                  fontWeight: FontWeight.w900,
+                  fontSize: dense ? 15.5 : 19,
+                  fontWeight: FontWeight.w700,
                   color: _inkPrimary,
-                  letterSpacing: -0.55,
+                  letterSpacing: -0.3,
                 ),
               ),
               if (hasDiscount) ...[
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 Text(
                   '₹${_rupees(mrp)}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.poppins(
-                    fontSize: dense ? 13 : 15,
+                    fontSize: dense ? 11 : 13,
                     color: _mrpMuted,
                     decoration: TextDecoration.lineThrough,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
@@ -817,7 +815,7 @@ class _ProductCardState extends State<ProductCard> {
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.poppins(
                 fontSize: dense ? 12 : 15,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: _discountBlue,
                 letterSpacing: -0.3,
               ),
@@ -830,36 +828,43 @@ class _ProductCardState extends State<ProductCard> {
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.poppins(
               fontSize: dense ? 13 : 16,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: _inkPrimary,
               height: 1.28,
               letterSpacing: -0.3,
             ),
           ),
           const SizedBox(height: 6),
-          Row(
-            children: [
-              ...List.generate(
-                5,
-                (index) => Icon(
-                  Icons.star_rounded,
-                  size: dense ? 14 : 16,
-                  color: _starYellow,
+          if (product.rating > 0)
+            Row(
+              children: [
+                ...List.generate(
+                  5,
+                  (index) => Icon(
+                    Icons.star_rounded,
+                    size: dense ? 14 : 16,
+                    // Fill stars to the product's actual rating, so a 3.5
+                    // product does not show five full stars.
+                    color: (index + 1) <= product.rating
+                        ? _starYellow
+                        : (index + 0.5 <= product.rating
+                            ? _starYellow.withOpacity(0.5)
+                            : const Color(0xFFE3E6EB)),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                _reviewCountLabel(product),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.poppins(
-                  fontSize: dense ? 11 : 13,
-                  fontWeight: FontWeight.w500,
-                  color: _inkSecondary,
+                const SizedBox(width: 5),
+                Text(
+                  product.rating.toStringAsFixed(1),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.poppins(
+                    fontSize: dense ? 11 : 13,
+                    fontWeight: FontWeight.w500,
+                    color: _inkSecondary,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
           const SizedBox(height: 6),
           Row(
             children: [
@@ -877,14 +882,16 @@ class _ProductCardState extends State<ProductCard> {
                 ),
               ),
               const SizedBox(width: 5),
-              Text(
-                '9 mins',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.poppins(
-                  fontSize: dense ? 11 : 13,
-                  fontWeight: FontWeight.w600,
-                  color: _inkSecondary,
+              Expanded(
+                child: Text(
+                  'Same-day delivery',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.poppins(
+                    fontSize: dense ? 11 : 13,
+                    fontWeight: FontWeight.w600,
+                    color: _inkSecondary,
+                  ),
                 ),
               ),
             ],
@@ -896,13 +903,4 @@ class _ProductCardState extends State<ProductCard> {
 
   String _rupees(double value) =>
       value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 2);
-
-  String _reviewCountLabel(Product product) {
-    final int count = 1000 + (product.id.hashCode.abs() % 89000);
-    final String str = count.toString();
-    if (str.length > 3) {
-      return '${str.substring(0, str.length - 3)},${str.substring(str.length - 3)}';
-    }
-    return str;
-  }
 }

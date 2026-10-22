@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:duggu/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../models/wallet_transaction.dart';
 import '../providers/wallet_provider.dart';
 import '../utils/constants.dart';
+import '../utils/tokens.dart';
 import '../widgets/gradient_app_bar.dart';
 import '../widgets/role_common.dart';
 import '../utils/format.dart';
@@ -31,6 +33,7 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final wallet = context.watch<WalletProvider>();
+    final t = context.tokens;
 
     return Scaffold(
       backgroundColor: AppConstants.backgroundColor,
@@ -41,44 +44,64 @@ class _WalletScreenState extends State<WalletScreen> {
       body: RefreshIndicator(
         onRefresh: () => context.read<WalletProvider>().loadTransactions(),
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpacing.gutter),
           children: [
+            // The balance: a labelled plate with the amount as its hero.
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(AppSpacing.xl),
               decoration: BoxDecoration(
                 gradient: AppConstants.headerGradient,
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: AppRadius.card,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Text(
-                    l10n.walletBalanceLabel,
-                    style: GoogleFonts.poppins(
-                      color:
-                          AppConstants.textPrimaryColor.withOpacity(0.7),
-                      fontSize: 13,
+                  Container(
+                    width: 46,
+                    height: 46,
+                    decoration: BoxDecoration(
+                      color: t.primary.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                    ),
+                    child: const Icon(
+                      Iconsax.wallet_3,
+                      size: 22,
+                      color: AppConstants.primaryColor,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    formatRupees(wallet.balance),
-                    style: GoogleFonts.poppins(
-                      color: AppConstants.textPrimaryColor,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w800,
-                    ),
+                  const SizedBox(width: AppSpacing.lg),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.walletBalanceLabel,
+                        style: GoogleFonts.poppins(
+                          color: t.textSecondary,
+                          fontSize: 13,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.xxs),
+                      Text(
+                        formatRupees(wallet.balance),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: t.textPrimary,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xl),
             Text(
               l10n.walletHistoryTitle,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             if (wallet.isLoading && wallet.transactions.isEmpty)
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 40),
@@ -90,17 +113,18 @@ class _WalletScreenState extends State<WalletScreen> {
                 onRetry: wallet.loadTransactions,
               )
             else if (wallet.transactions.isEmpty)
+              // Say what an empty wallet means, and what puts money in it,
+              // rather than a bare line of grey text.
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: Center(
-                  child: Text(
-                    l10n.walletEmpty,
-                    style: TextStyle(color: Colors.grey[600]),
-                  ),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxl),
+                child: RoleEmpty(
+                  icon: Iconsax.receipt,
+                  title: l10n.walletEmpty,
+                  message: l10n.walletEmptyBody,
                 ),
               )
             else
-              ...wallet.transactions.map((t) => _TransactionTile(t)),
+              ...wallet.transactions.map((t2) => _TransactionTile(t2)),
           ],
         ),
       ),
@@ -115,51 +139,59 @@ class _TransactionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = context.tokens;
     final isCredit = transaction.isCredit;
+    final colour = isCredit ? t.success : t.danger;
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        color: t.card,
+        borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(AppSpacing.sm),
             decoration: BoxDecoration(
-              color:
-                  (isCredit ? Colors.green : Colors.red).withOpacity(0.1),
+              color: colour.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               isCredit ? Iconsax.arrow_down_2 : Iconsax.arrow_up_3,
-              color: isCredit ? Colors.green : Colors.red,
+              color: colour,
               size: 18,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   transaction.title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 14),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: t.textPrimary,
+                  ),
                 ),
+                const SizedBox(height: AppSpacing.xxs),
                 Text(
-                  '${transaction.createdAt.day}/${transaction.createdAt.month}/${transaction.createdAt.year}',
-                  style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                  DateFormat('d MMM yyyy').format(transaction.createdAt),
+                  style: TextStyle(fontSize: 12, color: t.textSecondary),
                 ),
               ],
             ),
           ),
+          const SizedBox(width: AppSpacing.sm),
           Text(
             '${isCredit ? '+' : '-'}${formatRupees(transaction.amount)}',
             style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: isCredit ? Colors.green : Colors.red,
+              fontWeight: FontWeight.w600,
+              color: colour,
             ),
           ),
         ],

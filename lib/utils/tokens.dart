@@ -108,19 +108,19 @@ class AppType {
 
   static TextStyle get display => GoogleFonts.poppins(
         fontSize: 28,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         height: 1.2,
       );
 
   static TextStyle get title => GoogleFonts.poppins(
         fontSize: 21,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         height: 1.25,
       );
 
   static TextStyle get appBarTitle => GoogleFonts.poppins(
         fontSize: 19,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         height: 1.25,
       );
 

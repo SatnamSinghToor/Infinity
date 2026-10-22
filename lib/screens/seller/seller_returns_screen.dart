@@ -111,7 +111,7 @@ class _SellerReturnsScreenState extends State<SellerReturnsScreen> {
                 child: ListView.separated(
                   padding: const EdgeInsets.all(16),
                   itemCount: _returns.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.listGap),
                   itemBuilder: (context, i) {
                     final r = _returns[i];
                     final status = (r['status'] as String?) ?? 'pending';
@@ -120,10 +120,10 @@ class _SellerReturnsScreenState extends State<SellerReturnsScreen> {
                     final refund = (r['refund_amount'] as num?) ?? 0;
                     final note = (r['description'] as String?)?.trim() ?? '';
                     return Container(
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(AppSpacing.lg),
                       decoration: BoxDecoration(
                         color: tokens.card,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: AppRadius.card,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +140,7 @@ class _SellerReturnsScreenState extends State<SellerReturnsScreen> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 15,
                                   ),
                                 ),
@@ -152,7 +152,7 @@ class _SellerReturnsScreenState extends State<SellerReturnsScreen> {
                                 ),
                                 decoration: BoxDecoration(
                                   color: color.withOpacity(0.12),
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Text(
                                   status[0].toUpperCase() +
@@ -161,7 +161,7 @@ class _SellerReturnsScreenState extends State<SellerReturnsScreen> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: color,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -212,7 +212,7 @@ class _SellerReturnsScreenState extends State<SellerReturnsScreen> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                             ],

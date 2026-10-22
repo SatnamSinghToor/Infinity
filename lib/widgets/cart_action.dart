@@ -174,9 +174,9 @@ class CartAction extends StatelessWidget {
   BoxDecoration _decoration() {
     return BoxDecoration(
       color: outline ? Colors.white : _fill,
-      borderRadius: BorderRadius.circular(_large ? 14 : _borderRadius),
+      borderRadius: BorderRadius.circular(_borderRadius),
       border: outline
-          ? Border.all(color: AppConstants.primaryColor, width: 1.5)
+          ? Border.all(color: AppConstants.primaryColor, width: 1)
           : null,
       boxShadow: bagButton
           ? [
@@ -242,7 +242,7 @@ class CartAction extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontSize: 10,
                         height: 1.1,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppConstants.primaryColor,
                       ),
                     ),
@@ -268,7 +268,7 @@ class CartAction extends StatelessWidget {
             ? BoxDecoration(
                 color: _fill.withOpacity(0.25),
                 borderRadius:
-                    BorderRadius.circular(_large ? 14 : _borderRadius),
+                    BorderRadius.circular(_borderRadius),
               )
             : _decoration(),
         alignment: Alignment.center,
@@ -282,7 +282,7 @@ class CartAction extends StatelessWidget {
                 'ADD',
                 style: GoogleFonts.poppins(
                   fontSize: _large ? 14 : 12,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: !enabled
                       ? Colors.white70
                       : outline
@@ -310,7 +310,7 @@ class CartAction extends StatelessWidget {
     // middle is the quantity. The − and + still work as plain taps.
     final countStyle = GoogleFonts.poppins(
       fontSize: _large ? 15 : 13,
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w600,
       color: _glyph,
     );
     return _Roller(

@@ -46,7 +46,7 @@ class PartnerProfileHeader extends StatelessWidget {
             name.isEmpty ? '?' : name[0].toUpperCase(),
             style: TextStyle(
               fontSize: 28,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: tokens.primary,
             ),
           ),
@@ -55,7 +55,7 @@ class PartnerProfileHeader extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: tokens.card,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         children: [
@@ -86,7 +86,7 @@ class PartnerProfileHeader extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: tokens.textPrimary,
                   ),
                 ),
@@ -130,7 +130,7 @@ class PartnerGroup extends StatelessWidget {
                 title!.toUpperCase(),
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0.5,
                   color: tokens.textSecondary,
                 ),
@@ -139,7 +139,7 @@ class PartnerGroup extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: tokens.card,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
               children: [
@@ -194,7 +194,7 @@ class PartnerRow extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           color: danger ? tokens.danger : tokens.textPrimary,
         ),
       ),

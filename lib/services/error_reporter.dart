@@ -77,7 +77,7 @@ class ErrorReporter {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 15,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: Color(0xFF17181C),
             ),
           ),
@@ -113,7 +113,7 @@ class ErrorReporter {
     String source = 'unknown',
   }) async {
     final message = error.toString();
-    debugPrint('Duggu error ($source): $message');
+    debugPrint('Infinity error ($source): $message');
 
     final key = fingerprint(message);
     final now = DateTime.now();

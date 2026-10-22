@@ -76,10 +76,10 @@ class _DeliveryCashScreenState extends State<DeliveryCashScreen> {
 
     Widget figure(String label, String value, IconData icon) => Expanded(
           child: Container(
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(AppSpacing.cardPadding),
             decoration: BoxDecoration(
               color: tokens.card,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: AppRadius.card,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +94,7 @@ class _DeliveryCashScreenState extends State<DeliveryCashScreen> {
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: tokens.textPrimary,
                     ),
                   ),
@@ -103,7 +103,10 @@ class _DeliveryCashScreenState extends State<DeliveryCashScreen> {
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 12, color: tokens.textSecondary),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: tokens.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -146,7 +149,7 @@ class _DeliveryCashScreenState extends State<DeliveryCashScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: AppSpacing.lg),
               if (_orders.isEmpty)
                 RoleEmpty(
                   icon: Iconsax.money_3,
@@ -156,11 +159,11 @@ class _DeliveryCashScreenState extends State<DeliveryCashScreen> {
               else
                 for (final o in _orders)
                   Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.all(14),
+                    margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
+                    padding: const EdgeInsets.all(AppSpacing.cardPadding),
                     decoration: BoxDecoration(
                       color: tokens.card,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: AppRadius.card,
                     ),
                     child: Row(
                       children: [
@@ -168,7 +171,8 @@ class _DeliveryCashScreenState extends State<DeliveryCashScreen> {
                           padding: const EdgeInsets.all(9),
                           decoration: BoxDecoration(
                             color: tokens.success.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius:
+                                BorderRadius.circular(AppRadius.md),
                           ),
                           child: Icon(
                             Iconsax.tick_circle,
@@ -188,7 +192,7 @@ class _DeliveryCashScreenState extends State<DeliveryCashScreen> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                               Text(
@@ -208,7 +212,7 @@ class _DeliveryCashScreenState extends State<DeliveryCashScreen> {
                           formatRupees(_amount(o)),
                           maxLines: 1,
                           style: const TextStyle(
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             fontSize: 15,
                           ),
                         ),

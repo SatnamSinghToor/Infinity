@@ -36,7 +36,7 @@ class AppFonts {
     FontWeight.w400,
     FontWeight.w500,
     FontWeight.w600,
-    FontWeight.w700,
+    FontWeight.w600,
   ];
 
   /// Longest a launch will wait for the fonts. They come from the asset

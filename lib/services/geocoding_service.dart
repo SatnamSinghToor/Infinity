@@ -28,7 +28,7 @@ class GeocodedPlace {
 class GeocodingService {
   static const _host = 'nominatim.openstreetmap.org';
   static const _headers = {
-    'User-Agent': 'DugguApp/1.0 (com.duggu.app)',
+    'User-Agent': 'InfinityApp/1.0 (com.infinity.app)',
     'Accept-Language': 'en',
   };
   static const _timeout = Duration(seconds: 10);

@@ -82,7 +82,7 @@ class RoleBottomNav extends StatelessWidget {
                       color: isSelected ? tokens.primary : tokens.textPrimary,
                       fontSize: 11,
                       fontWeight:
-                          isSelected ? FontWeight.w700 : FontWeight.w500,
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
                     ),
                   ),
                 ],

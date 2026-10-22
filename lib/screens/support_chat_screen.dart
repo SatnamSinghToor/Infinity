@@ -275,7 +275,11 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
           widget.title ?? l10n.supportChatTitle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: tokens.textPrimary,
+          ),
         ),
       ),
       body: Column(
@@ -322,15 +326,15 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                           vertical: 14,
                         ),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none,
                         ),
                       ),

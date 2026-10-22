@@ -5,6 +5,7 @@ import 'package:supabase/supabase.dart' show FunctionException;
 
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../utils/safe_state.dart';
 import '../../widgets/role_common.dart';
@@ -150,7 +151,8 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           child: ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: _profiles.isEmpty ? 1 : _profiles.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            separatorBuilder: (_, __) =>
+                const SizedBox(height: AppSpacing.listGap),
             itemBuilder: (context, index) {
               if (_profiles.isEmpty) {
                 return RoleEmpty(
@@ -164,28 +166,43 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
               final isSelf = id == _selfId;
               final isDeleting = _deletingIds.contains(id);
 
-              return Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+              return RoleCard(
+                padding: const EdgeInsets.all(AppSpacing.cardPadding),
                 child: Row(
                   children: [
+                    CircleAvatar(
+                      backgroundColor:
+                          AppConstants.primaryColor.withOpacity(0.12),
+                      child: Icon(
+                        (profile['role'] as String?) == 'seller'
+                            ? Iconsax.shop
+                            : (profile['role'] as String?) == 'delivery'
+                                ? Iconsax.truck
+                                : Iconsax.user,
+                        size: 20,
+                        color: AppConstants.primaryColor,
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             profile['full_name'] as String? ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               fontSize: 14,
                             ),
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: AppSpacing.xxs),
                           Text(
-                            '${profile['phone'] ?? ''} · ${profile['role'] ?? ''}',
+                            '${profile['phone'] ?? ''} · '
+                            '${RoleStatusChip.titled(profile['role'] as String? ?? '')}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
@@ -203,6 +220,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     else if (!isSelf)
                       Pressable(
                           child: IconButton(
+                        tooltip: l10n.adminUsersDelete,
                         icon: const Icon(
                           Iconsax.trash,
                           color: AppConstants.dangerColor,

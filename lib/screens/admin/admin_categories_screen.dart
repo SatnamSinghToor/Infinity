@@ -4,6 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../widgets/role_common.dart';
 import '../../widgets/pressable.dart';
@@ -129,7 +130,7 @@ class _AdminCategoriesScreenState extends State<AdminCategoriesScreen> {
                         : l10n.adminCategoriesEditMain),
                 style: const TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 16),
@@ -161,16 +162,9 @@ class _AdminCategoriesScreenState extends State<AdminCategoriesScreen> {
               const SizedBox(height: 8),
               SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: AppControl.lg,
                 child: Pressable(
                     child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppConstants.primaryColor,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                   onPressed: () {
                     final n = name.text.trim();
                     if (n.isEmpty) {
@@ -334,7 +328,7 @@ class _AdminCategoriesScreenState extends State<AdminCategoriesScreen> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF4DB),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   l10n.adminCategoriesHint,
@@ -360,10 +354,11 @@ class _AdminCategoriesScreenState extends State<AdminCategoriesScreen> {
     );
     if (!active) subtitle += l10n.adminCategoriesHidden;
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: AppRadius.card,
+        border: Border.all(color: context.tokens.border),
       ),
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
@@ -372,7 +367,7 @@ class _AdminCategoriesScreenState extends State<AdminCategoriesScreen> {
           title: Text(
             main['name'] as String,
             style: TextStyle(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: active ? null : Colors.grey,
             ),
           ),
@@ -382,6 +377,14 @@ class _AdminCategoriesScreenState extends State<AdminCategoriesScreen> {
           ),
           childrenPadding: const EdgeInsets.fromLTRB(14, 0, 8, 10),
           children: [
+            if (subs.isEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+                child: RoleEmptyNote(
+                  icon: Iconsax.category,
+                  message: l10n.adminCategoriesNoSubs,
+                ),
+              ),
             for (final s in subs) _subRow(s),
             Row(
               children: [

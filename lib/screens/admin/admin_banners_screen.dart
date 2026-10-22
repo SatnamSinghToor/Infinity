@@ -9,6 +9,7 @@ import 'package:supabase/supabase.dart' show FileOptions;
 
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../widgets/role_common.dart';
 import '../../widgets/pressable.dart';
@@ -126,12 +127,12 @@ class _AdminBannersScreenState extends State<AdminBannersScreen> {
                 l10n.adminBannersNew,
                 style: const TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 12),
               ClipRRect(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(10),
                 child: AspectRatio(
                   aspectRatio: _ratio,
                   child: Image.memory(bytes, fit: BoxFit.cover),
@@ -166,16 +167,9 @@ class _AdminBannersScreenState extends State<AdminBannersScreen> {
               const SizedBox(height: 14),
               SizedBox(
                 width: double.infinity,
-                height: 48,
+                height: AppControl.lg,
                 child: Pressable(
                     child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppConstants.primaryColor,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                   onPressed: () => Navigator.pop(ctx, true),
                   child: Text(l10n.adminBannersUpload,
                       maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -363,18 +357,19 @@ class _AdminBannersScreenState extends State<AdminBannersScreen> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF4DB),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   l10n.adminBannersHint,
                   style: const TextStyle(fontSize: 12.5, height: 1.4),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.md),
               if (_rows.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Center(child: Text(l10n.adminBannersEmpty)),
+                RoleEmpty(
+                  icon: Iconsax.image,
+                  title: l10n.adminBannersEmpty,
+                  message: l10n.adminBannersShapeHint,
                 ),
               for (var i = 0; i < _rows.length; i++) _tile(i),
             ],
@@ -389,10 +384,11 @@ class _AdminBannersScreenState extends State<AdminBannersScreen> {
     final row = _rows[i];
     final active = row['is_active'] as bool? ?? true;
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: AppRadius.card,
+        border: Border.all(color: context.tokens.border),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(

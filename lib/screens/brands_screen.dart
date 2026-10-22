@@ -79,9 +79,14 @@ class _BrandsScreenState extends State<BrandsScreen> {
               maxLines: 1, overflow: TextOverflow.ellipsis),
           centerTitle: true),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const RoleLoading(message: 'Loading brands…')
           : _brands.isEmpty
-              ? Center(child: Text(l10n.brandsEmpty))
+              ? const RoleEmpty(
+                  icon: Iconsax.shopping_bag,
+                  title: 'No brands yet',
+                  message:
+                      'Brands added by the store will appear here for you to shop.',
+                )
               : GridView.builder(
                   padding: const EdgeInsets.all(16),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -109,7 +114,7 @@ class _BrandsScreenState extends State<BrandsScreen> {
                                     AppConstants.accentColor,
                                   ],
                                 ),
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: const Center(
                                 child: Icon(

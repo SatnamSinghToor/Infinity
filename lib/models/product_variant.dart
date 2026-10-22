@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// A sellable variant of a product (e.g., "1 kg", "2 kg", "500 g").
 /// Each variant has its own price, MRP, stock, and availability.
 class ProductVariant {

@@ -274,7 +274,7 @@ class _PayoutsScreenState extends State<PayoutsScreen> {
               const SizedBox(height: 24),
               const Text(
                 'Your requests',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
               if (_requests.isEmpty)
@@ -297,7 +297,7 @@ class _PayoutsScreenState extends State<PayoutsScreen> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: AppConstants.headerGradient,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,7 +311,7 @@ class _PayoutsScreenState extends State<PayoutsScreen> {
             formatRupees(_available),
             style: GoogleFonts.poppins(
               fontSize: 28,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppConstants.textPrimaryColor,
             ),
           ),
@@ -333,7 +333,7 @@ class _PayoutsScreenState extends State<PayoutsScreen> {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,7 +344,7 @@ class _PayoutsScreenState extends State<PayoutsScreen> {
                 formatRupees(request.amount),
                 style: const TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(width: 8),
@@ -352,13 +352,13 @@ class _PayoutsScreenState extends State<PayoutsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   _statusLabel(request.status),
                   style: TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: color,
                   ),
                 ),

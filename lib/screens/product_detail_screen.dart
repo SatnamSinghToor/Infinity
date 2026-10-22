@@ -278,9 +278,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Text(
                                 product.name,
                                 style: const TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 19,
                                   height: 1.2,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                   color: AppConstants.textPrimaryColor,
                                 ),
                               ),

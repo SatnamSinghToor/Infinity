@@ -162,7 +162,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                       AppConstants.accentColor,
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,7 +177,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -231,7 +231,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                 l10n.sellerEarningsDeliveredOrders(orders.length),
                 style: const TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 8),
@@ -257,7 +257,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                             ? l10n.sellerEarningsEmpty
                             : l10n.sellerEarningsEmptyPeriod,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontWeight: FontWeight.w700),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -275,8 +275,8 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
               else
                 for (final o in orders)
                   Container(
-                    margin: const EdgeInsets.only(bottom: AppSpacing.sm),
-                    padding: const EdgeInsets.all(AppSpacing.md),
+                    margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
+                    padding: const EdgeInsets.all(AppSpacing.lg),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: AppRadius.card,
@@ -292,7 +292,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                                   (o['id'] as String).substring(0, 8),
                                 ),
                                 style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                               const SizedBox(height: 2),
@@ -324,7 +324,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                           formatRupees((o['seller_payout'] as num?) ?? 0),
                           style: const TextStyle(
                             fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                             color: AppConstants.successColor,
                           ),
                         ),

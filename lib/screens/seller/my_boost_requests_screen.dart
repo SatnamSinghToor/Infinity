@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../utils/format.dart';
 import '../../utils/safe_state.dart';
@@ -92,19 +93,28 @@ class _MyBoostRequestsScreenState extends State<MyBoostRequestsScreen> {
                 child: ListView.separated(
                   padding: const EdgeInsets.all(16),
                   itemCount: _slots.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.listGap),
                   itemBuilder: (context, index) {
                     final s = _slots[index];
                     final status = s['status'] as String? ?? 'PENDING';
                     final productName =
                         (s['products'] as Map?)?['name'] as String? ??
                             l10n.sellerBoostsProductFallback;
+                    // The stored status is PENDING/APPROVED/REJECTED; a
+                    // person reads "Pending", so it is said that way.
+                    final statusLabel = status.isEmpty
+                        ? status
+                        : status[0] +
+                            status.substring(1).toLowerCase().replaceAll(
+                                  '_',
+                                  ' ',
+                                );
 
                     return Container(
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(AppSpacing.lg),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: AppRadius.card,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,38 +126,40 @@ class _MyBoostRequestsScreenState extends State<MyBoostRequestsScreen> {
                                 child: Text(
                                   s['headline'] as String? ?? '',
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 3,
+                                  horizontal: 10,
+                                  vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
                                   color: _statusColor(
                                     status,
                                   ).withOpacity(0.15),
-                                  borderRadius: BorderRadius.circular(6),
+                                  borderRadius: BorderRadius.circular(
+                                    AppRadius.pill,
+                                  ),
                                 ),
                                 child: Text(
-                                  status,
+                                  statusLabel,
                                   style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
                                     color: _statusColor(status),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: AppSpacing.xs),
                           Text(
                             l10n.sellerBoostsProduct(productName),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 13,
-                              color: Colors.grey[600],
+                              color: AppConstants.textSecondaryColor,
                             ),
                           ),
                           Text(
@@ -155,22 +167,23 @@ class _MyBoostRequestsScreenState extends State<MyBoostRequestsScreen> {
                               (s['duration_days'] as num?)?.toInt() ?? 0,
                               formatRupees((s['fee_amount'] as num?) ?? 0),
                             ),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[500],
+                              color: AppConstants.textSecondaryColor,
                             ),
                           ),
                           if (status == 'REJECTED' &&
                               s['rejection_reason'] != null)
                             Padding(
-                              padding: const EdgeInsets.only(top: 4),
+                              padding:
+                                  const EdgeInsets.only(top: AppSpacing.xs),
                               child: Text(
                                 l10n.sellerBoostsReason(
                                   s['rejection_reason'] as String,
                                 ),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 12,
-                                  color: Colors.grey[600],
+                                  color: AppConstants.textSecondaryColor,
                                 ),
                               ),
                             ),

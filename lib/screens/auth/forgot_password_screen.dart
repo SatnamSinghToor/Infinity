@@ -73,6 +73,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
         body: SafeArea(
           child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +98,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     l10n.authForgotQuestion,
                     style: GoogleFonts.poppins(
                       fontSize: 20,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppConstants.textPrimaryColor,
                     ),
                   ),
@@ -133,7 +134,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppConstants.primaryColor,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: _isLoading
@@ -185,7 +186,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             l10n.authInbox,
                             style: GoogleFonts.poppins(
                               fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           const SizedBox(height: 8),

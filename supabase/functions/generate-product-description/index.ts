@@ -79,7 +79,7 @@ type RequestBody = {
 // the length rule below was tested without a Supabase project or an API key.
 // ——————————————————————————————————————————————————————————————————————————————
 
-/** The length rule for a Duggu product description, in words. */
+/** The length rule for a Infinity product description, in words. */
 const MIN_WORDS = 700;
 const MAX_WORDS = 1500;
 
@@ -376,7 +376,7 @@ type Draft = {
 
 /** The house style, so that every seller's page reads alike and no model
  *  decides for itself that a description is a poem or a sales letter. */
-const SYSTEM_PROMPT = `You write product descriptions for Duggu Store, an Indian online
+const SYSTEM_PROMPT = `You write product descriptions for Infinity, an Indian online
 marketplace. The reader is a first-time buyer in a small city, on a phone, often on a slow
 connection, and the seller's page has to carry the whole sale on its own words.
 
@@ -941,7 +941,7 @@ function composeFallback(input: Record<string, string>, minWords: number): Draft
   parts.push(
     prose(
       'What this product is',
-      `${input.name} is listed on Duggu Store` +
+      `${input.name} is listed on Infinity` +
         `${input.category === '' ? '' : ` under ${input.category}`}` +
         `${input.unit === '' ? '' : ` and sold as ${input.unit}`}.`,
       ...(facts[0].toLowerCase() === input.name.toLowerCase() ? [] : [`${facts[0]}`]),
@@ -956,7 +956,7 @@ function composeFallback(input: Record<string, string>, minWords: number): Draft
     section('Why you will like it', [
       ...facts.slice(0, 5),
       input.unit === '' ? '' : `Sold as ${input.unit}`,
-      'Listed by a store that answers its buyers on Duggu Store',
+      'Listed by a store that answers its buyers on Infinity',
       'Packed for shipping once the order is accepted',
       'The photos and the details on this page are the store\'s own',
       'Ask the store about size, grade or fit before ordering, not after',
@@ -985,7 +985,7 @@ function composeFallback(input: Record<string, string>, minWords: number): Draft
         'follow the instructions in the box and the store\'s other photos first — most returns on ' +
         'items like this one turn out to be a usage question rather than a fault.',
       'Anything the pack does not answer is worth asking the store before ordering, not after: ' +
-        'the store page on Duggu lists its other products and how to reach it.',
+        'the store page on Infinity lists its other products and how to reach it.',
     ),
   );
 
@@ -1012,7 +1012,7 @@ function composeFallback(input: Record<string, string>, minWords: number): Draft
       'Where a product comes in sizes, grades or variants, the one that is sent is the one ' +
         'selected at checkout, so it is worth reading the name on the order once before paying.',
       'Stock on the page is the store\'s own count and can move during a busy day. An order is ' +
-        'confirmed when the seller accepts it, and Duggu tells the buyer either way.',
+        'confirmed when the seller accepts it, and Infinity tells the buyer either way.',
       'This page was written from the store\'s listing. A buyer who needs certainty about a ' +
         'specific number — a weight, a size, a date — should ask the store rather than read past ' +
         'it.',
@@ -1026,9 +1026,9 @@ function composeFallback(input: Record<string, string>, minWords: number): Draft
         'What is in the box is listed above, and the label on the pack is the final word if the ' +
         'two ever differ.',
       'What if the item arrives damaged? Tell the store from the order, with a photo of the pack ' +
-        'as it arrived, inside the return window Duggu allows. A damaged item is settled through ' +
+        'as it arrived, inside the return window Infinity allows. A damaged item is settled through ' +
         'the return flow.',
-      'Can I return it if I change my mind? Return terms are the store\'s policy and Duggu\'s, as ' +
+      'Can I return it if I change my mind? Return terms are the store\'s policy and Infinity\'s, as ' +
         'shown on the order page at the time of buying. Read that policy before ordering ' +
         'customised, perishable or sealed goods, where returns are narrower.',
       'When will it be dispatched? The store packs the order once it is accepted. The order page ' +
@@ -1039,9 +1039,9 @@ function composeFallback(input: Record<string, string>, minWords: number): Draft
   parts.push(
     prose(
       'About the seller',
-      `${seller} lists this product on Duggu Store and answers the questions buyers ask before ` +
+      `${seller} lists this product on Infinity and answers the questions buyers ask before ` +
         'ordering.',
-      'The store\'s other products, its rating and how long it has been selling are on its Duggu ' +
+      'The store\'s other products, its rating and how long it has been selling are on its Infinity ' +
         'store page.',
       'Asking about size, grade, compatibility or the date printed on the pack before buying is ' +
         'usually quicker than reading a long page, and the answer usually comes the same day.',

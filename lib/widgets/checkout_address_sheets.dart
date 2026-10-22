@@ -55,7 +55,7 @@ class _AddressPicker extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: tokens.textPrimary,
               ),
             ),
@@ -68,7 +68,7 @@ class _AddressPicker extends StatelessWidget {
                   side: BorderSide(color: tokens.border),
                   alignment: Alignment.centerLeft,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 icon: const Icon(Iconsax.add_copy, size: 20),
@@ -76,7 +76,7 @@ class _AddressPicker extends StatelessWidget {
                   l10n.checkoutAddAddress,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 onPressed: () {
                   Navigator.pop(context);
@@ -97,7 +97,7 @@ class _AddressPicker extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 13,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: tokens.textSecondary,
                 ),
               ),
@@ -141,7 +141,7 @@ class _AddressRow extends StatelessWidget {
           decoration: BoxDecoration(
             color:
                 selected ? tokens.primary.withOpacity(0.06) : tokens.card,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: selected ? tokens.primary : tokens.border,
               width: selected ? 1.6 : 1,
@@ -150,21 +150,14 @@ class _AddressRow extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: tokens.surfaceAlt,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  label == 'Work'
-                      ? Iconsax.briefcase
-                      : label == 'Home'
-                          ? Iconsax.home_2
-                          : Iconsax.location,
-                  size: 20,
-                  color: selected ? tokens.primary : tokens.textSecondary,
-                ),
+              Icon(
+                label == 'Work'
+                    ? Iconsax.briefcase
+                    : label == 'Home'
+                        ? Iconsax.home_2
+                        : Iconsax.location,
+                size: 22,
+                color: selected ? tokens.primary : tokens.textSecondary,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -180,7 +173,7 @@ class _AddressRow extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 15,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w600,
                               color: tokens.textPrimary,
                             ),
                           ),
@@ -194,7 +187,7 @@ class _AddressRow extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               color: tokens.primary.withOpacity(0.12),
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
                               l10n.checkoutDefaultBadge,
@@ -202,7 +195,7 @@ class _AddressRow extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 10,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 color: tokens.primary,
                               ),
                             ),
@@ -305,7 +298,7 @@ class _ReceiverSheetState extends State<_ReceiverSheet> {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: tokens.textPrimary,
                 ),
               ),
@@ -339,7 +332,7 @@ class _ReceiverSheetState extends State<_ReceiverSheet> {
                       backgroundColor: tokens.primary,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: _ready
@@ -354,7 +347,7 @@ class _ReceiverSheetState extends State<_ReceiverSheet> {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),

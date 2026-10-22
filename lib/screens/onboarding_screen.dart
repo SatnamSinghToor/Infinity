@@ -186,7 +186,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.poppins(
               fontSize: small ? 21 : 24,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               height: 1.18,
               color: AppConstants.textPrimaryColor,
             ),
@@ -242,7 +242,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           height: 8,
           decoration: BoxDecoration(
             color: active ? AppConstants.primaryColor : const Color(0xFFE3E0DC),
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(10),
           ),
         );
       }),
@@ -259,7 +259,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         height: AppControl.lg,
         decoration: BoxDecoration(
           color: AppConstants.primaryColor,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
               color: AppConstants.primaryColor.withOpacity(0.30),
@@ -304,7 +304,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(color: const Color(0xFFE6E2DD)),
           boxShadow: const [
             BoxShadow(

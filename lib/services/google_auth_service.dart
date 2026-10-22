@@ -24,13 +24,17 @@ class GoogleAuthService {
 
   static bool get isConfigured => _serverClientId.isNotEmpty;
 
-  static GoogleSignIn? _instance;
+  static bool _initialized = false;
 
-  static GoogleSignIn _client() {
-    return _instance ??= GoogleSignIn(
-      serverClientId: _serverClientId,
-      scopes: const ['email'],
+  /// google_sign_in 7.x is a singleton configured through one exact
+  /// `initialize()` call — there is no constructor to pass the server
+  /// client id into any more. Idempotent: every entry point awaits this.
+  static Future<void> _ensureInitialized() async {
+    if (_initialized) return;
+    await GoogleSignIn.instance.initialize(
+      serverClientId: _serverClientId.isEmpty ? null : _serverClientId,
     );
+    _initialized = true;
   }
 
   /// Runs the account picker and exchanges the result for a Supabase
@@ -38,37 +42,69 @@ class GoogleAuthService {
   /// nothing chosen) — not an error, so nothing is said about it. Any other
   /// failure is rethrown as an [AuthException] so the caller can show the
   /// same "couldn't sign in" message it already shows for email/password.
+  ///
+  /// google_sign_in 7.x API: `authenticate()` instead of `signIn()`, cancel
+  /// surfaces as a [GoogleSignInException] with code `canceled`, and the
+  /// access token needs a separate authorization call (only the idToken is
+  /// guaranteed by authentication alone).
   static Future<AuthResponse?> signIn() async {
     if (!isConfigured) {
       throw const AuthException(
         'Google sign-in is not set up yet on this build.',
       );
     }
-    final account = await _client().signIn();
+    final account = await _authenticateOrNull();
     if (account == null) return null; // the picker was dismissed
 
-    final auth = await account.authentication;
-    final idToken = auth.idToken;
+    final idToken = account.authentication.idToken;
     if (idToken == null) {
       throw const AuthException(
         "Google didn't return a usable sign-in token. Try again.",
       );
     }
 
+    // Supabase's Google flow works with the idToken; the access token is
+    // optional and only attached when Google already has a cached
+    // authorization for the email scope (no extra prompt).
+    String? accessToken;
+    try {
+      final authorization = await account.authorizationClient
+          .authorizationForScopes(const ['email']);
+      accessToken = authorization?.accessToken;
+    } catch (_) {
+      // No authorization — Supabase accepts the idToken by itself.
+    }
+
     return SupabaseService.client.auth.signInWithIdToken(
       provider: OAuthProvider.google,
       idToken: idToken,
-      accessToken: auth.accessToken,
+      accessToken: accessToken,
     );
   }
 
+  /// Wraps [GoogleSignIn.authenticate]: returns null when the user closed
+  /// the picker, and rethrows other failures as the [AuthException] the
+  /// callers already know how to show.
+  static Future<GoogleSignInAccount?> _authenticateOrNull() async {
+    try {
+      await _ensureInitialized();
+      return await GoogleSignIn.instance.authenticate();
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) return null;
+      throw AuthException(
+        e.description ?? 'Google sign-in failed (${e.code.name}).',
+      );
+    }
+  }
+
   /// Only clears Google's own cached account — not the app's session. A
-  /// mismatch between the two (signed out of Duggu, still cached in
+  /// mismatch between the two (signed out of Infinity, still cached in
   /// Google) would otherwise skip the picker on the next attempt and
   /// silently sign the same account back in.
   static Future<void> signOut() async {
     try {
-      await _client().signOut();
+      await _ensureInitialized();
+      await GoogleSignIn.instance.signOut();
     } catch (e) {
       debugPrint('Google sign-out failed: $e');
     }

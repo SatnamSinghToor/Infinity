@@ -182,7 +182,7 @@ class _CategoryPickerState extends State<_CategoryPicker> {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 19,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -215,11 +215,11 @@ class _CategoryPickerState extends State<_CategoryPicker> {
               fillColor: context.tokens.surface,
               contentPadding: const EdgeInsets.symmetric(vertical: 12),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: context.tokens.border),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(10),
                 borderSide:
                     BorderSide(color: context.tokens.primary, width: 1.5),
               ),
@@ -348,7 +348,7 @@ class _Row extends StatelessWidget {
         child: Text(
           title.isEmpty ? '?' : title[0].toUpperCase(),
           style: TextStyle(
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             color: selected ? t.card : t.primary,
           ),
         ),
@@ -359,7 +359,7 @@ class _Row extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontSize: 16,
-          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+          fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
           color: t.textPrimary,
         ),
       ),

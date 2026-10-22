@@ -208,7 +208,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                       onTap: _useCurrentLocation,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: _actionButton(
                       icon: Iconsax.location,
@@ -250,17 +250,21 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                       ),
                       Pressable(
                           child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () => setState(() {
                           _lat = null;
                           _lng = null;
                         }),
-                        child: const Icon(Iconsax.close_circle_copy, size: 18),
+                        child: const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Icon(Iconsax.close_circle_copy, size: 18),
+                        ),
                       )),
                     ],
                   ),
                 ),
               ],
-              const SizedBox(height: 18),
+              const SizedBox(height: 16),
               if (loggedIn) ...[
                 Text(
                   l10n.addressSaveAs,
@@ -270,7 +274,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                     color: Colors.grey[700],
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
                   children: [
@@ -345,7 +349,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
         foregroundColor: AppConstants.primaryColor,
         side: const BorderSide(color: AppConstants.primaryColor),
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

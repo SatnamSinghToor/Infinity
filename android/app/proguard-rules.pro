@@ -11,3 +11,8 @@
 # bundled with it, so the path never runs; without this R8 fails the
 # release build on the missing class.
 -dontwarn com.google.firebase.iid.**
+
+# Pigeon-generated SharedPreferences plugin: the registrar's suspend
+# signatures must survive as named, or the async dart bindings call a
+# method Java can no longer find (NoSuchMethodError on getAll).
+-keep class io.flutter.plugins.sharedpreferences.** { *; }

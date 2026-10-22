@@ -168,7 +168,7 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
   }
 
   Widget _label(String text) => Padding(
-        padding: const EdgeInsets.only(top: 18, bottom: 8),
+        padding: const EdgeInsets.only(top: AppSpacing.lg, bottom: AppSpacing.sm),
         child: Text(
           text,
           style: TextStyle(fontSize: 15, color: context.tokens.textPrimary),
@@ -222,7 +222,7 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
                             name.isEmpty ? '?' : name[0].toUpperCase(),
                             style: TextStyle(
                               fontSize: size * 0.4,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w600,
                               color: tokens.primary,
                             ),
                           ),
@@ -356,7 +356,7 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: tokens.card,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: AppRadius.card,
               border: Border.all(color: tokens.border),
             ),
             child: Row(
@@ -408,7 +408,7 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 21,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   Text(
@@ -479,7 +479,7 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
                   children: [
                     Expanded(
                       child: SizedBox(
-                        height: 54,
+                        height: AppControl.lg,
                         child: Pressable(
                           child: OutlinedButton(
                             onPressed: _saving
@@ -489,9 +489,13 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
                                     : setState(() => _step = 0),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: tokens.textPrimary,
-                              side: BorderSide(color: tokens.textSecondary),
+                              side: BorderSide(
+                                color: tokens.textSecondary,
+                              ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(
+                                  AppRadius.button,
+                                ),
                               ),
                             ),
                             child: Text(
@@ -500,16 +504,15 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
                                   : l10n.deliveryEditBack,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 17),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: SizedBox(
-                        height: 54,
+                        height: AppControl.lg,
                         child: Pressable(
                           child: ElevatedButton(
                             onPressed: _saving || (first && !_stepOneReady)
@@ -520,7 +523,9 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
                               backgroundColor: tokens.primary,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(
+                                  AppRadius.button,
+                                ),
                               ),
                             ),
                             child: _saving
@@ -538,7 +543,6 @@ class _DeliveryEditProfileScreenState extends State<DeliveryEditProfileScreen> {
                                         : l10n.deliverySettingsSave,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontSize: 17),
                                   ),
                           ),
                         ),

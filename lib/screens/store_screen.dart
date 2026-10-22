@@ -109,7 +109,7 @@ class _StoreHeader extends StatelessWidget {
                         name,
                         style: GoogleFonts.poppins(
                           fontSize: 17,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: AppConstants.textPrimaryColor,
                         ),
                       ),
@@ -192,7 +192,7 @@ class _StoreHeader extends StatelessWidget {
         name.isEmpty ? '?' : name[0].toUpperCase(),
         style: GoogleFonts.poppins(
           fontSize: 22,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: AppConstants.primaryColor,
         ),
       ),
@@ -206,13 +206,13 @@ class _StoreHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
         color: color.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
         open ? l10n.storeStatusOpen : l10n.storeStatusClosed,
         style: GoogleFonts.poppins(
           fontSize: 11,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           color: color,
         ),
       ),

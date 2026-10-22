@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:lucide_icons_flutter/lucide_icons_300.dart';
 
 import '../models/product.dart';
 import '../services/supabase_service.dart';
@@ -11,21 +12,35 @@ class HomeChip {
   final String name;
   final IconData icon;
 
-  const HomeChip(this.name, this.icon);
+  /// The chip's own accent — the colour the icon draws with in its idle
+  /// state, so each storefront reads as its own colour at a glance while
+  /// the shapes stay one family (Lucide light, drawn on one 24pt grid).
+  final Color accent;
+
+  const HomeChip(this.name, this.icon, {this.accent = const Color(0xFF6B7280)});
 }
 
 /// The Home strip is its own fixed list of storefronts, separate from the
 /// Categories tab (which follows the category tree in the database).
 const homeChips = [
-  HomeChip('All', Iconsax.category),
-  HomeChip('Festival', Iconsax.magic_star),
-  HomeChip('Electronics', Iconsax.mobile),
-  HomeChip('Beauty', Iconsax.brush_2),
-  HomeChip('Pharmacy', Iconsax.health),
-  HomeChip('Gifting', Iconsax.gift),
-  HomeChip('Decor', Iconsax.home_2),
-  HomeChip('Kids', Iconsax.happyemoji),
-  HomeChip('Imported', Iconsax.airplane),
+  HomeChip('All', LucideIcons300.layoutGrid,
+      accent: Color(0xFFF97316)),
+  HomeChip('Festival', LucideIcons300.sparkles,
+      accent: Color(0xFF8B5CF6)),
+  HomeChip('Electronics', LucideIcons300.smartphone,
+      accent: Color(0xFF3B82F6)),
+  HomeChip('Beauty', LucideIcons300.brush,
+      accent: Color(0xFFEC4899)),
+  HomeChip('Pharmacy', LucideIcons300.cross,
+      accent: Color(0xFF10B981)),
+  HomeChip('Gifting', LucideIcons300.gift,
+      accent: Color(0xFFEF4444)),
+  HomeChip('Decor', LucideIcons300.home,
+      accent: Color(0xFF14B8A6)),
+  HomeChip('Kids', LucideIcons300.smile,
+      accent: Color(0xFFA855F7)),
+  HomeChip('Imported', LucideIcons300.plane,
+      accent: Color(0xFF0EA5E9)),
 ];
 
 class ProductProvider extends ChangeNotifier {

@@ -107,7 +107,7 @@ class _Stop extends StatelessWidget {
                     label,
                     style: TextStyle(
                       fontSize: 11.5,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0.3,
                       color: color,
                     ),

@@ -11,6 +11,7 @@ import '../../utils/constants.dart';
 import '../../utils/format.dart';
 import '../../utils/launch_actions.dart';
 import '../../utils/safe_state.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/live_entrance.dart';
 import '../../widgets/role_common.dart';
 import '../../widgets/run_stops.dart';
@@ -393,11 +394,11 @@ class _DeliveryOrdersScreenState extends State<DeliveryOrdersScreen> {
     const divider = Divider(height: 24, color: Color(0xFFEBEBEB));
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
+      margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
+      padding: const EdgeInsets.all(AppSpacing.cardPadding),
+      decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: AppRadius.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -413,18 +414,31 @@ class _DeliveryOrdersScreenState extends State<DeliveryOrdersScreen> {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-              Text(
-                _stageLabel(stage, l10n),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: _stageColor(stage),
+              // Where the run stands, as a pill with the stage colour —
+              // the same chip the dashboard's cards use.
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
+                decoration: BoxDecoration(
+                  color: _stageColor(stage).withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
+                ),
+                child: Text(
+                  _stageLabel(stage, l10n),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.3,
+                    color: _stageColor(stage),
+                  ),
                 ),
               ),
             ],
@@ -542,7 +556,7 @@ class _DeliveryOrdersScreenState extends State<DeliveryOrdersScreen> {
                 formatRupees(total),
                 style: const TextStyle(
                   fontSize: 17,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
@@ -553,7 +567,7 @@ class _DeliveryOrdersScreenState extends State<DeliveryOrdersScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: AppConstants.primaryColor.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(AppRadius.md),
                 border: Border.all(
                   color: AppConstants.primaryColor.withOpacity(0.45),
                 ),
@@ -576,7 +590,7 @@ class _DeliveryOrdersScreenState extends State<DeliveryOrdersScreen> {
                     formatRupees(total),
                     style: const TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppConstants.primaryColor,
                     ),
                   ),
@@ -704,7 +718,7 @@ class _DeliveryOrdersScreenState extends State<DeliveryOrdersScreen> {
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     fontSize: 24,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                         ),
@@ -728,9 +742,9 @@ class _DeliveryOrdersScreenState extends State<DeliveryOrdersScreen> {
                     height: 56,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+                      padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
                       itemCount: chips.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 10),
+                      separatorBuilder: (_, __) => const SizedBox(width: 8),
                       itemBuilder: (_, i) {
                         final (key, label) = chips[i];
                         final on = _filter == key;
@@ -740,13 +754,14 @@ class _DeliveryOrdersScreenState extends State<DeliveryOrdersScreen> {
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 18),
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: on
                                     ? AppConstants.primaryColor
                                     : Colors.white,
-                                borderRadius: BorderRadius.circular(24),
+                                borderRadius:
+                                    BorderRadius.circular(AppRadius.pill),
                                 border: Border.all(
                                   color: on
                                       ? AppConstants.primaryColor

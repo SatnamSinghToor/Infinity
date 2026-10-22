@@ -29,7 +29,7 @@ class DeepLinkService {
     if (_started) return;
     _started = true;
     try {
-      final initial = await _appLinks.getInitialAppLink();
+      final initial = await _appLinks.getInitialLink();
       if (initial != null) await _handle(initial);
     } catch (e) {
       debugPrint('Initial deep link failed: $e');

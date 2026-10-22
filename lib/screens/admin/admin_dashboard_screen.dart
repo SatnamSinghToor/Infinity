@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../utils/format.dart';
 import '../../utils/safe_state.dart';
@@ -167,8 +168,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 crossAxisCount: 2,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
+                crossAxisSpacing: AppSpacing.md,
+                mainAxisSpacing: AppSpacing.md,
                 childAspectRatio: 1.5,
                 children: [
                   RoleStatCard(
@@ -193,23 +194,28 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xl),
               _StoreEditorCard(onOpen: _openStoreEditor),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
               // The categories table drives the chips on Home and the
               // Categories tab, and the editor for it had no way in at all.
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: AppRadius.card,
+                  border: Border.all(color: context.tokens.border),
                 ),
                 child: ListTile(
                   leading: const Icon(Iconsax.category),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                  ),
                   title: Text(l10n.adminDashCategories,
                       maxLines: 1, overflow: TextOverflow.ellipsis),
                   subtitle: Text(
                     l10n.adminDashCategoriesSub,
                     maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
@@ -222,15 +228,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   },
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xl),
               Text(
                 l10n.adminDashRecentOrders,
                 style: const TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
               if (_recentOrders.isEmpty)
                 RoleEmptyNote(
                   icon: Iconsax.receipt,
@@ -239,20 +245,41 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               else
                 ..._recentOrders.map(
                   (o) => Container(
-                    margin: const EdgeInsets.only(bottom: 8),
+                    margin: const EdgeInsets.only(
+                      bottom: AppSpacing.listGap,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: AppRadius.card,
+                      border: Border.all(color: context.tokens.border),
                     ),
                     child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                      ),
                       title: Text(
                         l10n.adminDashOrderNumber(
                           (o['id'] as String).substring(0, 8),
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
                       ),
-                      subtitle: Text(o['status'] as String? ?? ''),
-                      trailing:
-                          Text(formatRupees((o['total_amount'] as num?) ?? 0)),
+                      subtitle: Text(
+                        RoleStatusChip.titled(o['status'] as String? ?? ''),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: Text(
+                        formatRupees((o['total_amount'] as num?) ?? 0),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13.5,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -277,9 +304,9 @@ class _StoreEditorCard extends StatelessWidget {
     return GestureDetector(
       onTap: onOpen,
       child: Container(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: AppRadius.card,
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -297,7 +324,7 @@ class _StoreEditorCard extends StatelessWidget {
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 6),

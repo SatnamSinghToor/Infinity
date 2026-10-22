@@ -52,8 +52,9 @@ class _GoogleAuthButtonState extends State<GoogleAuthButton> {
 
   @override
   Widget build(BuildContext context) {
-    // Google sign-in disabled — button hidden
-    return const SizedBox.shrink();
+    // Nothing to show until the build actually has a Google Cloud client —
+    // `--dart-define=GOOGLE_SERVER_CLIENT_ID=...` turns the button on.
+    if (!GoogleAuthService.isConfigured) return const SizedBox.shrink();
     final l10n = AppLocalizations.of(context);
     final t = context.tokens;
     final loading = _busy || context.watch<AuthProvider>().isLoading;
@@ -84,7 +85,7 @@ class _GoogleAuthButtonState extends State<GoogleAuthButton> {
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: t.border),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
             child: loading
@@ -143,7 +144,7 @@ class _GoogleG extends StatelessWidget {
         'G',
         style: TextStyle(
           fontSize: 13,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: Color(0xFF4285F4),
           height: 1,
         ),

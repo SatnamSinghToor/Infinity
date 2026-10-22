@@ -191,8 +191,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             l10n.authHeading,
                             style: GoogleFonts.poppins(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
+                              fontSize: 19,
+                              fontWeight: FontWeight.w600,
                               color: AppConstants.blackColor,
                             ),
                           ),
@@ -227,7 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(
                                 fontSize: 12.5,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           )),
@@ -260,7 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   recognizer: _termsTap,
                                   style: const TextStyle(
                                     color: AppConstants.primaryColor,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 TextSpan(text: l10n.authAnd),
@@ -269,7 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   recognizer: _privacyTap,
                                   style: const TextStyle(
                                     color: AppConstants.primaryColor,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
@@ -290,14 +290,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _logoTile() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppRadius.lg),
-      child: Image.asset(
-        'assets/logo/duggu_logo.png',
-        height: 64,
-        width: 117,
-        fit: BoxFit.cover,
-      ),
+    // Contain, not cover: the wordmark is drawn to keep its aspect, so no
+    // corner of it is ever shaved off by the tile.
+    return Image.asset(
+      'assets/logo/infinity_logo.png',
+      height: 64,
+      fit: BoxFit.contain,
+      excludeFromSemantics: true,
     );
   }
 
@@ -324,7 +323,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text(
                     '+91',
                     style: TextStyle(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppConstants.blackColor,
                     ),
                   ),
@@ -367,7 +366,7 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
       decoration: BoxDecoration(
         color: AppConstants.primaryColor.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: AppConstants.primaryColor.withOpacity(0.35),
         ),
@@ -409,7 +408,7 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: loading ? null : _submit,
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
         child: loading

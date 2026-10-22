@@ -32,6 +32,7 @@ interface NotifyPayload {
   user_id: string;
   title: string;
   body: string;
+  type?: string;
   order_id: string | null;
   loud?: boolean;
 }
@@ -169,6 +170,7 @@ Deno.serve(async (req: Request) => {
             user_id: payload.user_id,
             title: payload.title,
             body: payload.body,
+            ...(payload.type ? { type: payload.type } : {}),
             loud: loud ? "true" : "false",
             ...(payload.order_id ? { order_id: payload.order_id } : {}),
           },

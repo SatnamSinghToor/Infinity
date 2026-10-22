@@ -9,7 +9,7 @@ import '../providers/auth_provider.dart';
 import '../utils/constants.dart';
 import 'root_router.dart';
 
-/// The first thing people see: the Duggu Store wordmark and tagline over the
+/// The first thing people see: the Infinity wordmark and tagline over the
 /// top of the backdrop, and a bar that fills as the app gets ready. It moves
 /// on as soon as the saved sign-in has been restored (but never before the
 /// intro has played, and never later than [_longest]).
@@ -156,7 +156,7 @@ class _SplashScreenState extends State<SplashScreen>
                     child: Column(
                       children: [
                         Image.asset(
-                          'assets/logo/duggu_logo.png',
+                          'assets/logo/infinity_logo.png',
                           width: MediaQuery.sizeOf(context).width * 0.46,
                           excludeFromSemantics: true,
                         ),
@@ -199,7 +199,7 @@ class _SplashScreenState extends State<SplashScreen>
       mainAxisSize: MainAxisSize.min,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(10),
           child: TweenAnimationBuilder<double>(
             tween: Tween(end: ready ? 1.0 : 0.82),
             duration: Duration(milliseconds: ready ? 500 : 3200),

@@ -430,6 +430,12 @@ abstract class AppLocalizations {
   /// **'No transactions yet'**
   String get walletEmpty;
 
+  /// Wallet screen: the hint under the empty title.
+  ///
+  /// In en, this message translates to:
+  /// **'Money you add, refunds and bonuses will show up here.'**
+  String get walletEmptyBody;
+
   /// Payment methods screen: the heading in the top bar.
   ///
   /// In en, this message translates to:
@@ -889,13 +895,13 @@ abstract class AppLocalizations {
   /// About screen: heading of the first paragraph.
   ///
   /// In en, this message translates to:
-  /// **'duggu'**
+  /// **'Infinity'**
   String get helpAboutDugguHeading;
 
-  /// About screen: what Duggu is.
+  /// About screen: what Infinity is.
   ///
   /// In en, this message translates to:
-  /// **'Duggu brings groceries, daily needs and festival shopping from stores near you to your door, fast.'**
+  /// **'Infinity brings groceries, daily needs and festival shopping from stores near you to your door, fast.'**
   String get helpAboutDugguBody;
 
   /// About screen: heading about where orders come from.
@@ -919,7 +925,7 @@ abstract class AppLocalizations {
   /// About screen: who does what, and how you can pay.
   ///
   /// In en, this message translates to:
-  /// **'Sellers list their own products and prices, delivery partners bring them to you, and you pay how you like: cash on delivery, online or from your Duggu wallet.'**
+  /// **'Sellers list their own products and prices, delivery partners bring them to you, and you pay how you like: cash on delivery, online or from your Infinity wallet.'**
   String get helpAboutNeighbourhoodsBody;
 
   /// Policies screen: the app-bar heading.
@@ -949,7 +955,7 @@ abstract class AppLocalizations {
   /// Policies screen: who handles online payments.
   ///
   /// In en, this message translates to:
-  /// **'Online payments are handled by Razorpay. Duggu never sees or stores your card or UPI details.'**
+  /// **'Online payments are handled by Razorpay. Infinity never sees or stores your card or UPI details.'**
   String get helpPolicyPaymentsBody;
 
   /// Policies screen: heading of the delivery-fee note.
@@ -973,7 +979,7 @@ abstract class AppLocalizations {
   /// Policies screen: when an order can be cancelled and where the money goes.
   ///
   /// In en, this message translates to:
-  /// **'An order can be cancelled from My Orders while the store has not sent it out. Money you paid from your Duggu wallet goes back to the wallet.'**
+  /// **'An order can be cancelled from My Orders while the store has not sent it out. Money you paid from your Infinity wallet goes back to the wallet.'**
   String get helpPolicyRefundsBody;
 
   /// Policies screen: heading of the returns note.
@@ -997,7 +1003,7 @@ abstract class AppLocalizations {
   /// Terms screen: heading of the account note.
   ///
   /// In en, this message translates to:
-  /// **'Using Duggu'**
+  /// **'Using Infinity'**
   String get helpTermsUsingHeading;
 
   /// Terms screen: account and details.
@@ -1027,7 +1033,7 @@ abstract class AppLocalizations {
   /// Terms screen: the coupon and wallet rules.
   ///
   /// In en, this message translates to:
-  /// **'A coupon can be used once per account and only above its minimum order value. Wallet money can only be spent on Duggu orders.'**
+  /// **'A coupon can be used once per account and only above its minimum order value. Wallet money can only be spent on Infinity orders.'**
   String get helpTermsCouponsBody;
 
   /// Terms screen: heading of the fair-use note.
@@ -1081,7 +1087,7 @@ abstract class AppLocalizations {
   /// FAQ screen: answer about payment methods.
   ///
   /// In en, this message translates to:
-  /// **'Cash on delivery, online (UPI and cards) or from your Duggu wallet. You can use wallet money together with either of the other two.'**
+  /// **'Cash on delivery, online (UPI and cards) or from your Infinity wallet. You can use wallet money together with either of the other two.'**
   String get helpFaqPayAnswer;
 
   /// FAQ screen: question about stacking coupons.
@@ -1255,7 +1261,7 @@ abstract class AppLocalizations {
   /// Rate-us sheet: the heading above the stars.
   ///
   /// In en, this message translates to:
-  /// **'How is your experience with Duggu?'**
+  /// **'How is your experience with Infinity?'**
   String get helpRateTitle;
 
   /// Rate-us sheet: label of the note field.
@@ -1273,13 +1279,13 @@ abstract class AppLocalizations {
   /// Rate-us sheet: notice after the rating was sent.
   ///
   /// In en, this message translates to:
-  /// **'Thank you for rating Duggu.'**
+  /// **'Thank you for rating Infinity.'**
   String get helpRateThanks;
 
   /// The message the Share App row hands to the phone's share sheet.
   ///
   /// In en, this message translates to:
-  /// **'Try Duggu: groceries and daily needs from stores near you, delivered fast.'**
+  /// **'Try Infinity: groceries and daily needs from stores near you, delivered fast.'**
   String get helpShareMessage;
 
   /// Profile screen: the heading above the account card.
@@ -1330,7 +1336,7 @@ abstract class AppLocalizations {
   /// **'Submit'**
   String get profileSubmit;
 
-  /// Profile screen: row and dialog title for delivering with Duggu.
+  /// Profile screen: row and dialog title for delivering with Infinity.
   ///
   /// In en, this message translates to:
   /// **'Become a Delivery Partner'**
@@ -1381,7 +1387,7 @@ abstract class AppLocalizations {
   /// Profile screen: heading of the orders, wallet and saved-things rows.
   ///
   /// In en, this message translates to:
-  /// **'Personal Data'**
+  /// **'My Account'**
   String get profileSectionPersonal;
 
   /// Profile screen: heading of the app settings rows.
@@ -1405,8 +1411,14 @@ abstract class AppLocalizations {
   /// Profile screen: heading of the become-a-seller / become-a-partner rows.
   ///
   /// In en, this message translates to:
-  /// **'Work with Duggu'**
+  /// **'Work with Infinity'**
   String get profileSectionWork;
+
+  /// Profile screen: heading above sign-out and delete account.
+  ///
+  /// In en, this message translates to:
+  /// **'Danger zone'**
+  String get profileSectionDanger;
 
   /// Profile screen: row that opens the order list.
   ///
@@ -1561,7 +1573,7 @@ abstract class AppLocalizations {
   /// Profile screen: greeting for someone not signed in.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to duggu'**
+  /// **'Welcome to Infinity'**
   String get profileWelcomeGuest;
 
   /// Profile screen: button that opens the sign-in page.
@@ -4309,7 +4321,7 @@ abstract class AppLocalizations {
   /// Sign-in: hint when the field takes either.
   ///
   /// In en, this message translates to:
-  /// **'Enter email or phone number'**
+  /// **'Email or mobile number'**
   String get authIdHint;
 
   /// Sign-in: password field hint.
@@ -4477,7 +4489,7 @@ abstract class AppLocalizations {
   /// Register page: name field hint.
   ///
   /// In en, this message translates to:
-  /// **'User Name'**
+  /// **'Full Name'**
   String get authUserName;
 
   /// Register page: phone field hint.
@@ -4507,7 +4519,7 @@ abstract class AppLocalizations {
   /// Register page: the button.
   ///
   /// In en, this message translates to:
-  /// **'Submit Securely'**
+  /// **'Sign Up'**
   String get authSubmit;
 
   /// Register page: line under the button.
@@ -4873,7 +4885,7 @@ abstract class AppLocalizations {
   /// Delivery: the button that marks a run as delivered.
   ///
   /// In en, this message translates to:
-  /// **'Delivered'**
+  /// **'Mark Delivered'**
   String get deliveryDelivered;
 
   /// Delivery: link from the home preview to the full pickup list.
@@ -4987,7 +4999,7 @@ abstract class AppLocalizations {
   /// Delivery runs: the app bar title.
   ///
   /// In en, this message translates to:
-  /// **'My Delivery'**
+  /// **'My Deliveries'**
   String get deliveryOrdersTitle;
 
   /// Delivery runs: loading message.
@@ -5041,7 +5053,7 @@ abstract class AppLocalizations {
   /// Delivery runs: pickup name when the store's details could not be loaded.
   ///
   /// In en, this message translates to:
-  /// **'The seller\'s store'**
+  /// **'Pickup store'**
   String get deliveryOrdersStoreFallback;
 
   /// Delivery runs: the customer's own delivery instructions, when they left one.
@@ -5083,7 +5095,7 @@ abstract class AppLocalizations {
   /// Delivery runs: the store or address has no lat/lng to show on the in-app map.
   ///
   /// In en, this message translates to:
-  /// **'This location has no map coordinates yet.'**
+  /// **'This order has no map location yet.'**
   String get deliveryOrdersNavigateFailed;
 
   /// In-app navigation: screen title.
@@ -5173,7 +5185,7 @@ abstract class AppLocalizations {
   /// Delivery earnings: no fee has been earned yet.
   ///
   /// In en, this message translates to:
-  /// **'No deliveries completed yet'**
+  /// **'No earnings yet — your delivery fees show up here as you complete runs.'**
   String get deliveryEarningsEmpty;
 
   /// Delivery earnings: an earnings row with no note of its own.
@@ -6105,6 +6117,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **' · hidden'**
   String get adminCategoriesHidden;
+
+  /// Admin categories: shown when a main category has no sub-categories yet.
+  ///
+  /// In en, this message translates to:
+  /// **'No sub-categories yet — add one and it becomes a card on this category\'s page.'**
+  String get adminCategoriesNoSubs;
 
   /// Admin categories: how many products a sub-category holds.
   ///
@@ -7612,7 +7630,7 @@ abstract class AppLocalizations {
   /// **'Written from your own notes — the AI did not write this, because the server has no AI key set.'**
   String get addProductGenerateFromNotes;
 
-  /// Add product: the AI writer could not reach Duggu because the device has no connection.
+  /// Add product: the AI writer could not reach Infinity because the device has no connection.
   ///
   /// In en, this message translates to:
   /// **'No internet — the AI writer needs a connection.'**
@@ -8209,7 +8227,7 @@ abstract class AppLocalizations {
   /// Cart: the bottom button that goes on to choosing how to pay.
   ///
   /// In en, this message translates to:
-  /// **'Proceed To Pay'**
+  /// **'Select Payment Method'**
   String get cartProceedToPay;
 
   /// Cart: small caps label under the amount on the bottom button.
@@ -8647,13 +8665,13 @@ abstract class AppLocalizations {
   /// Rider deliveries: cash on delivery, not yet collected.
   ///
   /// In en, this message translates to:
-  /// **'Pay via COD'**
+  /// **'Cash to collect'**
   String get deliveryOrdersPayCod;
 
   /// Rider deliveries: cash on delivery, collected.
   ///
   /// In en, this message translates to:
-  /// **'Paid via COD'**
+  /// **'Cash collected'**
   String get deliveryOrdersPaidCod;
 
   /// Rider deliveries: paid before delivery.
@@ -8671,19 +8689,19 @@ abstract class AppLocalizations {
   /// Rider deliveries: empty state title.
   ///
   /// In en, this message translates to:
-  /// **'No orders here'**
+  /// **'No deliveries to show'**
   String get deliveryOrdersEmptyTitle;
 
   /// Rider deliveries: empty state body.
   ///
   /// In en, this message translates to:
-  /// **'Orders ready for pickup, on the way and delivered show up here.'**
+  /// **'Runs waiting for pickup, on the way and delivered all show up here.'**
   String get deliveryOrdersEmptyBody;
 
   /// Rider earnings: what was earned today.
   ///
   /// In en, this message translates to:
-  /// **'Today\'s Earning'**
+  /// **'Today\'s earnings'**
   String get deliveryEarningsToday;
 
   /// Rider earnings: earned and not yet paid out.
@@ -8701,7 +8719,7 @@ abstract class AppLocalizations {
   /// Rider earnings: what the shop has paid out.
   ///
   /// In en, this message translates to:
-  /// **'Settlement History'**
+  /// **'Paid out'**
   String get deliveryEarningsSettled;
 
   /// Rider earnings: heading over the list of earnings.
@@ -8737,7 +8755,7 @@ abstract class AppLocalizations {
   /// Rider cash: tile with the total cash collected.
   ///
   /// In en, this message translates to:
-  /// **'Collected in all'**
+  /// **'Collected in total'**
   String get deliveryCashTotal;
 
   /// Rider cash: empty state title.
@@ -9123,6 +9141,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'When someone writes to support, their chat shows up here.'**
   String get adminSupportEmptyBody;
+
+  /// Variant sheet: the bottom button that adds the selected variant to the cart.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Cart'**
+  String get variantSheetAddToCart;
+
+  /// Variant sheet: message shown when no variant is selected yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Select an option'**
+  String get variantSheetSelectOption;
+
+  /// Variant sheet: shown when the product has no variants to choose from.
+  ///
+  /// In en, this message translates to:
+  /// **'No options available'**
+  String get variantSheetNoOptions;
+
+  /// Variant sheet: shown in the snackbar after adding a product to cart, e.g. '500g added to cart'.
+  ///
+  /// In en, this message translates to:
+  /// **'added to cart'**
+  String get productAddedToCart;
+
+  /// Product card: delivery time estimate. The eta placeholder is already formatted.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery in {eta}'**
+  String productDeliveryETA(String eta);
+
+  /// Product grid: heading when the search or filter matched nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No products found'**
+  String get productNoProductsFound;
+
+  /// Product grid: line under the empty heading suggesting to broaden the search.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a different search or category'**
+  String get productTryDifferentSearch;
 }
 
 class _AppLocalizationsDelegate

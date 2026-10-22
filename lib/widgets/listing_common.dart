@@ -88,7 +88,7 @@ Future<ListingSort?> showSortSheet(BuildContext context, ListingSort current) {
                 l10n.listingSortBy,
                 style: GoogleFonts.poppins(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -186,7 +186,7 @@ class ListingHeader extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           fontSize: 16,
                           height: 1.25,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: AppConstants.textPrimaryColor,
                         ),
                       ),
@@ -311,7 +311,7 @@ class ListingFilterRow extends StatelessWidget {
             color: active
                 ? AppConstants.primaryColor.withOpacity(0.1)
                 : Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: active
                   ? AppConstants.primaryColor
@@ -362,7 +362,7 @@ class ViewCartPill extends StatelessWidget {
             gradient: const LinearGradient(
               colors: [AppConstants.primaryColor, Color(0xFFFF8A2B)],
             ),
-            borderRadius: BorderRadius.circular(32),
+            borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
                 color: AppConstants.primaryColor.withOpacity(0.4),
@@ -382,7 +382,7 @@ class ViewCartPill extends StatelessWidget {
                     l10n.listingViewCart,
                     style: GoogleFonts.poppins(
                       fontSize: 15,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
@@ -442,7 +442,7 @@ class ListingEmpty extends StatelessWidget {
                   : message ?? l10n.listingNoProducts,
               style: GoogleFonts.poppins(
                 fontSize: 15,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: Colors.grey[600],
               ),
             ),

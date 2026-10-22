@@ -41,7 +41,7 @@ class PoojaThaliCard extends StatelessWidget {
       child: Column(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(10),
             child: Image.asset(
               'assets/festival/pooja_chokey.jpg',
               width: double.infinity,
@@ -57,7 +57,7 @@ class PoojaThaliCard extends StatelessWidget {
               height: AppControl.lg,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(10),
                 gradient: const LinearGradient(
                   colors: [Color(0xFFB8741F), Color(0xFF8A5A1C)],
                 ),
@@ -204,7 +204,7 @@ class BhogFeastsSection extends StatelessWidget {
                         style: GoogleFonts.playfairDisplay(
                           fontSize: 31,
                           height: 1.12,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: const Color(0xFFC4531A),
                         ),
                       ),
@@ -280,7 +280,7 @@ class _FeastTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.fromLTRB(6, 10, 6, 0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
             gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,

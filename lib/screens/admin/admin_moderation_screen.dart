@@ -4,6 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../utils/safe_state.dart';
 import 'admin_order_issues_screen.dart';
@@ -210,23 +211,32 @@ class _QueueTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: AppRadius.card,
+        border: Border.all(color: context.tokens.border),
       ),
       child: ListTile(
         onTap: onTap,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.xs,
+        ),
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: AppConstants.primaryColor.withOpacity(0.12),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppRadius.md),
           ),
           child: Icon(icon, color: AppConstants.primaryColor),
         ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-        subtitle: Text(subtitle),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+        subtitle: Text(
+          subtitle,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
         trailing: pendingCount > 0
             ? Container(
                 padding: const EdgeInsets.symmetric(
@@ -235,18 +245,18 @@ class _QueueTile extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: AppConstants.dangerColor,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
                 ),
                 child: Text(
                   '$pendingCount',
                   style: const TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),
                 ),
               )
-            : const Icon(Iconsax.arrow_right_3, size: 16, color: Colors.grey),
+            : const Icon(Iconsax.arrow_right_3, size: 18, color: Colors.grey),
       ),
     );
   }

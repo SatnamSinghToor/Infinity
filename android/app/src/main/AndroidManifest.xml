@@ -12,7 +12,7 @@
     <!-- Android 13+ asks at runtime before any push can be shown. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
-        android:label="duggu"
+        android:label="Infinity"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -71,6 +71,21 @@
         </intent>
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE"/>
+        </intent>
+        <!-- The UPI apps on the phone: each one answers the upi:// scheme,
+             and the payment picker lists them with their real icons. Without
+             this, Android 11 and later hide every one of them. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="upi"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="tez"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="paytmmp"/>
         </intent>
     </queries>
 </manifest>

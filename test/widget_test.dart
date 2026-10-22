@@ -10,13 +10,13 @@ void main() {
     await tester.pumpWidget(const MyApp());
     await tester.pump();
 
-    // The wordmark is a picture of the word "duggu", so the splash has to
+    // The wordmark is a picture of the word "infinity", so the splash has to
     // label it or a screen reader has nothing to say. Asserted on the widget
     // rather than through bySemanticsLabel, which only sees the label once
     // the semantics tree has been flushed for an accessibility client.
     expect(
       find.byWidgetPredicate(
-        (widget) => widget is Semantics && widget.properties.label == 'duggu',
+        (widget) => widget is Semantics && widget.properties.label == 'infinity',
         description: 'the splash wordmark labelled for screen readers',
       ),
       findsOneWidget,

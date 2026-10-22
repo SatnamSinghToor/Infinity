@@ -10,6 +10,7 @@ import '../providers/auth_provider.dart';
 import '../services/supabase_service.dart';
 import '../providers/wishlist_provider.dart';
 import '../utils/constants.dart';
+import '../utils/tokens.dart';
 import '../widgets/night_sky.dart';
 import '../widgets/role_common.dart';
 import 'help_screens.dart';
@@ -63,8 +64,8 @@ class ProfileScreen extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         // The size every other screen's title has.
                         style: const TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                           color: AppConstants.textPrimaryColor,
                         ),
                       ),
@@ -362,6 +363,11 @@ class _LoggedInView extends StatelessWidget {
                 );
               },
             ),
+            _ProfileRow(
+              icon: Iconsax.notification,
+              label: l10n.profileNotifications,
+              onTap: gated(() => open(const NotificationsScreen())),
+            ),
           ],
         ),
         _SectionTitle(l10n.profileSectionHelp),
@@ -398,11 +404,6 @@ class _LoggedInView extends StatelessWidget {
         _RowsCard(
           children: [
             _ProfileRow(
-              icon: Iconsax.notification,
-              label: l10n.profileNotifications,
-              onTap: gated(() => open(const NotificationsScreen())),
-            ),
-            _ProfileRow(
               icon: Iconsax.info_circle,
               label: l10n.profileAbout,
               onTap: () => open(const AboutScreen()),
@@ -437,7 +438,7 @@ class _LoggedInView extends StatelessWidget {
           ),
         ],
         if (loggedIn) ...[
-          const SizedBox(height: 28),
+          _SectionTitle(l10n.profileSectionDanger),
           _RowsCard(
             children: [
               _ProfileRow(
@@ -496,7 +497,7 @@ class _ProfileCard extends StatelessWidget {
       height: 88,
       decoration: BoxDecoration(
         color: const Color(0xFFD9D9D9),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.white, width: 3),
       ),
       clipBehavior: Clip.antiAlias,
@@ -513,7 +514,7 @@ class _ProfileCard extends StatelessWidget {
                       name[0].toUpperCase(),
                       style: const TextStyle(
                         fontSize: 38,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
                     )
@@ -524,8 +525,16 @@ class _ProfileCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF111111),
-        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        border: Border.all(color: const Color(0xFFE4E4E4)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -566,8 +575,8 @@ class _ProfileCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          color: AppConstants.textPrimaryColor,
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -579,7 +588,7 @@ class _ProfileCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 13,
-                          color: Color(0xFFBDBDBD),
+                          color: AppConstants.textSecondaryColor,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -590,7 +599,7 @@ class _ProfileCard extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: AppConstants.primaryColor,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(AppRadius.pill),
                         ),
                         child: Text(
                           auth.role.name.toUpperCase(),
@@ -598,7 +607,7 @@ class _ProfileCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 11,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                             letterSpacing: 0.5,
                           ),
@@ -614,9 +623,9 @@ class _ProfileCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w600,
+                          color: AppConstants.textPrimaryColor,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -624,10 +633,13 @@ class _ProfileCard extends StatelessWidget {
                           child: ElevatedButton(
                         onPressed: onLogin,
                         style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(0, 40),
-                          padding: const EdgeInsets.symmetric(horizontal: 22),
+                          minimumSize: const Size(0, AppControl.sm),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 22,
+                          ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius:
+                                BorderRadius.circular(AppRadius.button),
                           ),
                         ),
                         child: Text(
@@ -653,14 +665,14 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 30, bottom: 12),
+      padding: const EdgeInsets.only(top: 22, bottom: 10),
       child: Text(
         text,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w800,
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
           color: AppConstants.textPrimaryColor,
         ),
       ),
@@ -679,7 +691,7 @@ class _RowsCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: AppRadius.card,
         border: Border.all(color: const Color(0xFFE4E4E4)),
       ),
       clipBehavior: Clip.antiAlias,
@@ -687,7 +699,7 @@ class _RowsCard extends StatelessWidget {
         children: [
           for (var i = 0; i < children.length; i++) ...[
             if (i > 0)
-              const Divider(height: 1, thickness: 1, color: Color(0xFFEFEAE2)),
+              const Divider(height: 1, thickness: 1, color: Color(0xFFEBEBEB)),
             children[i],
           ],
         ],
@@ -717,51 +729,55 @@ class _ProfileRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ink = color ?? AppConstants.textPrimaryColor;
+    final ink = color ?? AppConstants.primaryColor;
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
-            Icon(icon, color: ink, size: 24),
-            const SizedBox(width: 18),
+            // Bare icon — no tinted tile behind it.
+            Icon(icon, size: 18, color: ink),
+            const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Text(
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: ink,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: color ?? AppConstants.textPrimaryColor,
                 ),
               ),
             ),
             if (badgeCount != null && badgeCount! > 0) ...[
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm,
+                  vertical: AppSpacing.xxs + 1,
+                ),
                 decoration: BoxDecoration(
                   color: AppConstants.primaryColor,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
                 ),
                 child: Text(
                   '$badgeCount',
                   maxLines: 1,
                   style: const TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacing.sm),
             ],
             if (trailing != null) trailing!,
             if (showChevron)
               const Icon(
                 Icons.chevron_right_rounded,
-                color: Color(0xFF757575),
+                color: Color(0xFF9A9A9A),
                 size: 24,
               ),
           ],

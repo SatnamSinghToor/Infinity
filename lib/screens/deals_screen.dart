@@ -8,6 +8,7 @@ import '../providers/product_provider.dart';
 import '../utils/constants.dart';
 import '../widgets/gradient_app_bar.dart';
 import '../widgets/product_card.dart';
+import '../widgets/role_common.dart';
 import '../screens/product_detail_screen.dart';
 import '../widgets/pressable.dart';
 
@@ -70,22 +71,11 @@ class _DealsScreenState extends State<DealsScreen> {
           _buildFilterBar(),
           Expanded(
             child: dealsProducts.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Iconsax.tag, size: 72, color: Colors.grey[300]),
-                        const SizedBox(height: 16),
-                        Text(
-                          'No deals right now',
-                          style: GoogleFonts.poppins(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
+                ? const RoleEmpty(
+                    icon: Iconsax.tag,
+                    title: 'No deals right now',
+                    message:
+                        'Fresh offers land here — check back soon, or browse the shop for what you need.',
                   )
                 : Column(
                     children: [
@@ -102,10 +92,10 @@ class _DealsScreenState extends State<DealsScreen> {
                               ),
                             ),
                             Text(
-                              'Upto ${dealsProducts.map((p) => p.discountPercent).reduce((a, b) => a > b ? a : b)}% OFF',
+                              'Up to ${dealsProducts.map((p) => p.discountPercent).reduce((a, b) => a > b ? a : b)}% OFF',
                               style: GoogleFonts.poppins(
                                 fontSize: 13,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 color: AppConstants.primaryColor,
                               ),
                             ),
@@ -173,7 +163,7 @@ class _DealsScreenState extends State<DealsScreen> {
                 color: isSelected
                     ? AppConstants.primaryColor
                     : AppConstants.backgroundColor,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 border:
                     isSelected ? null : Border.all(color: Colors.grey.shade300),
               ),
@@ -181,7 +171,7 @@ class _DealsScreenState extends State<DealsScreen> {
                 _filters[index],
                 style: GoogleFonts.poppins(
                   fontSize: 12,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   color: isSelected
                       ? Colors.white
                       : AppConstants.textSecondaryColor,

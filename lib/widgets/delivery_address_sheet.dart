@@ -196,7 +196,7 @@ class _DeliveryAddressSheetState extends State<_DeliveryAddressSheet> {
               l10n.addressChooseTitle,
               style: GoogleFonts.poppins(
                 fontSize: 18,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -227,7 +227,7 @@ class _DeliveryAddressSheetState extends State<_DeliveryAddressSheet> {
                 l10n.addressSavedHeading,
                 style: GoogleFonts.poppins(
                   fontSize: 13,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppConstants.textSecondaryColor,
                 ),
                 maxLines: 1,
@@ -237,7 +237,7 @@ class _DeliveryAddressSheetState extends State<_DeliveryAddressSheet> {
               for (final a in saved)
                 InkWell(
                   onTap: () => _pickSaved(a.id, a.fullAddress),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Row(
@@ -261,7 +261,7 @@ class _DeliveryAddressSheetState extends State<_DeliveryAddressSheet> {
                                 _labelText(l10n, a.label),
                                 style: GoogleFonts.poppins(
                                   fontSize: 13.5,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w600,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -288,7 +288,7 @@ class _DeliveryAddressSheetState extends State<_DeliveryAddressSheet> {
                 l10n.addressCurrentHeading,
                 style: GoogleFonts.poppins(
                   fontSize: 13,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppConstants.textSecondaryColor,
                 ),
                 maxLines: 1,
@@ -333,11 +333,11 @@ class _DeliveryAddressSheetState extends State<_DeliveryAddressSheet> {
       child: Pressable(
           child: InkWell(
         onTap: busy ? null : onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(10),
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Colors.black.withOpacity(0.08)),
           ),
           child: Row(
@@ -365,7 +365,7 @@ class _DeliveryAddressSheetState extends State<_DeliveryAddressSheet> {
                       title,
                       style: GoogleFonts.poppins(
                         fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppConstants.primaryColor,
                       ),
                       maxLines: 1,

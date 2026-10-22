@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../utils/safe_state.dart';
 import '../../widgets/role_common.dart';
@@ -91,7 +92,7 @@ class _SellerReviewsScreenState extends State<SellerReviewsScreen> {
                 child: ListView.separated(
                   padding: const EdgeInsets.all(16),
                   itemCount: _reviews.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.listGap),
                   itemBuilder: (context, index) {
                     final r = _reviews[index];
                     final rating = (r['rating'] as num?)?.toInt() ?? 0;
@@ -101,10 +102,10 @@ class _SellerReviewsScreenState extends State<SellerReviewsScreen> {
                     final comment = r['comment'] as String? ?? '';
 
                     return Container(
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(AppSpacing.lg),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: AppRadius.card,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +117,7 @@ class _SellerReviewsScreenState extends State<SellerReviewsScreen> {
                                 child: Text(
                                   productName,
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
@@ -135,12 +136,13 @@ class _SellerReviewsScreenState extends State<SellerReviewsScreen> {
                             ],
                           ),
                           if (comment.isNotEmpty) ...[
-                            const SizedBox(height: 6),
+                            const SizedBox(height: AppSpacing.sm),
                             Text(
                               comment,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 13,
-                                color: Colors.grey[700],
+                                height: 1.4,
+                                color: AppConstants.textSecondaryColor,
                               ),
                             ),
                           ],

@@ -64,7 +64,7 @@ class CategoriesScreen extends StatelessWidget {
                 'Shop by category',
                 style: GoogleFonts.poppins(
                   fontSize: 18,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppConstants.textPrimaryColor,
                 ),
               ),
@@ -73,8 +73,8 @@ class CategoriesScreen extends StatelessWidget {
               crossAxisCount: 4,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 14,
-              crossAxisSpacing: 10,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 12,
               childAspectRatio: 0.68,
               children: [
                 for (var i = 0; i < names.length; i++)

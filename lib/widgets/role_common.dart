@@ -77,7 +77,7 @@ class RoleStatCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: dense ? 15 : 20,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               color: AppConstants.textPrimaryColor,
             ),
           ),
@@ -204,7 +204,7 @@ class RoleError extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppConstants.textPrimaryColor,
               ),
             ),
@@ -272,7 +272,7 @@ class RoleEmpty extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppConstants.textPrimaryColor,
               ),
             ),
@@ -293,6 +293,85 @@ class RoleEmpty extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// One status word on a card — "Pending", "Approved", "Rejected": a
+/// translucent pill in the status's colour, so every queue (returns, issues,
+/// sponsored slots, payouts) reads its statuses the same way.
+///
+/// [color] is the meaning ("is this okay or not"); the shape never changes.
+class RoleStatusChip extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  const RoleStatusChip({super.key, required this.label, required this.color});
+
+  /// A raw status from the database as it is shown: "PENDING" and
+  /// "pending" both become "Pending".
+  static String titled(String status) {
+    if (status.isEmpty) return status;
+    return status[0].toUpperCase() + status.substring(1).toLowerCase();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+      ),
+      child: Text(
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
+    );
+  }
+}
+
+/// The card every list row sits in: white (or the theme's card), the token
+/// radius and the same hairline edge, so the roles' lists — which were
+/// drawn 12/14/16 with some borders and some without — share one look.
+class RoleCard extends StatelessWidget {
+  final Widget child;
+
+  /// Extra inset below the card, when the list builds cards inline.
+  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? padding;
+
+  /// A card can lean in when it is the live thing on screen.
+  final Color? borderColor;
+  final double? borderRadius;
+
+  const RoleCard({
+    super.key,
+    required this.child,
+    this.margin,
+    this.padding,
+    this.borderColor,
+    this.borderRadius,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final radius = borderRadius ?? AppRadius.lg;
+    return Container(
+      margin: margin,
+      padding: padding,
+      decoration: BoxDecoration(
+        color: context.tokens.card,
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: borderColor ?? context.tokens.border),
+      ),
+      child: child,
     );
   }
 }

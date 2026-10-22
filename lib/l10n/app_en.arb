@@ -269,6 +269,10 @@
   "@walletEmpty": {
     "description": "Wallet screen: the empty state of the transaction list."
   },
+  "walletEmptyBody": "Money you add, refunds and bonuses will show up here.",
+  "@walletEmptyBody": {
+    "description": "Wallet screen: the hint under the empty title."
+  },
   "paymentMethodsTitle": "Payment Methods",
   "@paymentMethodsTitle": {
     "description": "Payment methods screen: the heading in the top bar."
@@ -603,13 +607,13 @@
   "@helpAboutTitle": {
     "description": "About screen: the app-bar heading."
   },
-  "helpAboutDugguHeading": "duggu",
+  "helpAboutDugguHeading": "Infinity",
   "@helpAboutDugguHeading": {
     "description": "About screen: heading of the first paragraph."
   },
-  "helpAboutDugguBody": "Duggu brings groceries, daily needs and festival shopping from stores near you to your door, fast.",
+  "helpAboutDugguBody": "Infinity brings groceries, daily needs and festival shopping from stores near you to your door, fast.",
   "@helpAboutDugguBody": {
-    "description": "About screen: what Duggu is."
+    "description": "About screen: what Infinity is."
   },
   "helpAboutStoresHeading": "Local stores",
   "@helpAboutStoresHeading": {
@@ -623,7 +627,7 @@
   "@helpAboutNeighbourhoodsHeading": {
     "description": "About screen: heading about sellers, partners and payment."
   },
-  "helpAboutNeighbourhoodsBody": "Sellers list their own products and prices, delivery partners bring them to you, and you pay how you like: cash on delivery, online or from your Duggu wallet.",
+  "helpAboutNeighbourhoodsBody": "Sellers list their own products and prices, delivery partners bring them to you, and you pay how you like: cash on delivery, online or from your Infinity wallet.",
   "@helpAboutNeighbourhoodsBody": {
     "description": "About screen: who does what, and how you can pay."
   },
@@ -643,7 +647,7 @@
   "@helpPolicyPaymentsHeading": {
     "description": "Policies screen: heading of the payments note."
   },
-  "helpPolicyPaymentsBody": "Online payments are handled by Razorpay. Duggu never sees or stores your card or UPI details.",
+  "helpPolicyPaymentsBody": "Online payments are handled by Razorpay. Infinity never sees or stores your card or UPI details.",
   "@helpPolicyPaymentsBody": {
     "description": "Policies screen: who handles online payments."
   },
@@ -667,7 +671,7 @@
   "@helpPolicyRefundsHeading": {
     "description": "Policies screen: heading of the cancellation note."
   },
-  "helpPolicyRefundsBody": "An order can be cancelled from My Orders while the store has not sent it out. Money you paid from your Duggu wallet goes back to the wallet.",
+  "helpPolicyRefundsBody": "An order can be cancelled from My Orders while the store has not sent it out. Money you paid from your Infinity wallet goes back to the wallet.",
   "@helpPolicyRefundsBody": {
     "description": "Policies screen: when an order can be cancelled and where the money goes."
   },
@@ -683,7 +687,7 @@
   "@helpTermsTitle": {
     "description": "Terms screen: the app-bar heading."
   },
-  "helpTermsUsingHeading": "Using Duggu",
+  "helpTermsUsingHeading": "Using Infinity",
   "@helpTermsUsingHeading": {
     "description": "Terms screen: heading of the account note."
   },
@@ -703,7 +707,7 @@
   "@helpTermsCouponsHeading": {
     "description": "Terms screen: heading of the coupon note."
   },
-  "helpTermsCouponsBody": "A coupon can be used once per account and only above its minimum order value. Wallet money can only be spent on Duggu orders.",
+  "helpTermsCouponsBody": "A coupon can be used once per account and only above its minimum order value. Wallet money can only be spent on Infinity orders.",
   "@helpTermsCouponsBody": {
     "description": "Terms screen: the coupon and wallet rules."
   },
@@ -747,7 +751,7 @@
   "@helpFaqPayQuestion": {
     "description": "FAQ screen: question about payment methods."
   },
-  "helpFaqPayAnswer": "Cash on delivery, online (UPI and cards) or from your Duggu wallet. You can use wallet money together with either of the other two.",
+  "helpFaqPayAnswer": "Cash on delivery, online (UPI and cards) or from your Infinity wallet. You can use wallet money together with either of the other two.",
   "@helpFaqPayAnswer": {
     "description": "FAQ screen: answer about payment methods."
   },
@@ -868,7 +872,7 @@
   "@helpRequestOpen": {
     "description": "Product requests screen: status of a request still to be handled."
   },
-  "helpRateTitle": "How is your experience with Duggu?",
+  "helpRateTitle": "How is your experience with Infinity?",
   "@helpRateTitle": {
     "description": "Rate-us sheet: the heading above the stars."
   },
@@ -880,11 +884,11 @@
   "@helpRateSubmit": {
     "description": "Rate-us sheet: the button that sends the rating."
   },
-  "helpRateThanks": "Thank you for rating Duggu.",
+  "helpRateThanks": "Thank you for rating Infinity.",
   "@helpRateThanks": {
     "description": "Rate-us sheet: notice after the rating was sent."
   },
-  "helpShareMessage": "Try Duggu: groceries and daily needs from stores near you, delivered fast.",
+  "helpShareMessage": "Try Infinity: groceries and daily needs from stores near you, delivered fast.",
   "@helpShareMessage": {
     "description": "The message the Share App row hands to the phone's share sheet."
   },
@@ -922,7 +926,7 @@
   },
   "profileBecomeDelivery": "Become a Delivery Partner",
   "@profileBecomeDelivery": {
-    "description": "Profile screen: row and dialog title for delivering with Duggu."
+    "description": "Profile screen: row and dialog title for delivering with Infinity."
   },
   "profileFullName": "Full name",
   "@profileFullName": {
@@ -952,7 +956,7 @@
   "@profileStale": {
     "description": "Profile screen: note when the account details never arrived."
   },
-  "profileSectionPersonal": "Personal Data",
+  "profileSectionPersonal": "My Account",
   "@profileSectionPersonal": {
     "description": "Profile screen: heading of the orders, wallet and saved-things rows."
   },
@@ -968,9 +972,13 @@
   "@profileSectionAbout": {
     "description": "Profile screen: heading of the about and share rows."
   },
-  "profileSectionWork": "Work with Duggu",
+  "profileSectionWork": "Work with Infinity",
   "@profileSectionWork": {
     "description": "Profile screen: heading of the become-a-seller / become-a-partner rows."
+  },
+  "profileSectionDanger": "Danger zone",
+  "@profileSectionDanger": {
+    "description": "Profile screen: heading above sign-out and delete account."
   },
   "profileMyOrders": "My Orders",
   "@profileMyOrders": {
@@ -1072,7 +1080,7 @@
   "@profileWelcomeName": {
     "description": "Profile screen: shown in place of a missing name."
   },
-  "profileWelcomeGuest": "Welcome to duggu",
+  "profileWelcomeGuest": "Welcome to Infinity",
   "@profileWelcomeGuest": {
     "description": "Profile screen: greeting for someone not signed in."
   },
@@ -3161,7 +3169,7 @@
   "@authEmailHint": {
     "description": "Sign-in: hint when the field wants an email."
   },
-  "authIdHint": "Enter email or phone number",
+  "authIdHint": "Email or mobile number",
   "@authIdHint": {
     "description": "Sign-in: hint when the field takes either."
   },
@@ -3278,7 +3286,7 @@
   "@authCreateBody": {
     "description": "Register page: line under the title."
   },
-  "authUserName": "User Name",
+  "authUserName": "Full Name",
   "@authUserName": {
     "description": "Register page: name field hint."
   },
@@ -3298,7 +3306,7 @@
   "@authFriendsCode": {
     "description": "Register page: referral code field hint."
   },
-  "authSubmit": "Submit Securely",
+  "authSubmit": "Sign Up",
   "@authSubmit": {
     "description": "Register page: the button."
   },
@@ -3585,7 +3593,7 @@
   "@deliveryAccept": {
     "description": "Delivery: the button that claims a run waiting for pickup."
   },
-  "deliveryDelivered": "Delivered",
+  "deliveryDelivered": "Mark Delivered",
   "@deliveryDelivered": {
     "description": "Delivery: the button that marks a run as delivered."
   },
@@ -3671,7 +3679,7 @@
   "@deliveryDashMarkDeliveredFailed": {
     "description": "Delivery home: marking a run delivered failed."
   },
-  "deliveryOrdersTitle": "My Delivery",
+  "deliveryOrdersTitle": "My Deliveries",
   "@deliveryOrdersTitle": {
     "description": "Delivery runs: the app bar title."
   },
@@ -3707,7 +3715,7 @@
   "@deliveryOrdersDeliverTo": {
     "description": "Delivery runs: label over the customer's address the run goes to."
   },
-  "deliveryOrdersStoreFallback": "The seller's store",
+  "deliveryOrdersStoreFallback": "Pickup store",
   "@deliveryOrdersStoreFallback": {
     "description": "Delivery runs: pickup name when the store's details could not be loaded."
   },
@@ -3740,7 +3748,7 @@
   "@deliveryOrdersNavigateToCustomer": {
     "description": "Delivery runs: the in-app map's title when heading to the delivery address."
   },
-  "deliveryOrdersNavigateFailed": "This location has no map coordinates yet.",
+  "deliveryOrdersNavigateFailed": "This order has no map location yet.",
   "@deliveryOrdersNavigateFailed": {
     "description": "Delivery runs: the store or address has no lat/lng to show on the in-app map."
   },
@@ -3813,7 +3821,7 @@
   "@deliveryEarningsPayouts": {
     "description": "Delivery earnings: the button that opens the payout requests."
   },
-  "deliveryEarningsEmpty": "No deliveries completed yet",
+  "deliveryEarningsEmpty": "No earnings yet — your delivery fees show up here as you complete runs.",
   "@deliveryEarningsEmpty": {
     "description": "Delivery earnings: no fee has been earned yet."
   },
@@ -4515,6 +4523,10 @@
   "adminCategoriesHidden": " · hidden",
   "@adminCategoriesHidden": {
     "description": "Admin categories: the marker appended to a switched-off category."
+  },
+  "adminCategoriesNoSubs": "No sub-categories yet — add one and it becomes a card on this category's page.",
+  "@adminCategoriesNoSubs": {
+    "description": "Admin categories: shown when a main category has no sub-categories yet."
   },
   "adminCategoriesProductsCount": "{count,plural,=1{1 product} other{{count} products}}",
   "@adminCategoriesProductsCount": {
@@ -5699,7 +5711,7 @@
   },
   "addProductGenerateOffline": "No internet — the AI writer needs a connection.",
   "@addProductGenerateOffline": {
-    "description": "Add product: the AI writer could not reach Duggu because the device has no connection."
+    "description": "Add product: the AI writer could not reach Infinity because the device has no connection."
   },
   "addProductGenerateSlow": "The AI writer took too long this time. Tap Generate again.",
   "@addProductGenerateSlow": {
@@ -6154,7 +6166,7 @@
   "@checkoutPayNow": {
     "description": "Payment screen: button that pays online and places the order."
   },
-  "cartProceedToPay": "Proceed To Pay",
+  "cartProceedToPay": "Select Payment Method",
   "@cartProceedToPay": {
     "description": "Cart: the bottom button that goes on to choosing how to pay."
   },
@@ -6491,11 +6503,11 @@
       }
     }
   },
-  "deliveryOrdersPayCod": "Pay via COD",
+  "deliveryOrdersPayCod": "Cash to collect",
   "@deliveryOrdersPayCod": {
     "description": "Rider deliveries: cash on delivery, not yet collected."
   },
-  "deliveryOrdersPaidCod": "Paid via COD",
+  "deliveryOrdersPaidCod": "Cash collected",
   "@deliveryOrdersPaidCod": {
     "description": "Rider deliveries: cash on delivery, collected."
   },
@@ -6507,15 +6519,15 @@
   "@deliveryOrdersCollect": {
     "description": "Rider deliveries: the cash to take at the door."
   },
-  "deliveryOrdersEmptyTitle": "No orders here",
+  "deliveryOrdersEmptyTitle": "No deliveries to show",
   "@deliveryOrdersEmptyTitle": {
     "description": "Rider deliveries: empty state title."
   },
-  "deliveryOrdersEmptyBody": "Orders ready for pickup, on the way and delivered show up here.",
+  "deliveryOrdersEmptyBody": "Runs waiting for pickup, on the way and delivered all show up here.",
   "@deliveryOrdersEmptyBody": {
     "description": "Rider deliveries: empty state body."
   },
-  "deliveryEarningsToday": "Today's Earning",
+  "deliveryEarningsToday": "Today's earnings",
   "@deliveryEarningsToday": {
     "description": "Rider earnings: what was earned today."
   },
@@ -6527,7 +6539,7 @@
   "@deliveryEarningsWeek": {
     "description": "Rider earnings: earned since Monday."
   },
-  "deliveryEarningsSettled": "Settlement History",
+  "deliveryEarningsSettled": "Paid out",
   "@deliveryEarningsSettled": {
     "description": "Rider earnings: what the shop has paid out."
   },
@@ -6551,7 +6563,7 @@
   "@deliveryCashToday": {
     "description": "Rider cash: tile with today's cash total."
   },
-  "deliveryCashTotal": "Collected in all",
+  "deliveryCashTotal": "Collected in total",
   "@deliveryCashTotal": {
     "description": "Rider cash: tile with the total cash collected."
   },

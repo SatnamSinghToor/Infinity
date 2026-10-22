@@ -69,8 +69,38 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
             title: Text(l10n.trackingNotFound,
                 maxLines: 1, overflow: TextOverflow.ellipsis)),
         body: Center(
-          child: Text(l10n.trackingOrderMissing,
-              maxLines: 1, overflow: TextOverflow.ellipsis),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Iconsax.box,
+                  size: 52,
+                  color: Colors.grey[400],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.trackingNotFound,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  l10n.trackingOrderMissing,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1.4,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       );
     }
@@ -93,7 +123,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.06),
@@ -111,10 +141,12 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      l10n.trackingOrderNumber(orderId),
+                      l10n.trackingOrderNumber(
+                        '#${order?.shortRef ?? orderId.substring(0, 8).toUpperCase()}',
+                      ),
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -170,13 +202,13 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
               children: [
                 Text(
                   l10n.trackingTotal,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 Text(
                   formatRupees(order.totalAmount),
                   style: const TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: AppConstants.primaryColor,
                   ),
                 ),
@@ -264,7 +296,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight:
-                            isActive ? FontWeight.bold : FontWeight.w500,
+                            isActive ? FontWeight.w600 : FontWeight.w500,
                         color:
                             isActive ? AppConstants.primaryColor : Colors.grey,
                       ),
@@ -292,7 +324,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
   Widget _buildSection(String title) {
     return Text(
       title,
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
     );
   }
 }
@@ -370,7 +402,7 @@ class _LiveTrackingMapState extends State<_LiveTrackingMap> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(10),
       child: SizedBox(
         height: 220,
         child: StreamBuilder<List<Map<String, dynamic>>>(
@@ -465,7 +497,7 @@ class _LiveTrackingMapState extends State<_LiveTrackingMap> {
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -531,7 +563,7 @@ class _RiderCardState extends State<_RiderCard> {
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
             children: [
@@ -553,7 +585,7 @@ class _RiderCardState extends State<_RiderCard> {
                           : name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     Text(
                       l10n.trackingRiderOnWay,

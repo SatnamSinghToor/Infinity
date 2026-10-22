@@ -314,7 +314,7 @@ class _StoreLocationPickerScreenState extends State<StoreLocationPickerScreen> {
   Widget _buildSearchBar() {
     return Material(
       elevation: 4,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(10),
       color: Colors.white,
       child: TextField(
         controller: _searchController,
@@ -344,7 +344,7 @@ class _StoreLocationPickerScreenState extends State<StoreLocationPickerScreen> {
           filled: true,
           fillColor: Colors.white,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
           ),
         ),

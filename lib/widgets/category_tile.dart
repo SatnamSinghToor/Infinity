@@ -99,7 +99,7 @@ class CategoryArt extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
         shape: circle ? BoxShape.circle : BoxShape.rectangle,
-        borderRadius: circle ? null : BorderRadius.circular(18),
+        borderRadius: circle ? null : BorderRadius.circular(10),
       ),
       clipBehavior: Clip.antiAlias,
       child: content,

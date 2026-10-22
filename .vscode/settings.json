@@ -1,3 +1,5 @@
 {
-    "CodeGPT.apiKey": "OpenRouter"
+    "CodeGPT.apiKey": "CodeGPT Plus Beta",
+    "cmake.sourceDirectory": "C:/Users/toor/FlutterProjetcs/DUGGUSTORE-master/windows",
+    "chat.byokUtilityModelDefault": "mainAgent"
 }

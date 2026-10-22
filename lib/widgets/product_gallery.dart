@@ -82,7 +82,7 @@ class _ProductGalleryState extends State<ProductGallery> {
                       height: 76,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: i == _page
                               ? AppConstants.primaryColor
@@ -107,7 +107,7 @@ class _ProductGalleryState extends State<ProductGallery> {
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: const Color(0xFFE4E4E4)),
                 ),
                 clipBehavior: Clip.antiAlias,

@@ -337,8 +337,40 @@ class AuthProvider extends ChangeNotifier {
   /// Returns false with nothing in [error] when the account picker was
   /// simply dismissed; that is not a failure worth telling anyone about.
   Future<bool> signInWithGoogle() async {
-    // Google sign-in disabled
-    return false;
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      // null = the account picker was dismissed; a plain cancel, not an
+      // error worth surfacing (the button treats it the same way).
+      final response = await GoogleAuthService.signIn();
+      if (response == null) {
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+      final user = SupabaseService.client.auth.currentUser;
+      if (user == null) {
+        _error = 'Login failed. Please try again.';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+      await _loadProfile(user.id);
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } on AuthException catch (e) {
+      _error = e.message;
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      _error = 'Google login failed. Please try again.';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
   }
 
   /// Signs in with a phone number instead of an email, via the `phone-login`
@@ -398,7 +430,7 @@ class AuthProvider extends ChangeNotifier {
   /// that can be shown to the user.
   ///
   /// `redirectTo` is the app's own deep link (see DeepLinkService /
-  /// AndroidManifest.xml / Info.plist) so the link opens Duggu directly
+  /// AndroidManifest.xml / Info.plist) so the link opens Infinity directly
   /// instead of a browser tab — it must also be added under Authentication →
   /// URL Configuration → Redirect URLs in the Supabase dashboard, or GoTrue
   /// rejects it and falls back to the project's Site URL.

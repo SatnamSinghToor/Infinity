@@ -13,6 +13,7 @@ import '../../utils/constants.dart';
 import '../../utils/format.dart';
 import '../../utils/launch_actions.dart';
 import '../../utils/safe_state.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/app_network_image.dart';
 import '../../widgets/live_entrance.dart';
 import '../../widgets/notification_bell.dart';
@@ -352,11 +353,11 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
   }
 
   Widget _card({required Widget child}) => Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
+        margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
+        padding: const EdgeInsets.all(AppSpacing.cardPadding),
+        decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: AppRadius.card,
         ),
         child: child,
       );
@@ -375,19 +376,56 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
     );
   }
 
+  /// Where a run stands, as a small pill: orange while it waits to be
+  /// picked up, blue on the way, green delivered — the same colours the
+  /// Deliveries tab uses, so a chip means the same thing everywhere.
+  Widget _statusChip(String status, AppLocalizations l10n) {
+    final (label, color) = switch (status) {
+      'ready_for_pickup' => (l10n.deliveryOrdersReadyForPickup,
+          AppConstants.primaryColor),
+      'delivered' => (l10n.deliveryDashDeliveredLegend,
+          AppConstants.successColor),
+      _ => (l10n.deliveryDashOutForDelivery, const Color(0xFF1E88E5)),
+    };
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+      ),
+      child: Text(
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.3,
+          color: color,
+        ),
+      ),
+    );
+  }
+
   Widget _mineCard(Map<String, dynamic> o, AppLocalizations l10n) {
     final phone = _phoneByCustomer[o['customer_id'] as String?];
     return _card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _statusChip(o['status'] as String? ?? '', l10n),
+          const SizedBox(height: AppSpacing.sm),
           _stops(o, l10n),
           const Divider(height: 20),
-          Text(
-            formatRupees((o['total_amount'] as num?) ?? 0),
-            style: const TextStyle(
-              color: AppConstants.primaryColor,
-              fontWeight: FontWeight.bold,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              formatRupees((o['total_amount'] as num?) ?? 0),
+              style: const TextStyle(
+                color: AppConstants.primaryColor,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           const SizedBox(height: 10),
@@ -445,6 +483,8 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _statusChip(o['status'] as String? ?? 'ready_for_pickup', l10n),
+          const SizedBox(height: AppSpacing.sm),
           _stops(o, l10n),
           const Divider(height: 20),
           Row(
@@ -453,17 +493,19 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
                     decoration: BoxDecoration(
                       color: AppConstants.successColor.withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(AppRadius.pill),
                     ),
                     child: Text(
                       l10n.deliveryDashYouEarn(formatRupees(fee)),
                       style: const TextStyle(
                         fontSize: 12.5,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppConstants.successColor,
                       ),
                     ),
@@ -535,7 +577,7 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
                           first.isEmpty ? '?' : first[0].toUpperCase(),
                           style: const TextStyle(
                             fontSize: 22,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             color: AppConstants.primaryColor,
                           ),
                         ),
@@ -552,7 +594,7 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 19,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     if (auth.email.trim().isNotEmpty)
@@ -591,7 +633,10 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
   }
 
   Widget _sectionTitle(String text, {Widget? trailing}) => Padding(
-        padding: const EdgeInsets.only(top: 22, bottom: 12),
+        padding: const EdgeInsets.only(
+          top: AppSpacing.xl,
+          bottom: AppSpacing.sectionGap,
+        ),
         child: Row(
           children: [
             Expanded(
@@ -601,7 +646,7 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -678,7 +723,8 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
                         decoration: BoxDecoration(
                           color:
                               AppConstants.primaryColor.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius:
+                              BorderRadius.circular(AppRadius.pill),
                         ),
                         child: Text(
                           date,
@@ -814,7 +860,7 @@ class _DeliveryDashboardScreenState extends State<DeliveryDashboardScreen> {
                           : Text(
                               '${_activeRuns.length}',
                               style: const TextStyle(
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 color: AppConstants.primaryColor,
                               ),
                             ),
@@ -894,8 +940,9 @@ class _OnlinePill extends StatelessWidget {
           height: 38,
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: online ? AppConstants.primaryColor : const Color(0xFFD9D9D9),
-            borderRadius: BorderRadius.circular(30),
+            color:
+                online ? AppConstants.primaryColor : const Color(0xFFD9D9D9),
+            borderRadius: BorderRadius.circular(AppRadius.pill),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -918,7 +965,7 @@ class _OnlinePill extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: online ? Colors.white : AppConstants.textPrimaryColor,
                 ),
               ),
@@ -963,9 +1010,9 @@ class _TodayTile extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: AppRadius.card,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -982,8 +1029,8 @@ class _TodayTile extends StatelessWidget {
                       value,
                       maxLines: 1,
                       style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -1028,9 +1075,9 @@ class _OverviewTile extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: AppRadius.card,
           ),
           child: Row(
             children: [
@@ -1108,9 +1155,9 @@ class _StatusChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: AppRadius.card,
       ),
       child: Column(
         children: [
@@ -1190,7 +1237,7 @@ class _StatusChart extends StatelessWidget {
                       maxLines: 1,
                       style: const TextStyle(
                         fontSize: 22,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -1213,7 +1260,7 @@ class _StatusChart extends StatelessWidget {
                       maxLines: 1,
                       style: const TextStyle(
                         fontSize: 22,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -1324,9 +1371,9 @@ class _EarningsChart extends StatelessWidget {
     );
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: AppRadius.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1342,7 +1389,7 @@ class _EarningsChart extends StatelessWidget {
                     maxLines: 1,
                     style: const TextStyle(
                       fontSize: 26,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -1358,7 +1405,7 @@ class _EarningsChart extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
                   border: Border.all(
                     color: AppConstants.primaryColor.withOpacity(0.5),
                   ),
@@ -1542,7 +1589,7 @@ class _PerformanceCard extends StatelessWidget {
                 '$value',
                 style: const TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
@@ -1569,14 +1616,14 @@ class _PerformanceCard extends StatelessWidget {
                     '${(value * 100).round()}%',
                     style: const TextStyle(
                       fontSize: 19,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               ClipRRect(
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(10),
                 child: LinearProgressIndicator(
                   value: value,
                   minHeight: 9,
@@ -1590,9 +1637,9 @@ class _PerformanceCard extends StatelessWidget {
         );
     return Container(
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: AppRadius.card,
       ),
       child: Column(
         children: [

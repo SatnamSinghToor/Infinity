@@ -306,7 +306,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         padding: const EdgeInsets.fromLTRB(14, 8, 6, 8),
         decoration: BoxDecoration(
           color: AppConstants.primaryColor.withOpacity(0.06),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [
@@ -347,7 +347,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final group = chosen == null ? null : tree.parentOf(chosen);
     return InkWell(
       onTap: _chooseCategory,
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: BorderRadius.circular(10),
       child: InputDecorator(
         isEmpty: chosen == null,
         decoration: InputDecoration(
@@ -369,7 +369,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     if (group != null)
                       TextSpan(
                         text: '  ·  ${group.name}',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppConstants.textSecondaryColor,
+                        ),
                       ),
                   ],
                 ),
@@ -557,7 +560,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
   /// left under it — so the seller sees the gap without a dialog about it.
   TextStyle _descriptionStatusStyle() {
     if (!_descriptionShort) {
-      return TextStyle(fontSize: 12, color: Colors.grey[600]);
+      return const TextStyle(
+        fontSize: 12,
+        color: AppConstants.textSecondaryColor,
+      );
     }
     return const TextStyle(
       fontSize: 12,
@@ -707,7 +713,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         SnackBar(
           content: Text(l10n.addProductErrRequired,
               maxLines: 1, overflow: TextOverflow.ellipsis),
-          backgroundColor: Colors.red,
+          backgroundColor: AppConstants.dangerColor,
         ),
       );
       return;
@@ -774,7 +780,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           SnackBar(
             content: Text(l10n.addProductSaveFailed,
                 maxLines: 1, overflow: TextOverflow.ellipsis),
-            backgroundColor: Colors.red,
+            backgroundColor: AppConstants.dangerColor,
           ),
         );
       }
@@ -787,10 +793,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
   /// and a button to add another.
   Widget _buildVariants(AppLocalizations l10n) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadius.card,
         border: Border.all(color: const Color(0xFFEBEBEB)),
       ),
       child: Column(
@@ -798,7 +804,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         children: [
           Text(
             l10n.addProductVariantsTitle,
-            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
           ),
           const SizedBox(height: 2),
           Text(
@@ -807,7 +813,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 : l10n.addProductVariantsHelp,
             style: TextStyle(
               fontSize: 12,
-              color: _variantsFailed ? Colors.red : Colors.grey[600],
+              height: 1.35,
+              color: _variantsFailed
+                  ? AppConstants.dangerColor
+                  : AppConstants.textSecondaryColor,
             ),
           ),
           for (final v in _variants) ...[
@@ -816,7 +825,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               padding: const EdgeInsets.fromLTRB(12, 12, 4, 12),
               decoration: BoxDecoration(
                 color: const Color(0xFFF7F7F7),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppRadius.md),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -881,7 +890,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   IconButton(
                     tooltip: l10n.addProductVariantRemove,
                     onPressed: () => _removeVariant(v),
-                    icon: const Icon(Iconsax.trash, color: Colors.red),
+                    icon: const Icon(
+                      Iconsax.trash,
+                      color: AppConstants.dangerColor,
+                    ),
                   ),
                 ],
               ),
@@ -901,7 +913,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 foregroundColor: AppConstants.primaryColor,
                 side: const BorderSide(color: AppConstants.primaryColor),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
@@ -925,7 +937,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppRadius.md),
             border: Border.all(color: Colors.grey.shade300),
           ),
           child: Column(
@@ -935,11 +947,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(height: 8),
               Text(
                 l10n.addProductTapToAdd,
-                style: TextStyle(color: Colors.grey[600]),
+                style: const TextStyle(
+                  color: AppConstants.textSecondaryColor,
+                ),
               ),
               Text(
                 l10n.addProductUpTo(_maxPhotos),
-                style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppConstants.textSecondaryColor,
+                ),
               ),
             ],
           ),
@@ -965,7 +982,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppRadius.md),
                       border: Border.all(color: Colors.grey.shade300),
                     ),
                     child: Column(
@@ -981,7 +998,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           l10n.addProductAddMore,
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[600],
+                            color: AppConstants.textSecondaryColor,
                           ),
                         ),
                       ],
@@ -994,7 +1011,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
         const SizedBox(height: 6),
         Text(
           l10n.addProductPhotosHelp(_photos.length, _maxPhotos),
-          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+          style: const TextStyle(
+            fontSize: 12,
+            color: AppConstants.textSecondaryColor,
+          ),
         ),
       ],
     );
@@ -1021,14 +1041,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
         margin: const EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(
             color: main ? AppConstants.primaryColor : Colors.grey.shade300,
             width: main ? 2 : 1,
           ),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(AppRadius.md - 2),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -1060,7 +1080,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -1106,11 +1126,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
             _buildPhotos(),
             if (BackgroundRemovalService.isSupported)
               Container(
-                margin: const EdgeInsets.only(top: 10),
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                margin: const EdgeInsets.only(top: AppSpacing.sm),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppRadius.md),
                   border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: SwitchListTile(
@@ -1121,7 +1141,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     _removeBackground
                         ? l10n.addProductRemoveBgOn
                         : l10n.addProductRemoveBgOff,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppConstants.textSecondaryColor,
+                    ),
                   ),
                   value: _removeBackground,
                   activeColor: AppConstants.primaryColor,
@@ -1135,24 +1158,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         },
                 ),
               ),
-            const SizedBox(height: 14),
+            const SizedBox(height: AppSpacing.lg),
             TextField(
               controller: _nameController,
+              textCapitalization: TextCapitalization.words,
               decoration: InputDecoration(
                 labelText: l10n.addProductNameLabel,
                 border: const OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: AppSpacing.lg),
             _categoryField(),
-            const SizedBox(height: 14),
+            const SizedBox(height: AppSpacing.lg),
             // Brand: your own business name, or a big company's brand.
             Text(
               l10n.addProductBrandLabel,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12.5,
                 fontWeight: FontWeight.w600,
-                color: Colors.grey[700],
+                color: AppConstants.textSecondaryColor,
               ),
             ),
             const SizedBox(height: 6),
@@ -1185,7 +1209,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
             if (_myStoreName != null && !_useCompanyBrand)
               Text(
                 l10n.addProductMyStoreNote(_myStoreName!),
-                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppConstants.textSecondaryColor,
+                ),
               )
             else
               // Type any company brand (Apple, Samsung, Amul…); known ones are
@@ -1222,7 +1249,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   );
                 },
               ),
-            const SizedBox(height: 14),
+            const SizedBox(height: AppSpacing.lg),
             Row(
               children: [
                 Expanded(
@@ -1250,7 +1277,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: AppSpacing.lg),
             Row(
               children: [
                 Expanded(
@@ -1275,15 +1302,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.xl),
             _buildVariants(l10n),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.xl),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   l10n.addProductDescriptionLabel,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 Pressable(
                     child: TextButton.icon(
@@ -1311,7 +1338,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ProductDescriptionAi.minWords,
                 ProductDescriptionAi.maxWords,
               ),
-              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              style: const TextStyle(
+                fontSize: 12,
+                height: 1.35,
+                color: AppConstants.textSecondaryColor,
+              ),
             ),
             const SizedBox(height: 6),
             TextField(
@@ -1346,7 +1377,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(height: 12),
               Text(
                 l10n.addProductHighlights,
-                style: const TextStyle(fontWeight: FontWeight.w700),
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
               Wrap(
@@ -1364,8 +1395,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     .toList(),
               ),
             ],
-            const SizedBox(height: 28),
+            const SizedBox(height: AppSpacing.xl),
             SizedBox(
+              width: double.infinity,
               height: AppControl.lg,
               child: Pressable(
                   child: ElevatedButton(

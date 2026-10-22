@@ -7,6 +7,7 @@ import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/format.dart';
 import '../../utils/safe_state.dart';
+import '../../utils/tokens.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/role_common.dart';
 import '../payouts_screen.dart';
@@ -141,7 +142,7 @@ class _DeliveryEarningsScreenState extends State<DeliveryEarningsScreen> {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 24,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -164,9 +165,9 @@ class _DeliveryEarningsScreenState extends State<DeliveryEarningsScreen> {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(18),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(22),
+                        borderRadius: AppRadius.card,
                       ),
                       child: Column(
                         children: [
@@ -177,7 +178,8 @@ class _DeliveryEarningsScreenState extends State<DeliveryEarningsScreen> {
                                 height: 58,
                                 decoration: BoxDecoration(
                                   color: AppConstants.primaryColor,
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius:
+                                      BorderRadius.circular(AppRadius.lg),
                                 ),
                                 child: const Icon(
                                   Iconsax.trend_up,
@@ -207,7 +209,7 @@ class _DeliveryEarningsScreenState extends State<DeliveryEarningsScreen> {
                                         maxLines: 1,
                                         style: const TextStyle(
                                           fontSize: 24,
-                                          fontWeight: FontWeight.w800,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     ),
@@ -236,7 +238,7 @@ class _DeliveryEarningsScreenState extends State<DeliveryEarningsScreen> {
                                 formatRupees(_since(today)),
                                 style: const TextStyle(
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w600,
                                   color: AppConstants.primaryColor,
                                 ),
                               ),
@@ -280,12 +282,12 @@ class _DeliveryEarningsScreenState extends State<DeliveryEarningsScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: AppSpacing.lg),
                     // Asking for the money is its own button, not only a tile
                     // to discover: a request is how the wallet is paid out.
                     SizedBox(
                       width: double.infinity,
-                      height: 50,
+                      height: AppControl.lg,
                       child: Pressable(
                         child: OutlinedButton.icon(
                           onPressed: () => _open(const PayoutsScreen()),
@@ -301,21 +303,23 @@ class _DeliveryEarningsScreenState extends State<DeliveryEarningsScreen> {
                               color: AppConstants.primaryColor,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(
+                                AppRadius.button,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 22),
+                    const SizedBox(height: AppSpacing.xl),
                     Text(
                       l10n.deliveryEarningsHistory,
                       style: const TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: AppSpacing.sm),
                     if (_earnings.isEmpty)
                       RoleEmptyNote(
                         icon: Iconsax.wallet_3,
@@ -324,11 +328,12 @@ class _DeliveryEarningsScreenState extends State<DeliveryEarningsScreen> {
                     else
                       for (final e in _earnings)
                         Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
+                          margin:
+                              const EdgeInsets.only(bottom: AppSpacing.listGap),
+                          padding: const EdgeInsets.all(AppSpacing.cardPadding),
+                          decoration: const BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: AppRadius.card,
                           ),
                           child: Row(
                             children: [
@@ -349,7 +354,7 @@ class _DeliveryEarningsScreenState extends State<DeliveryEarningsScreen> {
                               Text(
                                 '+${formatRupees(_amount(e))}',
                                 style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   color: AppConstants.successColor,
                                 ),
                               ),
@@ -388,15 +393,15 @@ class _Tile extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: AppRadius.card,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: AppConstants.primaryColor, size: 28),
+              Icon(icon, color: AppConstants.primaryColor, size: 26),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -407,8 +412,8 @@ class _Tile extends StatelessWidget {
                       value,
                       maxLines: 1,
                       style: const TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),

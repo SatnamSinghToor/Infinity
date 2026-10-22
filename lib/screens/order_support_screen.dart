@@ -182,11 +182,11 @@ class _OrderSupportScreenState extends State<OrderSupportScreen> {
   Widget _ticketCard(Map<String, dynamic> ticket) {
     final status = ticket['status'] as String? ?? 'pending';
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,20 +197,20 @@ class _OrderSupportScreenState extends State<OrderSupportScreen> {
               Expanded(
                 child: Text(
                   ticket['reason'] as String? ?? '',
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: _statusColor(status).withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   status.toUpperCase(),
                   style: TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: _statusColor(status),
                   ),
                 ),
@@ -269,7 +269,7 @@ class _OrderSupportScreenState extends State<OrderSupportScreen> {
                               maxLines: 1, overflow: TextOverflow.ellipsis),
                         )),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Pressable(
                             child: OutlinedButton.icon(
@@ -287,7 +287,7 @@ class _OrderSupportScreenState extends State<OrderSupportScreen> {
                       l10n.orderSupportIssuesHeading,
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -299,7 +299,7 @@ class _OrderSupportScreenState extends State<OrderSupportScreen> {
                       l10n.orderSupportReturnsHeading,
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -308,9 +308,24 @@ class _OrderSupportScreenState extends State<OrderSupportScreen> {
                   if (_issues.isEmpty && _returns.isEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 24),
-                      child: Text(
-                        l10n.orderSupportEmpty,
-                        style: TextStyle(color: Colors.grey[600]),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Iconsax.message_question,
+                            size: 44,
+                            color: Colors.grey[300],
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            l10n.orderSupportEmpty,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 13.5,
+                              height: 1.4,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                 ],

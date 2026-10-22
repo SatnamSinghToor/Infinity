@@ -109,20 +109,19 @@ class _MainShellState extends State<MainShell>
             ),
           ),
           // On Home and Categories a cart pill floats just above the bar.
-          // Both live in the nav slot as one column, so the pill can never
-          // slip underneath the bar.
+          // No side or bottom padding: the pill sits flat on the content
+          // above the bar, lifted only by its own shadow. On the Cart tab
+          // the bar itself is dropped: the checkout column owns the bottom.
           bottomNavigationBar: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               if (index == MainShell.home || index == MainShell.categories)
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 8),
-                  child: ViewCartPill(),
+                const ViewCartPill(),
+              if (index != MainShell.cart)
+                BottomNavWidget(
+                  currentIndex: index,
+                  onTap: (i) => MainShell.tab.value = i,
                 ),
-              BottomNavWidget(
-                currentIndex: index,
-                onTap: (i) => MainShell.tab.value = i,
-              ),
             ],
           ),
         );

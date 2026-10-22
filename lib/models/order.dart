@@ -87,8 +87,21 @@ class Order {
   }
 
   String get formattedDate {
-    return '${dateTime.day}/${dateTime.month}/${dateTime.year} at ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    ];
+    final h12 = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
+    final ap = dateTime.hour < 12 ? 'AM' : 'PM';
+    return '${dateTime.day} ${months[dateTime.month - 1]} ${dateTime.year}, '
+        '$h12:${dateTime.minute.toString().padLeft(2, '0')} $ap';
   }
+
+  /// A short human reference for this order, for lists and support chats:
+  /// the first block of the row id, uppercased with a `#`. The raw id in a
+  /// card headline reads like a paste accident; this reads like a receipt.
+  String get shortRef =>
+      '#${(id.length > 8 ? id.substring(0, 8) : id).toUpperCase()}';
 
   /// A human-friendly version of [status], e.g. `ready_for_pickup` ->
   /// `Ready For Pickup`, for display in the UI. Comparisons against

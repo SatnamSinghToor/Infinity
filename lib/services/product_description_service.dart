@@ -402,7 +402,7 @@ class ProductDescriptionDraft {
 /// screen can show, because "Could not generate description" sent sellers to
 /// retry something that was never going to change.
 enum ProductDescriptionProblem {
-  /// The device has no route to Duggu.
+  /// The device has no route to Infinity.
   offline,
 
   /// The writer did not answer inside [ProductDescriptionAi.timeout].

@@ -784,11 +784,11 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
         children: [
           Text(
             l10n.sellerStoreComplete((done * 100 / checks.length).round()),
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: AppSpacing.sm),
           ClipRRect(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(
               value: done / checks.length,
               minHeight: 6,
@@ -818,7 +818,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey.shade300),
       ),
       clipBehavior: Clip.antiAlias,
@@ -955,7 +955,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
         child: AdaptiveImage(
           image: image,
           maxHeight: maxHeight,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           overlay: Align(
             alignment: Alignment.bottomRight,
             child: Container(
@@ -979,7 +979,7 @@ class _StoreProfileScreenState extends State<StoreProfileScreen> {
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1009,13 +1009,13 @@ class _StatusChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: color.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
         label,
         style: TextStyle(
           color: color,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           fontSize: 12,
         ),
       ),

@@ -81,6 +81,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ),
         body: SafeArea(
           child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +102,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     l10n.authResetTitle,
                     style: GoogleFonts.poppins(
                       fontSize: 20,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: tokens.textPrimary,
                     ),
                   ),
@@ -155,7 +156,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       onPressed: _isLoading ? null : _submit,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: _isLoading
@@ -188,7 +189,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             l10n.authResetDone,
                             style: GoogleFonts.poppins(
                               fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           const SizedBox(height: 24),

@@ -214,7 +214,7 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
                       : l10n.kycProgress(verified, required.length),
                   style: const TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -222,7 +222,7 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
           ),
           const SizedBox(height: AppSpacing.sm),
           ClipRRect(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(
               value: required.isEmpty ? 0 : verified / required.length,
               minHeight: 6,
@@ -297,7 +297,7 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
                   _progress(l10n, docTypes),
                   for (final d in docTypes) ...[
                     _docCard(l10n, d),
-                    const SizedBox(height: AppSpacing.sm),
+                    const SizedBox(height: AppSpacing.listGap),
                   ],
                 ],
               ),
@@ -314,7 +314,7 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
     final reason = (doc?['rejection_reason'] as String?)?.trim() ?? '';
 
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: AppRadius.card,
@@ -350,7 +350,10 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
                         d.label,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.w700),
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.xs),
@@ -366,7 +369,7 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: AppSpacing.xxs),
                 Text(
                   d.hint,
                   style: const TextStyle(
@@ -375,13 +378,13 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
                     color: AppConstants.textSecondaryColor,
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: AppSpacing.sm),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color: color.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     status == null
@@ -389,13 +392,13 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
                         : _statusText(l10n, status),
                     style: TextStyle(
                       fontSize: 11.5,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: color,
                     ),
                   ),
                 ),
                 if (status == 'REJECTED') ...[
-                  const SizedBox(height: 6),
+                  const SizedBox(height: AppSpacing.sm),
                   Text(
                     reason.isEmpty ? l10n.kycRejectedHelp : reason,
                     style: const TextStyle(

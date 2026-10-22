@@ -112,7 +112,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                       l10n.wishlistEmptyTitle,
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: Colors.grey[600],
                       ),
                       maxLines: 1,
@@ -164,7 +164,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                             products.fold(0.0, (sum, p) => sum + p.price)),
                         style: GoogleFonts.poppins(
                           fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: AppConstants.primaryColor,
                         ),
                         maxLines: 1,
@@ -222,7 +222,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppConstants.primaryColor,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () {
@@ -247,7 +247,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         l10n.wishlistAddAll,
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
                         maxLines: 1,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppConstants {
-  static const String appName = 'Duggu';
-  static const String tagline = 'Store me same day delivery';
+  static const String appName = 'Infinity';
+  static const String tagline =
+      'Same-day delivery for everything your home needs';
 
   // Colors — Orange grocery theme
   static const Color primaryColor = Color(0xFFFF5A00); // Mirinda orange
@@ -29,7 +30,7 @@ class AppConstants {
   );
 
   /// Home's soft butter-yellow header, distinct from the plain utility-page
-  /// headers while keeping the same warm Duggu palette.
+  /// headers while keeping the same warm Infinity palette.
   static const LinearGradient homeHeaderGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,

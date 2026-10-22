@@ -12,6 +12,7 @@ import '../../providers/auth_provider.dart';
 import '../../services/background_removal_service.dart';
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../utils/format.dart';
 import '../../utils/safe_state.dart';
@@ -475,7 +476,7 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
         name.isNotEmpty ? name[0].toUpperCase() : '?',
         style: const TextStyle(
           fontSize: 18,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),
@@ -534,14 +535,8 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: l10n.sellerProductsSearchHint,
-                  prefixIcon: const Icon(Iconsax.search_normal, size: 20),
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
+                  prefixIcon: const Icon(Iconsax.search_normal_1, size: 20),
+                  isDense: true,
                 ),
               ),
             ),
@@ -575,7 +570,7 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
                       child: ListView.separated(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 96),
                         itemCount: products.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 10),
+                        separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.listGap),
                         itemBuilder: (context, index) {
                           final p = products[index];
                           final stock = (p['stock'] as num?)?.toInt() ?? 0;
@@ -599,10 +594,10 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
                           }
 
                           return Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(AppSpacing.md),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: AppRadius.card,
                             ),
                             child: Row(
                               children: [
@@ -671,7 +666,7 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
-                                            fontWeight: FontWeight.w700,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                         const SizedBox(height: 3),
@@ -680,7 +675,7 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
                                               (p['price'] as num?) ?? 0),
                                           style: const TextStyle(
                                             color: AppConstants.primaryColor,
-                                            fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                         const SizedBox(height: 3),
@@ -706,18 +701,27 @@ class _SellerProductsScreenState extends State<SellerProductsScreen> {
                                               Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                  horizontal: 6,
-                                                  vertical: 1,
+                                                  horizontal: 8,
+                                                  vertical: 2,
                                                 ),
                                                 decoration: BoxDecoration(
-                                                  color: Colors.grey.shade300,
+                                                  color: AppConstants
+                                                      .textSecondaryColor
+                                                      .withOpacity(0.12),
                                                   borderRadius:
-                                                      BorderRadius.circular(4),
+                                                      BorderRadius.circular(
+                                                    AppRadius.pill,
+                                                  ),
                                                 ),
                                                 child: Text(
                                                   hidden,
                                                   style: const TextStyle(
-                                                      fontSize: 10),
+                                                    fontSize: 11,
+                                                    fontWeight:
+                                                        FontWeight.w600,
+                                                    color: AppConstants
+                                                        .textSecondaryColor,
+                                                  ),
                                                 ),
                                               ),
                                             ],

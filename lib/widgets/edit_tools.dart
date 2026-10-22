@@ -606,7 +606,7 @@ Future<String?> _pickLinkTarget(BuildContext context) {
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
             child: Text(
               l10n.editWhereOpen,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
           ),
           for (final o in options)

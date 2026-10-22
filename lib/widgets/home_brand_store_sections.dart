@@ -31,7 +31,7 @@ class _SectionTitle extends StatelessWidget {
             title,
             style: GoogleFonts.poppins(
               fontSize: 18,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppConstants.textPrimaryColor,
             ),
             maxLines: 1,
@@ -42,7 +42,7 @@ class _SectionTitle extends StatelessWidget {
             subtitle,
             style: GoogleFonts.poppins(
               fontSize: 12.5,
-              color: AppConstants.textSecondaryColor,
+              color: Colors.pink,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -327,7 +327,7 @@ class _StoreCard extends StatelessWidget {
         width: 264,
         decoration: BoxDecoration(
           color: palette.panel,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.16),
@@ -392,7 +392,7 @@ class _StoreCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       fontSize: 14.5,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
@@ -445,13 +445,13 @@ class _StoreCard extends StatelessWidget {
                               ? AppConstants.successColor
                               : AppConstants.dangerColor)
                           .withOpacity(0.25),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       isOpen ? l10n.homeOpen : l10n.homeClosed,
                       style: GoogleFonts.poppins(
                         fontSize: 10.5,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: isOpen
                             ? const Color(0xFF7BE07F)
                             : const Color(0xFFFF8A80),
@@ -465,7 +465,7 @@ class _StoreCard extends StatelessWidget {
                     l10n.homeItemCount(productCount),
                     style: GoogleFonts.poppins(
                       fontSize: 11.5,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppConstants.accentColor,
                     ),
                     maxLines: 1,
@@ -528,7 +528,7 @@ class _StoreCard extends StatelessWidget {
         name.isEmpty ? '?' : name[0].toUpperCase(),
         style: GoogleFonts.poppins(
           fontSize: 22,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: color,
         ),
         maxLines: 1,

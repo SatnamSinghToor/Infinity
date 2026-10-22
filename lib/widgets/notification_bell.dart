@@ -43,7 +43,7 @@ class NotificationBell extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: tokens.danger,
-                  borderRadius: BorderRadius.circular(9),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.white, width: 1.2),
                 ),
                 child: Text(
@@ -51,7 +51,7 @@ class NotificationBell extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 9,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     height: 1,
                   ),
                 ),

@@ -549,7 +549,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
                             style: GoogleFonts.poppins(
                               fontSize: 32,
                               height: 1.2,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: _ink,
                             ),
                           ),
@@ -601,7 +601,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
                   l10n.voiceShoppingList,
                   style: GoogleFonts.poppins(
                     fontSize: 24,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: _ink,
                   ),
                 ),
@@ -701,7 +701,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               color: const Color(0xFFF4F5F7),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: (image != null && image.isNotEmpty)
                 ? AppNetworkImage(
@@ -772,7 +772,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: AppConstants.primaryColor,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
                 color: AppConstants.primaryColor.withOpacity(0.35),
@@ -853,7 +853,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.85),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -1017,7 +1017,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.10),
@@ -1107,7 +1107,7 @@ class _VoiceSearchSheetState extends State<_VoiceSearchSheet>
         width: size,
         height: size,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           color: color,
           border: border
               ? Border.all(

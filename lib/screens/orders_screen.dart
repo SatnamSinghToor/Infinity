@@ -6,10 +6,12 @@ import 'package:provider/provider.dart';
 import '../models/order.dart';
 import '../providers/order_provider.dart';
 import '../utils/constants.dart';
+import '../utils/tokens.dart';
 import '../widgets/gradient_app_bar.dart';
 import '../widgets/live_entrance.dart';
 import '../widgets/role_common.dart';
 import '../utils/format.dart';
+import 'main_shell.dart';
 import 'order_detail_screen.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -52,28 +54,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
               maxLines: 1, overflow: TextOverflow.ellipsis),
           centerTitle: true),
       body: orders.isEmpty
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Iconsax.receipt, size: 72, color: Colors.grey[400]),
-                    const SizedBox(height: 16),
-                    Text(
-                      l10n.ordersEmptyTitle,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n.ordersEmptyBody,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                  ],
+          ? RoleEmpty(
+              icon: Iconsax.receipt,
+              title: l10n.ordersEmptyTitle,
+              message: l10n.ordersEmptyBody,
+              action: SizedBox(
+                height: AppControl.lg,
+                child: ElevatedButton.icon(
+                  onPressed: () => MainShell.goTo(context, MainShell.home),
+                  icon: const Icon(Iconsax.shopping_bag, size: 18),
+                  label: const Text(
+                    'Start shopping',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
             )
@@ -112,14 +106,29 @@ class _OrderCard extends StatelessWidget {
 
   const _OrderCard({required this.order});
 
+  /// What each status means in colour, matching the amber/green/red the
+  /// support tickets use: a delivered order reads as done, a cancelled one
+  /// as red, everything in flight as amber.
+  static Color _statusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'delivered':
+        return AppConstants.successColor;
+      case 'cancelled':
+        return AppConstants.dangerColor;
+      default:
+        return const Color(0xFFF59E0B); // amber, for everything in flight
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final statusColor = _statusColor(order.status);
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
+      padding: const EdgeInsets.all(AppSpacing.cardPadding),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: AppRadius.card,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -132,15 +141,58 @@ class _OrderCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                order.id,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+              // The first item's photo makes the card readable at a glance;
+              // an order without pictures reads like a database dump.
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  width: 46,
+                  height: 46,
+                  color: AppConstants.backgroundColor,
+                  child: (order.items.isNotEmpty &&
+                          order.items.first.product.gallery.isNotEmpty)
+                      ? Image.network(
+                          order.items.first.product.gallery.first,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => const Icon(
+                            Iconsax.receipt,
+                            size: 20,
+                            color: Colors.grey,
+                          ),
+                        )
+                      : const Icon(Iconsax.receipt, size: 20, color: Colors.grey),
                 ),
               ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _itemsSummary(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13.5,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      '${order.formattedDate} · ${order.shortRef}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 11.5,
+                        color: Color(0xFF757575),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
               // A live status change (a seller confirming, a rider marking
               // it delivered) pops the badge in fresh rather than swapping
               // its text in place — the same tell a chat app gives a
@@ -153,50 +205,25 @@ class _OrderCard extends StatelessWidget {
                 ),
                 child: Container(
                   key: ValueKey(order.status),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
-                    color: AppConstants.successColor.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(6),
+                    color: statusColor.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     order.statusLabel,
-                    style: const TextStyle(
-                      color: AppConstants.successColor,
+                    style: TextStyle(
+                      color: statusColor,
                       fontSize: 11,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            order.formattedDate,
-            style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-          ),
-          const Divider(height: 20),
-          ...order.items.map(
-            (item) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      '${item.product.name} × ${item.quantity}',
-                      style: const TextStyle(fontSize: 13),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Text(
-                    formatRupees(item.totalPrice),
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                ],
-              ),
-            ),
           ),
           const Divider(height: 20),
           Row(
@@ -204,14 +231,17 @@ class _OrderCard extends StatelessWidget {
             children: [
               Text(
                 AppLocalizations.of(context).ordersTotal,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12.5,
+                  color: Color(0xFF757575),
+                ),
               ),
               Text(
                 formatRupees(order.totalAmount),
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15.5,
                   color: AppConstants.primaryColor,
                 ),
               ),
@@ -220,5 +250,16 @@ class _OrderCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// The card's headline: the first line item, then how many more hide
+  /// behind it, so a five-item order still reads as one clean line.
+  String _itemsSummary() {
+    if (order.items.isEmpty) return '';
+    final first = order.items.first;
+    final summary =
+        '${first.product.name} × ${first.quantity}';
+    final more = order.items.length - 1;
+    return more > 0 ? '$summary +$more more' : summary;
   }
 }

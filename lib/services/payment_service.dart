@@ -134,7 +134,7 @@ class PaymentService {
           'amount': data['amount'],
           'order_id': data['order_id'],
           'currency': 'INR',
-          'name': 'Duggu',
+          'name': 'Infinity',
           'description': 'Order payment',
           if (contactPhone != null || contactEmail != null)
             'prefill': {

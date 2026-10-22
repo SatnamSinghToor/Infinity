@@ -6,6 +6,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../models/review.dart';
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../utils/format.dart';
 import '../../widgets/adaptive_image.dart';
@@ -268,7 +269,7 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
                           p['name'] as String? ?? '',
                           style: const TextStyle(
                             fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -282,7 +283,7 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
                         formatRupees(price),
                         style: const TextStyle(
                           fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           color: AppConstants.primaryColor,
                         ),
                       ),
@@ -300,7 +301,7 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
                           l10n.sellerProductDetailDiscountValue(discount),
                           style: const TextStyle(
                             color: AppConstants.successColor,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
@@ -364,7 +365,10 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
                   if (description.isNotEmpty)
                     Text(
                       description,
-                      style: TextStyle(color: Colors.grey[700], height: 1.5),
+                      style: const TextStyle(
+                        color: AppConstants.textSecondaryColor,
+                        height: 1.5,
+                      ),
                     )
                   else
                     _missingDescription(l10n),
@@ -374,7 +378,7 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
                       l10n.sellerProductDetailHighlights,
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -394,7 +398,7 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
                     l10n.sellerProductDetailReviews(_reviews.length),
                     style: const TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -433,11 +437,11 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
                   else
                     ..._reviews.map(
                       (review) => Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        padding: const EdgeInsets.all(14),
+                        margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                        padding: const EdgeInsets.all(AppSpacing.lg),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: AppRadius.card,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -476,15 +480,19 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
 
   Widget _heading(String text) => Text(
         text,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          height: 1.3,
+        ),
       );
 
   Widget _card(Widget child) => Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: AppRadius.card,
         ),
         child: child,
       );
@@ -497,7 +505,7 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: color.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -597,7 +605,10 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
       ),
       child: Row(
         children: [
-          Text(label, style: TextStyle(color: Colors.grey[600])),
+          Text(
+            label,
+            style: const TextStyle(color: AppConstants.textSecondaryColor),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -618,10 +629,10 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
   Widget _missingDescription(AppLocalizations l10n) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppConstants.primaryColor.withOpacity(0.06),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: AppRadius.card,
         border: Border.all(
           color: AppConstants.primaryColor.withOpacity(0.25),
         ),
@@ -636,7 +647,10 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
           const SizedBox(height: 4),
           Text(
             l10n.sellerProductDetailAddDescriptionHint,
-            style: TextStyle(color: Colors.grey[700], height: 1.4),
+            style: const TextStyle(
+              color: AppConstants.textSecondaryColor,
+              height: 1.4,
+            ),
           ),
           const SizedBox(height: 8),
           Pressable(
@@ -679,10 +693,6 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
                 onPressed: _isToggling ? null : _toggleActive,
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppConstants.textPrimaryColor,
-                  padding: const EdgeInsets.symmetric(vertical: 13),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
                 ),
                 icon: Icon(
                   isActive ? Iconsax.eye_slash : Iconsax.eye,
@@ -705,10 +715,6 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.primaryColor,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 13),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
                 ),
                 icon: const Icon(Iconsax.edit_2, size: 18),
                 label: Text(
@@ -732,7 +738,7 @@ class _SellerProductDetailScreenState extends State<SellerProductDetailScreen> {
         name.isNotEmpty ? name[0].toUpperCase() : '?',
         style: const TextStyle(
           fontSize: 64,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),

@@ -15,11 +15,14 @@ import '../models/product.dart';
 import '../providers/auth_provider.dart';
 import '../providers/cart_provider.dart';
 import '../providers/order_provider.dart';
+import '../providers/wallet_provider.dart';
 import '../screens/checkout_screen.dart';
 import '../utils/constants.dart';
 import '../utils/tokens.dart';
 import '../services/analytics.dart';
 import '../services/supabase_service.dart';
+import '../services/system_bars_service.dart';
+import '../services/upi_apps_service.dart';
 import '../utils/checkout_math.dart';
 import '../utils/format.dart';
 import '../widgets/checkout_address_sheets.dart';
@@ -59,6 +62,9 @@ class _CartScreenState extends State<CartScreen> {
   String? _couponError;
   bool _applyingCoupon = false;
 
+  /// Whether a Place Order is running right now: the bar's button spins.
+  bool _placingOrder = false;
+
   /// An address picked from the sheet; null means the one the app knows.
   Address? _pickedAddress;
 
@@ -71,6 +77,10 @@ class _CartScreenState extends State<CartScreen> {
     super.initState();
     final auth = context.read<AuthProvider>();
     if (auth.isLoggedIn && auth.addresses.isEmpty) auth.loadAddresses();
+    // The payment apps behind the bar's method names, fetched once.
+    PaymentChoice.ensureLoaded().then((_) {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -126,21 +136,22 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   /// Proceed To Pay: signs in, settles an address and who takes it if
-  /// either is missing, then opens the payment page.
-  Future<void> _proceed(AuthProvider auth) async {
+  /// either is missing, then returns the ready address. Null means the
+  /// flow stopped (login, address or receiver not settled).
+  Future<Address?> _settledAddress(AuthProvider auth) async {
     if (!auth.isLoggedIn) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const LoginScreen()),
       );
-      return;
+      return null;
     }
     var address = _deliveryAddress(auth);
     if (address == null) {
       await _changeAddress(auth);
-      if (!mounted) return;
+      if (!mounted) return null;
       address = _deliveryAddress(auth);
-      if (address == null) return;
+      if (address == null) return null;
     }
     if (address.fullName.isEmpty || address.phone.isEmpty) {
       final who = await showReceiverSheet(
@@ -148,25 +159,59 @@ class _CartScreenState extends State<CartScreen> {
         name: address.fullName,
         phone: address.phone,
       );
-      if (who == null || !mounted) return;
+      if (who == null || !mounted) return null;
       setState(() {
         _receiverName = who.$1;
         _receiverPhone = who.$2;
       });
       address = _deliveryAddress(auth);
-      if (address == null) return;
+      if (address == null) return null;
     }
-    Navigator.push(
+    return address;
+  }
+
+  /// Opens the payment picker; tapping a row there selects it and lands
+  /// right back here, with the bar showing the method.
+  Future<void> _proceed(AuthProvider auth) async {
+    final address = await _settledAddress(auth);
+    if (address == null || !mounted) return;
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => CheckoutScreen(
-          address: address!,
+          address: address,
           tip: _tip,
           deliveryNote: _deliveryNote,
           coupon: _appliedCoupon,
         ),
       ),
     );
+    // The picker may have changed the chosen method: redraw the bar.
+    if (mounted) setState(() {});
+  }
+
+  /// Place Order: the picker's chosen way to pay spends nothing on its own
+  /// tap; this runs the payment, or places the order straight away for
+  /// cash, with everything the cart settled.
+  Future<void> _placeOrder(AuthProvider auth) async {
+    final cart = Provider.of<CartProvider>(context, listen: false);
+    if (cart.items.isEmpty) return;
+    final address = await _settledAddress(auth);
+    if (address == null || !mounted) return;
+    setState(() => _placingOrder = true);
+    try {
+      await placeOrderNow(
+        context,
+        cartProvider: cart,
+        address: address,
+        tip: _tip,
+        deliveryNote: _deliveryNote,
+        coupon: _appliedCoupon,
+        useWallet: PaymentChoice.useWallet,
+      );
+    } finally {
+      if (mounted) setState(() => _placingOrder = false);
+    }
   }
 
   Future<void> _applyCoupon(double subtotal) async {
@@ -230,47 +275,15 @@ class _CartScreenState extends State<CartScreen> {
         (item.product.brand?.toLowerCase().contains(q) ?? false);
   }
 
-  Future<void> _confirmClear(BuildContext context, CartProvider cart) async {
-    final l10n = AppLocalizations.of(context);
-    final clear = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.cartClearTitle),
-        content: Text(l10n.cartClearBody),
-        actions: [
-          Pressable(
-              child: TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(
-              l10n.cartKeep,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          )),
-          Pressable(
-              child: TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(
-              l10n.cartClearAction,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          )),
-        ],
-      ),
-    );
-    if (clear == true) cart.clearCart();
-  }
-
   Widget _header(AppLocalizations l10n, bool empty) {
     Widget circle(IconData icon, VoidCallback onTap) => Pressable(
             child: Material(
           color: const Color(0xFFEFEFEF),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
           ),
           child: InkWell(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
             onTap: onTap,
             child: Padding(
               padding: const EdgeInsets.all(14),
@@ -285,6 +298,15 @@ class _CartScreenState extends State<CartScreen> {
         height: 50,
         child: Row(
           children: [
+            // Back toggle beside the "My Cart" title — lands on the Home tab.
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => MainShell.tab.value = MainShell.home,
+              child: const Padding(
+                padding: EdgeInsets.only(right: 12),
+                child: Icon(Iconsax.arrow_left_copy, size: 24),
+              ),
+            ),
             Expanded(
               child: _searching
                   ? TextField(
@@ -305,8 +327,8 @@ class _CartScreenState extends State<CartScreen> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
+                        fontSize: 19,
+                        fontWeight: FontWeight.w600,
                         color: AppConstants.textPrimaryColor,
                       ),
                     ),
@@ -328,6 +350,21 @@ class _CartScreenState extends State<CartScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
     final empty = cartProvider.items.isEmpty;
     final shown = cartProvider.items.where(_matches).toList();
+    // The one gap the floating checkout card lifts itself by: the phone's
+    // own nav strip. MediaQuery's viewPadding reads zero once the window
+    // has gone edge-to-edge (see SystemBars), so the strip's height wins
+    // when it is known.
+    final bottomInset = SystemBars.stripHeight > 0
+        ? SystemBars.stripHeight
+        : MediaQuery.of(context).viewPadding.bottom > 0
+            ? MediaQuery.of(context).viewPadding.bottom
+            : 6.0;
+    // The checkout card's full stack: 12+12 card padding, the ~48
+    // "Delivering to" row (signed in with an address) and the 56 button.
+    // Reserving for the tallest state, so the last card never slides under
+    // the pinned card no matter which state the bar is in.
+    // +12: the hair of lift the card carries above the nav line.
+    const checkoutCardHeight = 140.0;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
@@ -363,39 +400,54 @@ class _CartScreenState extends State<CartScreen> {
                               16,
                               16,
                               16,
-                              // Room for the checkout bar pinned under the list.
-                              170 + MediaQuery.of(context).padding.bottom,
+                              // Room for the floating checkout card pinned
+                              // at the very bottom: its full grown height,
+                              // the gap it lifts by, and one breath of air.
+                              // The old flat 140 fell short of the card's
+                              // address row, so the last card hid under it.
+                              checkoutCardHeight + bottomInset + 12,
                             ),
                             children: [
                               if (cartProvider.syncFailed)
                                 _SyncNotice(cart: cartProvider),
                               if (!_searching)
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Pressable(
-                                      child: TextButton.icon(
-                                    onPressed: () =>
-                                        _confirmClear(context, cartProvider),
-                                    icon: const Icon(Iconsax.trash, size: 18),
-                                    label: Text(
-                                      l10n.cartClear,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor:
-                                          AppConstants.primaryColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                                // One merged section: the delivery header
+                                // and every item row live inside a single
+                                // white card, separated by hairlines — the
+                                // gap between the old cards is gone.
+                                Container(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    14,
+                                    14,
+                                    14,
+                                    4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.circular(AppRadius.xl),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      _DeliveryCard(
+                                        count: cartProvider.itemCount,
+                                        embedded: true,
                                       ),
-                                    ),
-                                  )),
+                                      for (final item in shown)
+                                        _CartItemCard(
+                                          item: item,
+                                          cart: cartProvider,
+                                          embedded: true,
+                                        ),
+                                    ],
+                                  ),
                                 ),
-                              if (!_searching)
-                                _DeliveryCard(count: cartProvider.itemCount),
-                              for (final item in shown)
-                                _CartItemCard(item: item, cart: cartProvider),
-                              if (!_searching) _AlsoLike(cart: cartProvider),
+                              // A clear rest between the merged section and
+                              // the suggestions below it.
+                              if (!_searching) ...[
+                                const SizedBox(height: 18),
+                                _AlsoLike(cart: cartProvider),
+                              ],
                               if (shown.isEmpty)
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -430,10 +482,13 @@ class _CartScreenState extends State<CartScreen> {
                             Positioned(
                               left: 0,
                               right: 0,
-                              // Just above the app's bottom bar (the shell
-                              // reports its height as padding), or the phone's
-                              // own edge when the cart was opened on its own.
-                              bottom: MediaQuery.of(context).padding.bottom,
+                              // Sits right on the phone's own nav strip: the
+                              // window knows the strip's exact height, and
+                              // the card rests on top of it. The same inset
+                              // the list reserves its bottom room by.
+                              // Rides a touch higher than the nav bar's
+                              // own line — a hair of lift.
+                              bottom: bottomInset + 12,
                               child: _checkoutBar(
                                   l10n, cartProvider, authProvider),
                             ),
@@ -452,7 +507,7 @@ class _CartScreenState extends State<CartScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: context.tokens.card,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(AppRadius.xl),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -462,7 +517,7 @@ class _CartScreenState extends State<CartScreen> {
               title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
           if (subtitle != null) ...[
             const SizedBox(height: 2),
@@ -509,7 +564,7 @@ class _CartScreenState extends State<CartScreen> {
                       foregroundColor: context.tokens.primary,
                       side: BorderSide(color: context.tokens.primary),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: _applyingCoupon
@@ -573,7 +628,7 @@ class _CartScreenState extends State<CartScreen> {
                 selected: _tip == amount,
                 showCheckmark: false,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 selectedColor: context.tokens.primary.withOpacity(0.15),
                 onSelected: (_) =>
@@ -613,7 +668,7 @@ class _CartScreenState extends State<CartScreen> {
                   selected: _noteChips.contains(text),
                   showCheckmark: false,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   selectedColor: context.tokens.primary.withOpacity(0.15),
                   onSelected: (on) => setState(() =>
@@ -651,6 +706,18 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  /// The chosen method's face on the bar: the real launcher icon of the
+  /// UPI app, or a glyph for card and cash.
+  Widget _methodIcon() {
+    final icon = PaymentChoice.icon;
+    if (icon != null) return Image.memory(icon, fit: BoxFit.contain);
+    return Icon(
+      PaymentChoice.code == 'card' ? Iconsax.card : Iconsax.money_3,
+      size: 14,
+      color: context.tokens.primary,
+    );
+  }
+
   /// Blinkit's pinned bottom: where it is going, with Change, and the one
   /// button — total on its left, Proceed To Pay on its right.
   Widget _checkoutBar(
@@ -659,11 +726,20 @@ class _CartScreenState extends State<CartScreen> {
     AuthProvider auth,
   ) {
     final address = auth.isLoggedIn ? _deliveryAddress(auth) : null;
+    final discount = couponDiscountFor(_appliedCoupon, cart.totalAmount);
+    final deliveryFee = OrderProvider.deliveryFeeFor(cart.items);
+    final payableAfterDiscount = cart.totalAmount + deliveryFee - discount;
+    final walletUsed = PaymentChoice.useWallet
+        ? walletUseFor(
+            payable: payableAfterDiscount,
+            balance: context.read<WalletProvider>().balance.toDouble(),
+          )
+        : 0;
     final total = payableTotalFor(
       subtotal: cart.totalAmount,
-      deliveryFee: OrderProvider.deliveryFeeFor(cart.items),
-      discount: couponDiscountFor(_appliedCoupon, cart.totalAmount),
-      walletUsed: 0,
+      deliveryFee: deliveryFee,
+      discount: discount,
+      walletUsed: walletUsed.toDouble(),
       tip: _tip.toDouble(),
     );
     final label = !auth.isLoggedIn
@@ -671,11 +747,20 @@ class _CartScreenState extends State<CartScreen> {
         : address == null
             ? l10n.cartSelectAddress
             : l10n.cartProceedToPay;
+    // Floating card like the nav pill under it: side gutter, fully rounded
+    // and an even gap between the two, instead of a full-bleed sheet that
+    // sits flush on the bar.
     return Container(
+      margin: const EdgeInsets.fromLTRB(
+        AppSpacing.gutter,
+        0,
+        AppSpacing.gutter,
+        0,
+      ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       decoration: BoxDecoration(
         color: context.tokens.card,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
+        borderRadius: const BorderRadius.all(Radius.circular(AppRadius.xl)),
         boxShadow: const [
           BoxShadow(
             color: Color(0x1A000000),
@@ -690,19 +775,12 @@ class _CartScreenState extends State<CartScreen> {
           if (address != null) ...[
             Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: context.tokens.surfaceAlt,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    address.label == 'Work'
-                        ? Iconsax.briefcase
-                        : Iconsax.home_2,
-                    size: 20,
-                    color: context.tokens.primary,
-                  ),
+                Icon(
+                  address.label == 'Work'
+                      ? Iconsax.briefcase
+                      : Iconsax.home_2,
+                  size: 22,
+                  color: context.tokens.primary,
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -715,7 +793,7 @@ class _CartScreenState extends State<CartScreen> {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
@@ -739,77 +817,189 @@ class _CartScreenState extends State<CartScreen> {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: context.tokens.primary,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-            Divider(height: 16, color: context.tokens.border),
           ],
-          SizedBox(
-            height: 56,
-            width: double.infinity,
-            child: Pressable(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: context.tokens.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+          // Two states. Until a way to pay has actually been picked on the
+          // picker screen, the hairline "Select Payment Method" button
+          // stands here. The moment a row there is tapped (the screen
+          // closes and lands right back), the bar flips to Blinkit's:
+          // the chosen app on the left, total + Place Order on the right.
+          if (!PaymentChoice.chosen)
+            SizedBox(
+              height: 48,
+              width: double.infinity,
+              child: Pressable(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    // Hairline checkout: white fill, thin orange border and
+                    // orange glyphs, matching the product card ADD buttons.
+                    backgroundColor: Colors.white,
+                    foregroundColor: context.tokens.primary,
+                    side: BorderSide(color: context.tokens.primary, width: 1),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () => _proceed(auth),
+                  // One centred label, no arrow.
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                onPressed: () => _proceed(auth),
-                child: Row(
-                  children: [
-                    if (auth.isLoggedIn && address != null)
-                      Column(
+              ),
+            )
+          else
+            SizedBox(
+              height: 48,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // The chosen method; tapping it reopens the picker.
+                  Expanded(
+                    flex: 5,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => _proceed(auth),
+                      child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            formatRupees(total),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                            ),
+                          Row(
+                            children: [
+                              // The app's own icon, with no box around it.
+                              SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: _methodIcon(),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'PAY USING',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.4,
+                                  color: context.tokens.textPrimary,
+                                ),
+                              ),
+                              const Icon(Iconsax.arrow_up_2_copy, size: 10),
+                            ],
                           ),
+                          const SizedBox(height: 3),
                           Text(
-                            l10n.cartTotalLabel,
+                            PaymentChoice.label,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontSize: 10,
+                              fontSize: 14.5,
                               fontWeight: FontWeight.w600,
-                              letterSpacing: 0.6,
+                              color: Color(0xFF20252E),
                             ),
                           ),
                         ],
                       ),
-                    const Spacer(),
-                    Flexible(
-                      flex: 6,
-                      child: Text(
-                        label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Total on its left inside, Place Order on its right —
+                  // one solid button, exactly like the reference shot.
+                  Expanded(
+                    flex: 7,
+                    child: SizedBox(
+                      height: 52,
+                      child: Pressable(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: context.tokens.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: _placingOrder
+                              ? null
+                              : () => _placeOrder(auth),
+                          child: _placingOrder
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Row(
+                                  children: [
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          formatRupees(total),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 15.5,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        Text(
+                                          l10n.cartTotalLabel,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 0.6,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    Flexible(
+                                      child: Text(
+                                        l10n.checkoutPlaceOrder,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 15.5,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                    const Icon(
+                                      Iconsax.arrow_right_3_copy,
+                                      size: 13,
+                                    ),
+                                  ],
+                                ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    const Icon(Iconsax.arrow_right_3_copy, size: 18),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ),
         ],
       ),
     );
@@ -866,7 +1056,7 @@ class _EmptyCart extends StatelessWidget {
               backgroundColor: AppConstants.primaryColor,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
             ),
@@ -899,7 +1089,7 @@ class _SyncNotice extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
       decoration: BoxDecoration(
         color: AppConstants.primaryColor.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         border:
             Border.all(color: AppConstants.primaryColor.withOpacity(0.3)),
       ),
@@ -944,7 +1134,15 @@ class _CartItemCard extends StatelessWidget {
   final CartItem item;
   final CartProvider cart;
 
-  const _CartItemCard({required this.item, required this.cart});
+  /// When true the card drops its own white shell and hairline: the row
+  /// joins the delivery card above it in one section.
+  final bool embedded;
+
+  const _CartItemCard({
+    required this.item,
+    required this.cart,
+    this.embedded = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -954,20 +1152,13 @@ class _CartItemCard extends StatelessWidget {
     final showWas =
         item.variantPrice == null && product.originalPrice > product.price;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-      ),
-      child: Row(
+    final Widget content = Row(
         children: [
           Container(
             width: 84,
             height: 84,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(color: const Color(0xFFE4E4E4)),
             ),
             clipBehavior: Clip.antiAlias,
@@ -983,7 +1174,7 @@ class _CartItemCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     fontSize: 16,
                   ),
                 ),
@@ -1038,7 +1229,7 @@ class _CartItemCard extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFEFEFEF),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       item.variantName!,
@@ -1064,7 +1255,7 @@ class _CartItemCard extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                                 fontSize: 16,
                               ),
                             ),
@@ -1087,14 +1278,38 @@ class _CartItemCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    CartAction(product: product, alwaysShowStepper: true),
+                    CartAction(
+                      product: product,
+                      alwaysShowStepper: true,
+                      outline: true,
+                    ),
                   ],
                 ),
               ],
             ),
           ),
         ],
+    );
+
+    if (!embedded) return Container(
+      margin: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
       ),
+      child: content,
+    );
+    // Inside the merged section card: a hairline on top separates this row
+    // from the delivery header (or a previous item) with no shell.
+    return Column(
+      children: [
+        const Divider(height: 1, thickness: 1, color: Color(0xFFEBEBEB)),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+          child: content,
+        ),
+      ],
     );
   }
 }
@@ -1103,30 +1318,21 @@ class _CartItemCard extends StatelessWidget {
 class _DeliveryCard extends StatelessWidget {
   final int count;
 
-  const _DeliveryCard({required this.count});
+  /// True drops the shell so the header can sit at the top of the merged
+  /// section card that also carries the item rows.
+  final bool embedded;
+
+  const _DeliveryCard({required this.count, this.embedded = false});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final eta = context.watch<DeliveryEtaProvider>().label;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-      ),
-      child: Row(
+    final Widget content = Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppConstants.successColor.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: const Icon(Iconsax.timer_1,
-                color: AppConstants.successColor, size: 24),
-          ),
+          // Bare icon — no tinted tile behind it.
+          const Icon(Iconsax.timer_1,
+              color: AppConstants.successColor, size: 24),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -1140,7 +1346,7 @@ class _DeliveryCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
@@ -1156,7 +1362,20 @@ class _DeliveryCard extends StatelessWidget {
             ),
           ),
         ],
+      );
+
+    if (!embedded) return Container(
+      margin: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
       ),
+      child: content,
+    );
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
+      child: content,
     );
   }
 }
@@ -1190,7 +1409,7 @@ class _AlsoLike extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(AppRadius.xl),
       ),
       child: ProductShelf(
         title: l10n.cartYouMightLike,
@@ -1249,8 +1468,8 @@ class _BillCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: bold ? FontWeight.w800 : FontWeight.w500,
+                  fontSize: 13.5,
+                  fontWeight: bold ? FontWeight.w600 : FontWeight.w500,
                 ),
               ),
             ),
@@ -1259,8 +1478,8 @@ class _BillCard extends StatelessWidget {
               value,
               maxLines: 1,
               style: TextStyle(
-                fontSize: 17,
-                fontWeight: bold ? FontWeight.w800 : FontWeight.w600,
+                fontSize: 13.5,
+                fontWeight: bold ? FontWeight.w600 : FontWeight.w500,
               ),
             ),
           ],
@@ -1271,7 +1490,7 @@ class _BillCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(AppRadius.xl),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1286,7 +1505,7 @@ class _BillCard extends StatelessWidget {
           ],
           Text(
             l10n.cartBillDetails,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
           ),
           const _Dashed(),
           line(l10n.cartItemsCount(cart.itemCount), formatRupees(subtotal)),
@@ -1333,7 +1552,7 @@ class _BillCard extends StatelessWidget {
                     child: Text(
                       l10n.cartYouSave(formatRupees(saved)),
                       style: const TextStyle(
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppConstants.successColor,
                       ),
                     ),
@@ -1378,14 +1597,14 @@ class _FreeDeliveryBar extends StatelessWidget {
                     ? l10n.cartFreeDeliveryUnlocked
                     : l10n.cartFreeDeliveryShort(
                         formatRupees((threshold - subtotal).ceil())),
-                style: TextStyle(fontWeight: FontWeight.w700, color: color),
+                style: TextStyle(fontWeight: FontWeight.w600, color: color),
               ),
             ),
           ],
         ),
         const SizedBox(height: 8),
         ClipRRect(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(10),
           child: TweenAnimationBuilder<double>(
             tween: Tween(end: progress),
             duration: const Duration(milliseconds: 400),
@@ -1445,7 +1664,7 @@ class _Thumbnail extends StatelessWidget {
           style: TextStyle(
             fontSize: 30,
             color: Colors.white.withOpacity(0.6),
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),

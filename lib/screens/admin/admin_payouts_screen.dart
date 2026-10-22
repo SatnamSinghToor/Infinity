@@ -8,6 +8,7 @@ import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/format.dart';
 import '../../utils/safe_state.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../widgets/role_common.dart';
 import '../../widgets/pressable.dart';
@@ -222,22 +223,22 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
                   l10n.adminPayoutsWaiting(pending.length),
                   style: const TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 ...pending.map(_pendingCard),
               ],
               if (decided.isNotEmpty) ...[
-                const SizedBox(height: 22),
+                const SizedBox(height: AppSpacing.xl),
                 Text(
                   l10n.adminPayoutsDecided,
                   style: const TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 ...decided.map(_decidedCard),
               ],
             ],
@@ -250,13 +251,9 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
   Widget _pendingCard(PayoutRequest request) {
     final l10n = AppLocalizations.of(context);
     final isUpdating = _updatingIds.contains(request.id);
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-      ),
+    return RoleCard(
+      margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
+      padding: const EdgeInsets.all(AppSpacing.cardPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -266,10 +263,10 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
                 formatRupees(request.amount),
                 style: GoogleFonts.poppins(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacing.sm),
               Text(
                 request.roleLabel,
                 style: const TextStyle(
@@ -288,14 +285,14 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
             ],
           ),
           if (request.method != null && request.method!.isNotEmpty) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               l10n.adminPayoutsSendTo(request.method!),
               style: const TextStyle(fontSize: 13),
             ),
           ],
           if (request.note != null && request.note!.isNotEmpty) ...[
-            const SizedBox(height: 4),
+            const SizedBox(height: AppSpacing.xs),
             Text(
               l10n.adminPayoutsPartnerNote(request.note!),
               style: const TextStyle(
@@ -304,7 +301,7 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
               ),
             ),
           ],
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.md),
           if (isUpdating)
             const Center(
               child: SizedBox(
@@ -324,7 +321,7 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
                         maxLines: 1, overflow: TextOverflow.ellipsis),
                   )),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Pressable(
                       child: OutlinedButton(
@@ -346,13 +343,9 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
   Widget _decidedCard(PayoutRequest request) {
     final l10n = AppLocalizations.of(context);
     final color = _statusColor(request.status);
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-      ),
+    return RoleCard(
+      margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
+      padding: const EdgeInsets.all(AppSpacing.cardPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -362,24 +355,13 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
                 formatRupees(request.amount),
                 style: const TextStyle(
                   fontSize: 15,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  request.status[0].toUpperCase() + request.status.substring(1),
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: color,
-                  ),
-                ),
+              const SizedBox(width: AppSpacing.sm),
+              RoleStatusChip(
+                label: RoleStatusChip.titled(request.status),
+                color: color,
               ),
               const Spacer(),
               Text(
@@ -393,7 +375,7 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
           ),
           if (request.decisionNote != null &&
               request.decisionNote!.isNotEmpty) ...[
-            const SizedBox(height: 5),
+            const SizedBox(height: AppSpacing.xs),
             Text(
               request.decisionNote!,
               style: const TextStyle(
@@ -403,7 +385,7 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
             ),
           ],
           if (request.status == 'approved') ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: AppSpacing.md),
             SizedBox(
               width: double.infinity,
               child: Pressable(
@@ -419,7 +401,7 @@ class _AdminPayoutsScreenState extends State<AdminPayoutsScreen> {
           ],
           if (request.paymentReference != null &&
               request.paymentReference!.isNotEmpty) ...[
-            const SizedBox(height: 4),
+            const SizedBox(height: AppSpacing.xs),
             Text(
               l10n.adminPayoutsReference(request.paymentReference!),
               style: const TextStyle(

@@ -5,6 +5,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../models/festival.dart';
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../widgets/role_common.dart';
 import '../../widgets/pressable.dart';
@@ -222,7 +223,7 @@ class _AdminFestivalsScreenState extends State<AdminFestivalsScreen> {
                         : l10n.adminFestivalsEditDialog,
                     style: const TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -337,16 +338,9 @@ class _AdminFestivalsScreenState extends State<AdminFestivalsScreen> {
                     ),
                   SizedBox(
                     width: double.infinity,
-                    height: 48,
+                    height: AppControl.lg,
                     child: Pressable(
                         child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppConstants.primaryColor,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
                       onPressed: () {
                         if (chip.text.trim().isEmpty ||
                             title.text.trim().isEmpty) {
@@ -485,7 +479,7 @@ class _AdminFestivalsScreenState extends State<AdminFestivalsScreen> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF4DB),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   live == null
@@ -497,7 +491,7 @@ class _AdminFestivalsScreenState extends State<AdminFestivalsScreen> {
                   style: const TextStyle(fontSize: 12.5, height: 1.4),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.md),
               for (var i = 0; i < _rows.length; i++)
                 _tile(_rows[i], festivals[i]),
             ],
@@ -515,14 +509,14 @@ class _AdminFestivalsScreenState extends State<AdminFestivalsScreen> {
     if (f.showPooja) dates += l10n.adminFestivalsPoojaSuffix;
     if (!active) dates += l10n.adminFestivalsOffSuffix;
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: AppSpacing.listGap),
+      padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: AppRadius.card,
         border: on && active
             ? Border.all(color: AppConstants.primaryColor, width: 1.4)
-            : null,
+            : Border.all(color: context.tokens.border),
       ),
       child: Row(
         children: [
@@ -530,7 +524,7 @@ class _AdminFestivalsScreenState extends State<AdminFestivalsScreen> {
             width: 46,
             height: 46,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppRadius.md),
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -539,7 +533,7 @@ class _AdminFestivalsScreenState extends State<AdminFestivalsScreen> {
             ),
             child: Icon(Iconsax.magic_star, color: f.accent, size: 22),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -550,7 +544,7 @@ class _AdminFestivalsScreenState extends State<AdminFestivalsScreen> {
                       child: Text(
                         f.chipLabel,
                         style: TextStyle(
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: active ? null : Colors.grey,
                         ),
                       ),
@@ -564,14 +558,14 @@ class _AdminFestivalsScreenState extends State<AdminFestivalsScreen> {
                         ),
                         decoration: BoxDecoration(
                           color: AppConstants.primaryColor,
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           l10n.adminFestivalsLive,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

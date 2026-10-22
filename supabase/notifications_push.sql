@@ -49,6 +49,7 @@ begin
       'user_id', new.user_id,
       'title', new.title,
       'body', new.message,
+      'type', new.type,
       'order_id', new.order_id,
       'loud', v_loud
     )

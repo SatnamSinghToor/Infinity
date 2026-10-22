@@ -335,10 +335,10 @@ class _InfoCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10)],
+        borderRadius: AppRadius.card,
+        boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -353,7 +353,7 @@ class _InfoCard extends StatelessWidget {
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 if (address != null && address!.isNotEmpty)
                   Text(

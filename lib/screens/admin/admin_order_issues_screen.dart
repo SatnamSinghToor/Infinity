@@ -4,6 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../utils/safe_state.dart';
 import '../../widgets/role_common.dart';
@@ -164,19 +165,16 @@ class _AdminOrderIssuesScreenState extends State<AdminOrderIssuesScreen> {
                 child: ListView.separated(
                   padding: const EdgeInsets.all(16),
                   itemCount: _issues.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: AppSpacing.listGap),
                   itemBuilder: (context, index) {
                     final i = _issues[index];
                     final id = i['id'] as String;
                     final status = i['status'] as String? ?? 'open';
                     final isUpdating = _updatingIds.contains(id);
 
-                    return Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                    return RoleCard(
+                      padding: const EdgeInsets.all(AppSpacing.cardPadding),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -187,35 +185,21 @@ class _AdminOrderIssuesScreenState extends State<AdminOrderIssuesScreen> {
                                 child: Text(
                                   i['reason'] as String? ?? '',
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.5,
                                   ),
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 3,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: _statusColor(
-                                    status,
-                                  ).withOpacity(0.15),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  status.toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: _statusColor(status),
-                                  ),
-                                ),
+                              const SizedBox(width: AppSpacing.sm),
+                              RoleStatusChip(
+                                label: RoleStatusChip.titled(status),
+                                color: _statusColor(status),
                               ),
                             ],
                           ),
                           if ((i['description'] as String?)?.isNotEmpty ==
                               true) ...[
-                            const SizedBox(height: 6),
+                            const SizedBox(height: AppSpacing.sm),
                             Text(
                               i['description'] as String,
                               style: TextStyle(
@@ -224,7 +208,7 @@ class _AdminOrderIssuesScreenState extends State<AdminOrderIssuesScreen> {
                               ),
                             ),
                           ],
-                          const SizedBox(height: 4),
+                          const SizedBox(height: AppSpacing.xs),
                           Text(
                             l10n.adminIssuesOrder(
                               (i['order_id'] as String).substring(0, 8),
@@ -235,7 +219,7 @@ class _AdminOrderIssuesScreenState extends State<AdminOrderIssuesScreen> {
                             ),
                           ),
                           if (status == 'open') ...[
-                            const SizedBox(height: 10),
+                            const SizedBox(height: AppSpacing.md),
                             if (isUpdating)
                               const Align(
                                 alignment: Alignment.centerRight,

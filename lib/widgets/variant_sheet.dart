@@ -10,7 +10,6 @@ import '../models/product_variant.dart';
 import '../providers/cart_provider.dart';
 import '../utils/constants.dart';
 import 'app_network_image.dart';
-import 'cart_action.dart';
 import 'pressable.dart';
 
 /// Orange grocery "Select an option" bottom sheet.
@@ -97,7 +96,7 @@ class _VariantSheetState extends State<_VariantSheet> {
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       color: AppConstants.imageBackground,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: AppConstants.cardBorder),
                     ),
                     child: widget.product.gallery.isNotEmpty
@@ -129,7 +128,7 @@ class _VariantSheetState extends State<_VariantSheet> {
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.poppins(
                             fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             color: AppConstants.textPrimaryColor,
                           ),
                         ),
@@ -268,7 +267,7 @@ class _VariantSheetState extends State<_VariantSheet> {
         widget.product.name.isNotEmpty ? widget.product.name[0] : '?',
         style: GoogleFonts.poppins(
           fontSize: 24,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           color: Colors.white.withOpacity(0.6),
         ),
       ),
@@ -290,7 +289,7 @@ Widget _buildAddToCartButton(List<ProductVariant> availableVariants) {
                 final cart = context.read<CartProvider>();
                 cart.addToCart(
                   widget.product,
-                  variantId: selected!.id,
+                  variantId: selected.id,
                   variantName: selected.label,
                   variantPrice: selected.price,
                 );
@@ -322,7 +321,7 @@ Widget _buildAddToCartButton(List<ProductVariant> availableVariants) {
                 '${AppLocalizations.of(context).variantSheetAddToCart} ${selected.formattedPrice}',
                 style: GoogleFonts.poppins(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0.3,
                 ),
               )
@@ -330,7 +329,7 @@ Widget _buildAddToCartButton(List<ProductVariant> availableVariants) {
                 AppLocalizations.of(context).variantSheetSelectOption,
                 style: GoogleFonts.poppins(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0.3,
                 ),
               ),
@@ -364,7 +363,7 @@ class _VariantRow extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: isSelected ? AppConstants.primaryColor.withOpacity(0.08) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: isSelected ? AppConstants.primaryColor : AppConstants.cardBorder,
           width: isSelected ? 2 : 1,
@@ -373,7 +372,7 @@ class _VariantRow extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(10),
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(14),
@@ -411,7 +410,7 @@ class _VariantRow extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
                     color: AppConstants.imageBackground,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: AppConstants.cardBorder),
                   ),
                   child: product.gallery.isNotEmpty
@@ -434,7 +433,7 @@ class _VariantRow extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                           fontSize: 14,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: isDisabled ? Colors.grey[500] : AppConstants.textPrimaryColor,
                         ),
                       ),
@@ -458,7 +457,7 @@ class _VariantRow extends StatelessWidget {
                               variant.formattedPrice,
                               style: GoogleFonts.poppins(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                                 color: AppConstants.textPrimaryColor,
                               ),
                             ),
@@ -479,7 +478,7 @@ class _VariantRow extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                                 decoration: BoxDecoration(
                                   color: AppConstants.discountBlue.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(4),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Text(
                                   variant.discountDisplay.isNotEmpty
@@ -487,7 +486,7 @@ class _VariantRow extends StatelessWidget {
                                       : '$discountPercent% OFF',
                                   style: GoogleFonts.poppins(
                                     fontSize: 11,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                     color: AppConstants.discountBlue,
                                   ),
                                 ),
@@ -505,7 +504,7 @@ class _VariantRow extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppConstants.successColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       'In Stock',
@@ -530,7 +529,7 @@ class _VariantRow extends StatelessWidget {
         product.name.isNotEmpty ? product.name[0] : '?',
         style: GoogleFonts.poppins(
           fontSize: 20,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           color: Colors.white.withOpacity(0.6),
         ),
       ),

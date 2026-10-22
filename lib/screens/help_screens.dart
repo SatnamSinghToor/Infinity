@@ -7,6 +7,7 @@ import '../providers/order_provider.dart';
 import '../services/supabase_service.dart';
 import '../utils/constants.dart';
 import '../utils/format.dart';
+import '../utils/tokens.dart';
 import '../widgets/gradient_app_bar.dart';
 import '../widgets/role_common.dart';
 import '../widgets/pressable.dart';
@@ -29,12 +30,13 @@ class InfoScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: ListView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
         children: [
           for (final (heading, body) in sections) ...[
             Text(
               heading,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 6),
             Text(
@@ -161,7 +163,7 @@ class FaqScreen extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 10),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: const Color(0xFFE4E4E4)),
               ),
               clipBehavior: Clip.antiAlias,
@@ -233,6 +235,7 @@ class _FormShell extends StatelessWidget {
         centerTitle: true,
       ),
       body: ListView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: EdgeInsets.fromLTRB(
           20,
           20,
@@ -295,7 +298,11 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
       children: [
         Text(
           l10n.helpContactIntro,
-          style: const TextStyle(color: AppConstants.textSecondaryColor),
+          style: const TextStyle(
+            fontSize: 13.5,
+            height: 1.4,
+            color: AppConstants.textSecondaryColor,
+          ),
         ),
         const SizedBox(height: 16),
         TextField(
@@ -415,7 +422,11 @@ class _ProductRequestsScreenState extends State<ProductRequestsScreen> {
       children: [
         Text(
           l10n.helpRequestsIntro,
-          style: const TextStyle(color: AppConstants.textSecondaryColor),
+          style: const TextStyle(
+            fontSize: 13.5,
+            height: 1.4,
+            color: AppConstants.textSecondaryColor,
+          ),
         ),
         const SizedBox(height: 16),
         TextField(
@@ -457,40 +468,55 @@ class _ProductRequestsScreenState extends State<ProductRequestsScreen> {
           const SizedBox(height: 28),
           Text(
             l10n.helpRequestsMine,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 10),
           for (final row in _mine)
             Container(
-              margin: const EdgeInsets.only(bottom: 8),
-              padding: const EdgeInsets.all(14),
+              margin: const EdgeInsets.only(bottom: AppSpacing.md),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: const Color(0xFFE4E4E4)),
               ),
               child: Row(
                 children: [
                   const Icon(Iconsax.box, size: 22),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: Text(
                       row['title'] as String? ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      style:
+                          const TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ),
-                  Text(
-                    row['status'] == 'done'
-                        ? l10n.helpRequestDone
-                        : l10n.helpRequestOpen,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: row['status'] == 'done'
-                          ? AppConstants.successColor
-                          : AppConstants.textSecondaryColor,
+                  // The same little status chip the KYC documents use.
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      color: (row['status'] == 'done'
+                              ? AppConstants.successColor
+                              : AppConstants.textSecondaryColor)
+                          .withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      row['status'] == 'done'
+                          ? l10n.helpRequestDone
+                          : l10n.helpRequestOpen,
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w600,
+                        color: row['status'] == 'done'
+                            ? AppConstants.successColor
+                            : AppConstants.textSecondaryColor,
+                      ),
                     ),
                   ),
                 ],
@@ -573,7 +599,7 @@ class _RateUsSheetState extends State<_RateUsSheet> {
             Text(
               l10n.helpRateTitle,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 14),
             Row(

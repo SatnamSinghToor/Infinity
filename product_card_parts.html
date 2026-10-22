@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Card — Parts Map (Hinglish)</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background:#F4F5F7; color:#20252E; padding:28px 20px 60px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  h1 { font-size:24px; font-weight:600; margin-bottom:4px; }
+  .sub { color:#68717E; font-size:13.5px; margin-bottom:22px; }
+  h2 { font-size:16px; font-weight:600; margin:26px 0 12px; }
+  code { background:#EEF1F4; border-radius:5px; padding:1px 6px; font-size:12px; color:#B34A00;
+         font-family: Consolas, monospace; }
+  .cols { display:flex; gap:26px; align-items:flex-start; flex-wrap:wrap; }
+  .diagram { background:#fff; border:1px solid #E3E6EB; border-radius:18px; padding:20px; width:360px; flex:0 0 auto;
+             box-shadow:0 2px 7px rgba(28,37,50,.06); position:relative; }
+  .parts { flex:1; min-width:340px; }
+  /* diagram pieces */
+  .canvas {
+    background: linear-gradient(to bottom left, #FAFBFC, #EFF1F4);
+    border-radius:16px 16px 0 0; height:210px; position:relative;
+  }
+  .food { width:110px; height:120px; margin:26px auto 0; position:relative; }
+  . Jarvis (--no) none
+  .canvas .label { position:absolute; left:10px; top:8px; font-size:11px; color:#87909C; }
+  .dots { position:absolute; left:12px; bottom:10px; display:flex; gap:5px; }
+  .dots span { width:8px; height:8px; border-radius:50%; background:#BDC3CB; }
+  .dots span:first-child { background:#404650; }
+  .heart { position:absolute; top:8px; right:8px; font-size:18px; color:#89919C; }
+  .vegbadge { position:absolute; right:10px; bottom:12px; width:20px; height:20px; background:#fff;
+              border:1.6px solid #237A35; border-radius:4px; display:flex; align-items:center; justify-content:center; }
+  .vegbadge i { width:8px; height:8px; border-radius:50%; background:#237A35; }
+  .soldtag { position:absolute; left:10px; bottom:10px; background:rgba(0,0,0,.65); color:#fff; font-size:9.5px;
+             padding:3px 7px; border-radius:6px; display:none; }
+  .footdiv { height:1px; background:#E3E6EB; }
+  .footer-strip {
+    background: linear-gradient(to bottom left, #FAFBFC, #EFF1F4);
+    border-radius:0 0 16px 16px; height:44px; display:flex; align-items:center; padding-left:14px;
+    font-size:14px; font-weight:600; color:#20252E;
+  }
+  .addchip {
+    position:absolute; right:-6px; top:172px; width:92px; background:#fff;
+    border:1px solid #FF5A00; border-radius:10px; height:52px;
+    box-shadow:0 3px 10px rgba(28,37,50,.12);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:600; color:#E64E00; font-size:14px; letter-spacing:-.2px;
+  }
+  .meta { padding:12px 2px; }
+  .pricerow { display:flex; align-items:baseline; gap:6px; }
+  .price { font-size:19px; font-weight:700; letter-spacing:-0.3px; }
+  .mrp { font-size:12.5px; color:#747C88; text-decoration:line-through; font-weight:400; }
+  .off { color:#2F6FC9; font-size:11.5px; font-weight:600; margin-top:2px; }
+  .pname { font-size:13.5px; font-weight:600; margin-top:5px; line-height:1.28; }
+  .stars { color:#FFC93D; font-size:13px; margin-top:5px; letter-spacing:1px; }
+  .stars b { color:#68717E; font-size:11px; font-weight:500; margin-left:4px; letter-spacing:0; }
+  .sameday { color:#68717E; font-size:11.5px; font-weight:600; margin-top:5px; }
+  .sameday .clock { display:inline-block; width:14px; height:14px; border:1.5px solid #8B94A2; border-radius:50%;
+                    vertical-align:-2px; margin-right:5px; }
+  /* parts table */
+  table { width:100%; border-collapse:collapse; background:#fff; border:1px solid #E3E6EB; border-radius:12px; overflow:hidden; }
+  th { background:#20252E; color:#fff; text-align:left; font-size:12px; font-weight:600; padding:9px 12px; }
+  td { padding:9px 12px; border-top:1px solid #F0F1F4; font-size:13px; vertical-align:top; }
+  td.n { font-weight:700; color:#E64E00; white-space:nowrap; }
+  td.c { width:90px; }
+  .sw { display:inline-block; width:13px; height:13px; border-radius:3px; vertical-align:-2px; margin-right:4px;
+        border:1px solid rgba(0,0,0,.08); }
+  .note { background:#FFF0E8; border:1px solid #FFD8C2; padding:10px 14px; border-radius:10px; font-size:12.5px;
+          color:#7A3A10; margin-top:14px; }
+  .num { font-weight:700; color:#FF5A00; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🛒 Product Card — Parts ka map</h1>
+  <div class="sub">File: <code>lib/widgets/product_card.dart</code> · Hinglish guide · har part ka naam, kaam aur colour</div>
+
+  <div class="cols">
+    <!-- ================= DIAGRAM ================= -->
+    <div class="diagram">
+      <div class="canvas">
+        <div class="label">① &nbsp;PHOTO CANVAS (bg gradient)</div>
+        <div class="food">
+          ▓▓▓<br>&nbsp; photo<br>&nbsp; (contain)
+        </div>
+        <div class="heart">♡</div>
+        <div class="dots"><span></span><span></span><span></span><span></span></div>
+        <div class="vegbadge"><i></i></div>
+        <div class=" Jarvis" style="display:none"></div>
+      </div>
+      <div class="footdiv"></div>
+      <div class="footer-strip">④ &nbsp;VARIANT LABEL STRIP (500g)</div>
+      <div class="addchip">ADD</div>
+      <div style="height:26px"></div>
+      <div class="meta">
+        <div class="pricerow"><span class="price">₹176.40</span><span class="mrp">₹199.50</span></div>
+        <div class="off">12% OFF on MRP</div>
+        <div class="pname">Quaker Oats</div>
+        <div class="stars">★★★★<b>4.5</b></div>
+        <div class="sameday"><span class="clock"></span>Same-day delivery</div>
+      </div>
+    </div>
+
+    <!-- ================= PARTS LIST ================= -->
+    <div class="parts">
+      <table>
+        <tr><th>#</th><th>Part</th><th>Kya hai / kya karta hai</th><th>Colour</th></tr>
+        <tr><td class="n">1</td><td><b>Card Shell</b><br><code>_buildVisualCard</code></td>
+            <td>Poora card ka daba — rounded 16, halki shadow. Iske andar hi saare parts hain.</td>
+            <td class="c"><span class="sw" style="background:#fff"></span>white<br>border <span class="sw" style="background:#E3E6EB"></span></td></tr>
+
+        <tr><td class="n">2</td><td><b>Photo Canvas</b><br><code>imageHeight</code></td>
+            <td>Upar wala photo wala hissa — bg halka grey wash gradient.</td>
+            <td class="c"><span class="sw" style="background:#FAFBFC"></span>#FAFBFC →<br><span class="sw" style="background:#EFF1F4"></span>#EFF1F4</td></tr>
+
+        <tr><td class="n">2a</td><td><b>Product Photo</b><br><code>_buildPhoto</code></td>
+            <td>Photo contain me fit hoti hai; photo na ho to <b>2b Placeholder</b> (naam ka pehla akshar, 32/44px w600 grey) dikhata hai.</td>
+            <td class="c">network image<br>placeholder <span class="sw" style="background:#999"></span></td></tr>
+
+        <tr><td class="n">2c</td><td><b>Wishlist Button</b><br><code>_buildWishlistButton</code></td>
+            <td>Photo ke top-right me ♡ — tap par wishlist on/off. Dil bhara to red.</td>
+            <td class="c"><span class="sw" style="background:#EC4C54"></span>#EC4C54 /<br><span class="sw" style="background:#89919C"></span>#89919C</td></tr>
+
+        <tr><td class="n">2d</td><td><b>Carousel Dots</b><br><code>_buildCarouselDots</code></td>
+            <td>Photo ke bottom-left me chhote dots — matlab zyada photos swipe karne ke liye. 1 photo ho to dots gayab.</td>
+            <td class="c"><span class="sw" style="background:#404650"></span>active<br><span class="sw" style="background:#BDC3CB"></span>idle</td></tr>
+
+        <tr><td class="n">2e</td><td><b>Veg / Non-Veg Badge</b><br><code>_buildVegBadge</code></td>
+            <td>Safed square chip — veg me green dot, non-veg me red triangle. Photo ke bottom-right.</td>
+            <td class="c"><span class="sw" style="background:#237A35"></span>veg<br><span class="sw" style="background:#D32F2F"></span>non-veg</td></tr>
+
+        <tr><td class="n">2f</td><td><b>Sold Out Overlay</b></td>
+            <td>Stock khatam: photo 45% dim + "Sold out" black tag chip.</td>
+            <td class="c"><span class="sw" style="background:#000"></span>opaque 65%</td></tr>
+
+        <tr><td class="n">3</td><td><b>Divider Line</b><br><code>Container(height:1, color:_line)</code></td>
+            <td>Photo part neeche part ko kaat-ti patli line.</td>
+            <td class="c"><span class="sw" style="background:#E3E6EB"></span>#E3E6EB</td></tr>
+
+        <tr><td class="n">4</td><td><b>Variant Label Strip</b><br><code>footerHeight</code></td>
+            <td><b class="num">ADD button ke bilkul saamne wala hissa</b> — pack size "500g" likha hota hai.<br>⭐<b>Naye change:</b> iska bg ab photo-canvas wala <u>same gradient</u> (user ka request). Pehle flat #F8F9FB tha.</td>
+            <td class="c"><span class="sw" style="background:#FAFBFC"></span>canvas gradient<br>(same as #2)</td></tr>
+
+        <tr><td class="n">5</td><td><b>Action Chip (ADD / stepper)</b><br><code>_buildActionControl</code></td>
+            <td>Daiye kinare pe card se thoda bahar liptki hoti hai (right −5px, photo-foot line se −6px upar):
+              <br>• <b>ADD</b> (add karne se pehle)
+              <br>• <b>− qty + stepper</b> (jab cart me ho)
+              <br>• <b>"N options"</b> do-tier — ADD + peach strip neeche (multi-variant me)
+            </td>
+            <td class="c"><span class="sw" style="background:#fff"></span>white + border<br><span class="sw" style="background:#FF5A00"></span>#FF5A00<br><span class="sw" style="background:#E64E00"></span>text #E64E00<br><span class="sw" style="background:#FFF0E8"></span>#FFF0E8</td></tr>
+
+        <tr><td class="n">6</td><td><b>Price Row</b><br><code>metadata</code></td>
+            <td>Price (dense 15.5 / bade 19px w700) + purane MRP ke upar line kaata hua. Naye fix me overlap gayab: price 15.5, MRP 11.</td>
+            <td class="c">price <span class="sw" style="background:#20252E"></span>#20252E<br>MRP <span class="sw" style="background:#747C88"></span>#747C88</td></tr>
+
+        <tr><td class="n">7</td><td><b>OFF Tag</b><br><code>$discountPercent% OFF on MRP</code></td>
+            <td>Discount kimaat hai to hi dikhta hai, warna gayab.</td>
+            <td class="c"><span class="sw" style="background:#2F6FC9"></span>#2F6FC9 blue</td></tr>
+
+        <tr><td class="n">8</td><td><b>Product Name</b><br><code>product.name</code></td>
+            <td>Do line me naam, galat aur khatte ke bina.</td>
+            <td class="c"><span class="sw" style="background:#20252E"></span>#20252E</td></tr>
+
+        <tr><td class="n">9</td><td><b>Rating Row</b><br><code>stars + number</code></td>
+            <td>5 tare (poore/half/khaali asli rate ke hisaab) + number. Rating 0 ho to gayab.</td>
+            <td class="c"><span class="sw" style="background:#FFC93D"></span>#FFC93D<br>khaali <span class="sw" style="background:#E3E6EB"></span></td></tr>
+
+        <tr><td class="n">10</td><td><b>Delivery Row</b><br><code>Same-day delivery</code></td>
+            <td>Ghadi ke nishaan ke sath delivery ka waqt.</td>
+            <td class="c">clock <span class="sw" style="background:#8B94A2"></span>#8B94A2<br>text <span class="sw" style="background:#68717E"></span>#68717E</td></tr>
+      </table>
+
+      <div class="note">
+        🔁 <b>Aa jaka naya change:</b> Part <b>4 — Variant Label Strip</b> ka background ab Part 2 (Photo Canvas) jaisa <u>same gradient</u> hai. Pehle wo flat <span class="sw" style="background:#F8F9FB"></span> #F8F9FB tha (do alag rang likhe the). Ab poora card ek jaisa surface lagta hai. <br>
+        Aage ke lie kisi bhi partा colour ya sizing badalna to is table me uska naam پuron se bol do.
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

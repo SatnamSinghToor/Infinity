@@ -209,6 +209,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletEmpty => 'No transactions yet';
 
   @override
+  String get walletEmptyBody =>
+      'Money you add, refunds and bonuses will show up here.';
+
+  @override
   String get paymentMethodsTitle => 'Payment Methods';
 
   @override
@@ -463,11 +467,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpAboutTitle => 'About Us';
 
   @override
-  String get helpAboutDugguHeading => 'duggu';
+  String get helpAboutDugguHeading => 'Infinity';
 
   @override
   String get helpAboutDugguBody =>
-      'Duggu brings groceries, daily needs and festival shopping from stores near you to your door, fast.';
+      'Infinity brings groceries, daily needs and festival shopping from stores near you to your door, fast.';
 
   @override
   String get helpAboutStoresHeading => 'Local stores';
@@ -481,7 +485,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpAboutNeighbourhoodsBody =>
-      'Sellers list their own products and prices, delivery partners bring them to you, and you pay how you like: cash on delivery, online or from your Duggu wallet.';
+      'Sellers list their own products and prices, delivery partners bring them to you, and you pay how you like: cash on delivery, online or from your Infinity wallet.';
 
   @override
   String get helpPoliciesTitle => 'Policies';
@@ -498,7 +502,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpPolicyPaymentsBody =>
-      'Online payments are handled by Razorpay. Duggu never sees or stores your card or UPI details.';
+      'Online payments are handled by Razorpay. Infinity never sees or stores your card or UPI details.';
 
   @override
   String get helpPolicyDeliveryHeading => 'Delivery';
@@ -513,7 +517,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpPolicyRefundsBody =>
-      'An order can be cancelled from My Orders while the store has not sent it out. Money you paid from your Duggu wallet goes back to the wallet.';
+      'An order can be cancelled from My Orders while the store has not sent it out. Money you paid from your Infinity wallet goes back to the wallet.';
 
   @override
   String get helpPolicyReturnsHeading => 'Returns';
@@ -526,7 +530,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpTermsTitle => 'Terms & Conditions';
 
   @override
-  String get helpTermsUsingHeading => 'Using Duggu';
+  String get helpTermsUsingHeading => 'Using Infinity';
 
   @override
   String get helpTermsUsingBody =>
@@ -544,7 +548,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpTermsCouponsBody =>
-      'A coupon can be used once per account and only above its minimum order value. Wallet money can only be spent on Duggu orders.';
+      'A coupon can be used once per account and only above its minimum order value. Wallet money can only be spent on Infinity orders.';
 
   @override
   String get helpTermsFairUseHeading => 'Fair use';
@@ -577,7 +581,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpFaqPayAnswer =>
-      'Cash on delivery, online (UPI and cards) or from your Duggu wallet. You can use wallet money together with either of the other two.';
+      'Cash on delivery, online (UPI and cards) or from your Infinity wallet. You can use wallet money together with either of the other two.';
 
   @override
   String get helpFaqCouponsQuestion => 'Can I use more than one coupon?';
@@ -673,7 +677,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpRequestOpen => 'Open';
 
   @override
-  String get helpRateTitle => 'How is your experience with Duggu?';
+  String get helpRateTitle => 'How is your experience with Infinity?';
 
   @override
   String get helpRateNote => 'Tell us more (optional)';
@@ -682,11 +686,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpRateSubmit => 'Submit';
 
   @override
-  String get helpRateThanks => 'Thank you for rating Duggu.';
+  String get helpRateThanks => 'Thank you for rating Infinity.';
 
   @override
   String get helpShareMessage =>
-      'Try Duggu: groceries and daily needs from stores near you, delivered fast.';
+      'Try Infinity: groceries and daily needs from stores near you, delivered fast.';
 
   @override
   String get profileTitle => 'My Profile';
@@ -737,7 +741,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileStale => 'Couldn\'t load your account details.';
 
   @override
-  String get profileSectionPersonal => 'Personal Data';
+  String get profileSectionPersonal => 'My Account';
 
   @override
   String get profileSectionSettings => 'App Settings';
@@ -749,7 +753,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSectionAbout => 'About & Community';
 
   @override
-  String get profileSectionWork => 'Work with Duggu';
+  String get profileSectionWork => 'Work with Infinity';
+
+  @override
+  String get profileSectionDanger => 'Danger zone';
 
   @override
   String get profileMyOrders => 'My Orders';
@@ -830,7 +837,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileWelcomeName => 'Welcome';
 
   @override
-  String get profileWelcomeGuest => 'Welcome to duggu';
+  String get profileWelcomeGuest => 'Welcome to Infinity';
 
   @override
   String get profileLogin => 'Login';
@@ -2368,7 +2375,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authEmailHint => 'Email address';
 
   @override
-  String get authIdHint => 'Enter email or phone number';
+  String get authIdHint => 'Email or mobile number';
 
   @override
   String get authPasswordHint => 'Password';
@@ -2455,7 +2462,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter a few details to set up your account and start shopping.';
 
   @override
-  String get authUserName => 'User Name';
+  String get authUserName => 'Full Name';
 
   @override
   String get authPhone => 'Phone number';
@@ -2470,7 +2477,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authFriendsCode => 'Friends Code (optional)';
 
   @override
-  String get authSubmit => 'Submit Securely';
+  String get authSubmit => 'Sign Up';
 
   @override
   String get authRoleNote =>
@@ -2689,7 +2696,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryAccept => 'Accept';
 
   @override
-  String get deliveryDelivered => 'Delivered';
+  String get deliveryDelivered => 'Mark Delivered';
 
   @override
   String get deliveryViewAll => 'View All';
@@ -2762,7 +2769,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t mark it delivered. Check your connection and try again.';
 
   @override
-  String get deliveryOrdersTitle => 'My Delivery';
+  String get deliveryOrdersTitle => 'My Deliveries';
 
   @override
   String get deliveryOrdersLoading => 'Loading the runs…';
@@ -2793,7 +2800,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryOrdersDeliverTo => 'DELIVER TO';
 
   @override
-  String get deliveryOrdersStoreFallback => 'The seller\'s store';
+  String get deliveryOrdersStoreFallback => 'Pickup store';
 
   @override
   String deliveryOrdersNote(String note) {
@@ -2817,7 +2824,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deliveryOrdersNavigateFailed =>
-      'This location has no map coordinates yet.';
+      'This order has no map location yet.';
 
   @override
   String get deliveryNavigateTitle => 'Directions';
@@ -2867,7 +2874,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryEarningsPayouts => 'Payouts & withdrawals';
 
   @override
-  String get deliveryEarningsEmpty => 'No deliveries completed yet';
+  String get deliveryEarningsEmpty =>
+      'No earnings yet — your delivery fees show up here as you complete runs.';
 
   @override
   String get deliveryEarningsFeeFallback => 'Delivery fee';
@@ -3390,6 +3398,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminCategoriesHidden => ' · hidden';
+
+  @override
+  String get adminCategoriesNoSubs =>
+      'No sub-categories yet — add one and it becomes a card on this category\'s page.';
 
   @override
   String adminCategoriesProductsCount(int count) {
@@ -4622,7 +4634,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checkoutPayNow => 'Pay now';
 
   @override
-  String get cartProceedToPay => 'Proceed To Pay';
+  String get cartProceedToPay => 'Select Payment Method';
 
   @override
   String get cartTotalLabel => 'TOTAL';
@@ -4870,10 +4882,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get deliveryOrdersPayCod => 'Pay via COD';
+  String get deliveryOrdersPayCod => 'Cash to collect';
 
   @override
-  String get deliveryOrdersPaidCod => 'Paid via COD';
+  String get deliveryOrdersPaidCod => 'Cash collected';
 
   @override
   String get deliveryOrdersPaidOnline => 'Paid online';
@@ -4882,14 +4894,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryOrdersCollect => 'Collect from Customer';
 
   @override
-  String get deliveryOrdersEmptyTitle => 'No orders here';
+  String get deliveryOrdersEmptyTitle => 'No deliveries to show';
 
   @override
   String get deliveryOrdersEmptyBody =>
-      'Orders ready for pickup, on the way and delivered show up here.';
+      'Runs waiting for pickup, on the way and delivered all show up here.';
 
   @override
-  String get deliveryEarningsToday => 'Today\'s Earning';
+  String get deliveryEarningsToday => 'Today\'s earnings';
 
   @override
   String get deliveryEarningsWallet => 'Wallet';
@@ -4898,7 +4910,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryEarningsWeek => 'This Week';
 
   @override
-  String get deliveryEarningsSettled => 'Settlement History';
+  String get deliveryEarningsSettled => 'Paid out';
 
   @override
   String get deliveryEarningsHistory => 'Earnings history';
@@ -4916,7 +4928,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryCashToday => 'Collected today';
 
   @override
-  String get deliveryCashTotal => 'Collected in all';
+  String get deliveryCashTotal => 'Collected in total';
 
   @override
   String get deliveryCashEmptyTitle => 'No cash collected yet';
@@ -5117,4 +5129,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get adminSupportEmptyBody =>
       'When someone writes to support, their chat shows up here.';
+
+  @override
+  String get variantSheetAddToCart => 'Add to Cart';
+
+  @override
+  String get variantSheetSelectOption => 'Select an option';
+
+  @override
+  String get variantSheetNoOptions => 'No options available';
+
+  @override
+  String get productAddedToCart => 'added to cart';
+
+  @override
+  String productDeliveryETA(String eta) {
+    return 'Delivery in $eta';
+  }
+
+  @override
+  String get productNoProductsFound => 'No products found';
+
+  @override
+  String get productTryDifferentSearch => 'Try a different search or category';
 }

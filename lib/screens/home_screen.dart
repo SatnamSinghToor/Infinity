@@ -23,6 +23,8 @@ import '../utils/constants.dart';
 import '../utils/format.dart';
 import '../widgets/category_icon_tab.dart';
 import '../widgets/chip_store_sections.dart';
+// Lucide light line icons for the category chips strip.
+import 'package:lucide_icons_flutter/lucide_icons_300.dart';
 import '../widgets/delivery_address_sheet.dart';
 import '../widgets/edit_badge.dart';
 import '../widgets/edit_tools.dart';
@@ -423,7 +425,17 @@ class _HomeScreenState extends State<HomeScreen> {
     final pillRoom = cartProvider.itemCount > 0 ? 70.0 : 0.0;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: _dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+      // Status bar glyphs follow the banner behind them; the three-key strip
+      // below stays solid white on every light or dark headline.
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: _dark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: _dark ? Brightness.dark : Brightness.light,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarDividerColor: Colors.transparent,
+        systemNavigationBarContrastEnforced: false,
+      ),
       child: Scaffold(
         backgroundColor: AppConstants.backgroundColor,
         // Only an admin sees this: it switches the pencils on.
@@ -578,7 +590,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: GoogleFonts.poppins(
                 fontSize: ok ? 22 : 19,
                 height: 1.2,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: ink,
               ),
             ),
@@ -591,7 +603,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: _dark
                     ? Colors.white.withOpacity(0.18)
                     : const Color(0xFF1E88E5).withOpacity(0.14),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
                 eta.distanceLabel!,
@@ -733,7 +745,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 9,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -939,7 +951,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 9,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -983,7 +995,8 @@ class _HomeScreenState extends State<HomeScreen> {
             if (index == chips.length) {
               return CategoryIconTab(
                 label: l10n.homeSeeAll,
-                icon: Iconsax.category,
+                icon: LucideIcons300.layoutGrid,
+                accent: const Color(0xFF6B7280),
                 isSelected: false,
                 onTap: () => MainShell.tab.value = MainShell.categories,
               );
@@ -994,6 +1007,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? (_festival?.chipLabel ?? chip.name)
                   : chip.name,
               icon: chip.icon,
+              accent: chip.accent,
               isSelected: productProvider.selectedCategory == chip.name,
               onTap: () {
                 productProvider.setBrand(null);
@@ -1020,11 +1034,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Swipeable promo banner with dot indicators.
   Widget _buildPromoCarousel() {
-    // The offer cards wear the festival page's tall card shape: the same
-    // width, and one and a half times as tall.
+    // The offer cards keep the festival page's card shape — the same width,
+    // a touch taller than it is wide — but sit shorter than the festival
+    // page's own tall cards, so Home scrolls to its shelves sooner.
     final cardHeight =
         (MediaQuery.of(context).size.width * _promoFraction - 2 * _promoGap) *
-            1.5;
+            1.1;
     final l10n = AppLocalizations.of(context);
     final slideCount = _promoSlideCount(l10n);
     return Column(
@@ -1086,7 +1101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         margin:
                             const EdgeInsets.symmetric(horizontal: _promoGap),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22),
+                          borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
                               color: AppConstants.primaryColor
@@ -1097,7 +1112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(22),
+                          borderRadius: BorderRadius.circular(10),
                           child: _bannerPicture(banner['image_url'] as String),
                         ),
                       ),
@@ -1107,7 +1122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Container(
                     margin: const EdgeInsets.symmetric(horizontal: _promoGap),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(10),
                       gradient: const LinearGradient(
                         begin: Alignment.bottomRight,
                         end: Alignment.topLeft,
@@ -1127,7 +1142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(10),
                       child: Stack(
                         children: [
                           Positioned(
@@ -1160,7 +1175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         style: GoogleFonts.poppins(
                                           color: Colors.white,
                                           fontSize: 18,
-                                          fontWeight: FontWeight.w800,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -1184,7 +1199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     color: Colors.white.withOpacity(0.22),
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: const Icon(
                                     Iconsax.discount_shape_copy,
@@ -1330,7 +1345,7 @@ class _HomeScreenState extends State<HomeScreen> {
             failed ? l10n.homeLoadFailed : l10n.homeNoProducts,
             style: GoogleFonts.poppins(
               fontSize: 15,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: const Color(0xFF757575),
             ),
             maxLines: 1,

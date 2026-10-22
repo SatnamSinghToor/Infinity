@@ -229,16 +229,30 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                       children: [
                         Icon(
                           Iconsax.card,
-                          size: 72,
+                          size: 64,
                           color: Colors.grey[300],
                         ),
                         const SizedBox(height: 16),
                         Text(
                           l10n.paymentMethodsEmpty,
-                          style: TextStyle(
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w600,
+                            color: AppConstants.textPrimaryColor,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          height: 48,
+                          child: ElevatedButton.icon(
+                            onPressed: _addMethod,
+                            icon: const Icon(Iconsax.add, size: 18),
+                            label: Text(
+                              l10n.paymentMethodsAddTitle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                       ],
@@ -248,14 +262,14 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
               : ListView.separated(
                   padding: const EdgeInsets.all(16),
                   itemCount: _methods.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final method = _methods[index];
                     return Container(
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
                         border: method.isDefault
                             ? Border.all(
                                 color: AppConstants.primaryColor, width: 1.5)
@@ -279,7 +293,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                                     Text(
                                       method.label,
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.w700),
+                                          fontWeight: FontWeight.w600),
                                     ),
                                     if (method.isDefault) ...[
                                       const SizedBox(width: 6),
@@ -292,13 +306,13 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                                           color: AppConstants.primaryColor
                                               .withOpacity(0.12),
                                           borderRadius:
-                                              BorderRadius.circular(4),
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Text(
                                           l10n.paymentMethodsDefaultBadge,
                                           style: const TextStyle(
-                                            fontSize: 9,
-                                            fontWeight: FontWeight.bold,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600,
                                             color: AppConstants.primaryColor,
                                           ),
                                         ),

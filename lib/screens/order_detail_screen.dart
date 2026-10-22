@@ -12,6 +12,7 @@ import '../providers/product_provider.dart';
 import '../services/invoice_service.dart';
 import '../services/supabase_service.dart';
 import '../utils/constants.dart';
+import '../utils/tokens.dart';
 import '../widgets/gradient_app_bar.dart';
 import '../widgets/role_common.dart';
 import '../utils/format.dart';
@@ -165,17 +166,22 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             _buildSection(l10n.orderDetailSectionInfo),
             const SizedBox(height: 8),
             _buildInfoCard([
-              _buildInfoRow(l10n.orderDetailOrderId, order.id),
+              _buildInfoRow(l10n.orderDetailOrderId, '#${order.shortRef}'),
               _buildInfoRow(l10n.orderDetailDate, order.formattedDate),
               _buildInfoRow(l10n.orderDetailStatusLabel, order.statusLabel),
             ]),
             const SizedBox(height: 16),
             _buildSection(l10n.orderDetailSectionAddress),
             const SizedBox(height: 8),
+            // Old orders may not carry the contact fields; an empty row
+            // reads as a bug, so it is dropped instead of drawn blank.
             _buildInfoCard([
-              _buildInfoRow(l10n.orderDetailName, order.name),
-              _buildInfoRow(l10n.orderDetailPhone, order.phone),
-              _buildInfoRow(l10n.orderDetailAddress, order.address),
+              if (order.name.isNotEmpty)
+                _buildInfoRow(l10n.orderDetailName, order.name),
+              if (order.phone.isNotEmpty)
+                _buildInfoRow(l10n.orderDetailPhone, order.phone),
+              if (order.address.isNotEmpty)
+                _buildInfoRow(l10n.orderDetailAddress, order.address),
             ]),
             const SizedBox(height: 16),
             _buildSection(l10n.orderDetailSectionItems),
@@ -291,13 +297,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             const SizedBox(height: 24),
             if (order.status == 'pending' || order.status == 'confirmed')
               SizedBox(
-                height: 48,
+                height: 44,
                 child: Pressable(
                     child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppConstants.dangerColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   onPressed: () {
@@ -306,8 +312,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   child: Text(
                     l10n.orderDetailCancelOrder,
                     style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
                       color: Colors.white,
                     ),
                     maxLines: 1,
@@ -390,35 +396,55 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     // The journey has to match the status underneath it: this card used to
     // say "Order Placed" with three grey steps even for a delivered order.
     final step = order.stepIndex;
+    // The solid orange slab read as one heavy block; a plain card with a
+    // small status pill carries the same facts at a third of the weight.
+    final cancelled = order.status == 'cancelled';
+    final ink = cancelled ? AppConstants.dangerColor : AppConstants.primaryColor;
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [AppConstants.primaryColor, AppConstants.accentColor],
-        ),
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        borderRadius: AppRadius.card,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         children: [
-          Text(
-            l10n.orderDetailStatusWith(order.statusLabel),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            order.id,
-            style: GoogleFonts.poppins(
-              color: Colors.white.withOpacity(0.9),
-              fontSize: 14,
-            ),
+          Row(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: ink.withOpacity(0.10),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  order.statusLabel,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: ink,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Text(
+                '#${order.shortRef}',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 12),
           Row(
@@ -454,16 +480,27 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   Widget _buildSection(String title) {
     return Text(
       title,
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      style: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: AppConstants.textPrimaryColor,
+      ),
     );
   }
 
   Widget _buildInfoCard(List<Widget> children) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.cardPadding),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.card,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(children: children),
     );
@@ -479,19 +516,24 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
-              color: isPrimary
-                  ? AppConstants.primaryColor
-                  : isGreen
-                      ? Colors.green
-                      : AppConstants.textPrimaryColor,
+          Text(label, style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: isBold ? FontWeight.w600 : FontWeight.w500,
+                height: 1.35,
+                color: isPrimary
+                    ? AppConstants.primaryColor
+                    : isGreen
+                        ? Colors.green
+                        : AppConstants.textPrimaryColor,
+              ),
             ),
           ),
         ],
@@ -506,7 +548,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.card,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -514,23 +563,43 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           Row(
             children: [
               Container(
-                width: 50,
-                height: 50,
+                width: 46,
+                height: 46,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF66BB6A), Color(0xFF2E7D32)],
-                  ),
+                  color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Center(
-                  child: Text(
-                    item.product.name.isNotEmpty ? item.product.name[0] : '?',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: item.product.gallery.isNotEmpty
+                      ? Image.network(
+                          item.product.gallery.first,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Center(
+                            child: Text(
+                              item.product.name.isNotEmpty
+                                  ? item.product.name[0]
+                                  : '?',
+                              style: const TextStyle(
+                                color: AppConstants.primaryColor,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Center(
+                          child: Text(
+                            item.product.name.isNotEmpty
+                                ? item.product.name[0]
+                                : '?',
+                            style: const TextStyle(
+                              color: AppConstants.primaryColor,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -541,9 +610,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     Text(
                       item.product.name,
                       style: const TextStyle(
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                         fontSize: 14,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       l10n.orderDetailQty(item.quantity),
@@ -555,7 +626,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               Text(
                 formatRupees(item.totalPrice),
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   fontSize: 14,
                   color: AppConstants.primaryColor,
                 ),
@@ -718,7 +789,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             Pressable(
                 child: TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel',
+              child: Text(l10n.orderDetailCancel,
                   maxLines: 1, overflow: TextOverflow.ellipsis),
             )),
             Pressable(
@@ -761,7 +832,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   }
                 }
               },
-              child: const Text('Submit',
+              child: Text(l10n.orderDetailSubmit,
                   maxLines: 1, overflow: TextOverflow.ellipsis),
             )),
           ],
@@ -799,7 +870,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 SnackBar(
                   content: Text(
                     cancelled
-                        ? l10n.orderDetailCancelled(order.id)
+                        ? l10n.orderDetailCancelled(order.shortRef)
                         : l10n.orderDetailCancelFailed,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -834,20 +905,21 @@ class _StatusStep extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(7),
           decoration: BoxDecoration(
-            color: active ? AppConstants.primaryColor : Colors.grey[300],
+            color: active ? AppConstants.primaryColor : Colors.grey[200],
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, color: Colors.white, size: 18),
+          child: Icon(icon,
+              color: active ? Colors.white : Colors.grey[400], size: 15),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 5),
         Text(
           label,
           style: TextStyle(
-            fontSize: 10,
-            fontWeight: active ? FontWeight.bold : FontWeight.w500,
-            color: active ? AppConstants.primaryColor : Colors.grey,
+            fontSize: 9.5,
+            fontWeight: active ? FontWeight.w600 : FontWeight.w400,
+            color: active ? AppConstants.primaryColor : Colors.grey[500],
           ),
         ),
       ],

@@ -8,6 +8,7 @@ import '../../providers/auth_provider.dart';
 import '../../widgets/notification_bell.dart';
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../utils/format.dart';
 import '../../utils/safe_state.dart';
@@ -232,7 +233,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                 l10n.sellerDashHi(auth.userName),
                 style: const TextStyle(
                   fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 4),
@@ -240,7 +241,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                 l10n.sellerDashSub,
                 style: TextStyle(color: Colors.grey[600], fontSize: 13),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: AppSpacing.lg),
               GridView.count(
                 crossAxisCount: 2,
                 shrinkWrap: true,
@@ -295,17 +296,17 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: AppSpacing.lg),
               _WeekSalesCard(sales: _weekSales),
               if (_products.isNotEmpty) ...[
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSpacing.lg),
                 _CategoryCountCard(counts: _categoryCounts),
               ],
-              const SizedBox(height: 22),
+              const SizedBox(height: AppSpacing.xl),
               Text(
                 l10n.sellerDashQuickActions,
                 style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
               Row(
@@ -348,7 +349,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                     l10n.sellerDashMyProducts,
                     style: const TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   Pressable(
@@ -389,13 +390,16 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(AppRadius.md),
+                            border: Border.all(
+                              color: context.tokens.border,
+                            ),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(10),
                                 child: SizedBox(
                                   width: 84,
                                   height: 64,
@@ -433,7 +437,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: AppConstants.primaryColor,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
@@ -451,7 +455,7 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                     l10n.sellerDashRecentOrders,
                     style: const TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   Pressable(
@@ -474,7 +478,8 @@ class _SellerDashboardScreenState extends State<SellerDashboardScreen> {
                         margin: const EdgeInsets.only(bottom: 8),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppRadius.md),
+                          border: Border.all(color: context.tokens.border),
                         ),
                         child: ListTile(
                           title: Text(
@@ -513,10 +518,11 @@ class _QuickAction extends StatelessWidget {
         child: GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppRadius.button),
+          border: Border.all(color: context.tokens.border),
         ),
         child: Column(
           children: [
@@ -557,10 +563,11 @@ class _StatTile extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: AppRadius.card,
+            border: Border.all(color: context.tokens.border),
           ),
           child: Row(
             children: [
@@ -568,7 +575,8 @@ class _StatTile extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: tint.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius:
+                      BorderRadius.circular(AppRadius.button - 2),
                 ),
                 child: Icon(icon, color: tint, size: 22),
               ),
@@ -586,7 +594,7 @@ class _StatTile extends StatelessWidget {
                         maxLines: 1,
                         style: const TextStyle(
                           fontSize: 19,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -635,7 +643,8 @@ class _WeekSalesCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        border: Border.all(color: context.tokens.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -644,7 +653,7 @@ class _WeekSalesCard extends StatelessWidget {
             l10n.sellerDashWeekSales,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 2),
           Text(
@@ -656,7 +665,7 @@ class _WeekSalesCard extends StatelessWidget {
               color: AppConstants.textSecondaryColor,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: AppSpacing.lg),
           SizedBox(
             height: 150,
             child: Row(
@@ -676,7 +685,7 @@ class _WeekSalesCard extends StatelessWidget {
                               maxLines: 1,
                               style: const TextStyle(
                                 fontSize: 10,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
@@ -695,7 +704,7 @@ class _WeekSalesCard extends StatelessWidget {
                                     ? AppConstants.primaryColor
                                     : AppConstants.primaryColor
                                         .withOpacity(0.35),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                             ),
                           ),
@@ -708,7 +717,7 @@ class _WeekSalesCard extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight:
-                                  i == 6 ? FontWeight.w800 : FontWeight.w500,
+                                  i == 6 ? FontWeight.w600 : FontWeight.w500,
                               color: AppConstants.textSecondaryColor,
                             ),
                           ),
@@ -739,7 +748,8 @@ class _CategoryCountCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        border: Border.all(color: context.tokens.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -748,7 +758,7 @@ class _CategoryCountCard extends StatelessWidget {
             l10n.sellerDashCategoryCount,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 12),
           for (final (name, count) in counts.take(6))
@@ -767,7 +777,7 @@ class _CategoryCountCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(10),
                       child: LinearProgressIndicator(
                         value: count / top,
                         minHeight: 10,
@@ -785,7 +795,7 @@ class _CategoryCountCard extends StatelessWidget {
                       maxLines: 1,
                       style: const TextStyle(
                         fontSize: 13,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),

@@ -84,7 +84,7 @@ class AuthSkipButton extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 13.5,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
                 color: AppConstants.textPrimaryColor,
               ),
             ),
@@ -98,7 +98,7 @@ class AuthSkipButton extends StatelessWidget {
       style: TextButton.styleFrom(
         foregroundColor: color,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

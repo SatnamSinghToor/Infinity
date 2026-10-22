@@ -184,7 +184,7 @@ class DeliverySettingsScreen extends StatelessWidget {
           l10n.deliveryProfileSettings,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+          style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w600),
         ),
       ),
       body: ListView(
@@ -193,7 +193,7 @@ class DeliverySettingsScreen extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: tokens.card,
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: AppRadius.card,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +204,7 @@ class DeliverySettingsScreen extends StatelessWidget {
                     l10n.deliverySettingsGeneral,
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: tokens.textPrimary,
                     ),
                   ),

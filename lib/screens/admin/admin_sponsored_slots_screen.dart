@@ -4,6 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/tokens.dart';
 import '../../widgets/gradient_app_bar.dart';
 import '../../utils/format.dart';
 import '../../utils/safe_state.dart';
@@ -171,7 +172,8 @@ class _AdminSponsoredSlotsScreenState extends State<AdminSponsoredSlotsScreen> {
                 child: ListView.separated(
                   padding: const EdgeInsets.all(16),
                   itemCount: _slots.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: AppSpacing.listGap),
                   itemBuilder: (context, index) {
                     final s = _slots[index];
                     final id = s['id'] as String;
@@ -181,12 +183,8 @@ class _AdminSponsoredSlotsScreenState extends State<AdminSponsoredSlotsScreen> {
                         (s['products'] as Map?)?['name'] as String? ??
                             l10n.adminSlotsUnknownProduct;
 
-                    return Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                    return RoleCard(
+                      padding: const EdgeInsets.all(AppSpacing.cardPadding),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -197,33 +195,19 @@ class _AdminSponsoredSlotsScreenState extends State<AdminSponsoredSlotsScreen> {
                                 child: Text(
                                   s['headline'] as String? ?? '',
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.5,
                                   ),
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 3,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: _statusColor(
-                                    status,
-                                  ).withOpacity(0.15),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  status,
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: _statusColor(status),
-                                  ),
-                                ),
+                              const SizedBox(width: AppSpacing.sm),
+                              RoleStatusChip(
+                                label: RoleStatusChip.titled(status),
+                                color: _statusColor(status),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: AppSpacing.xs),
                           Text(
                             l10n.adminSlotsProduct(productName),
                             style: TextStyle(
@@ -251,7 +235,7 @@ class _AdminSponsoredSlotsScreenState extends State<AdminSponsoredSlotsScreen> {
                               ),
                             ),
                           if (status == 'PENDING') ...[
-                            const SizedBox(height: 10),
+                            const SizedBox(height: AppSpacing.md),
                             if (isUpdating)
                               const Align(
                                 alignment: Alignment.centerRight,

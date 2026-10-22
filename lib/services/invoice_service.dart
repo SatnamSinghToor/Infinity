@@ -22,18 +22,18 @@ class InvoiceService {
     final bytes = await build(order, orderLabel: orderLabel);
     final dir = await getTemporaryDirectory();
     final shortId = order.id.length > 8 ? order.id.substring(0, 8) : order.id;
-    final file = File('${dir.path}/duggu-invoice-$shortId.pdf');
+    final file = File('${dir.path}/infinity-invoice-$shortId.pdf');
     await file.writeAsBytes(bytes);
     await Share.shareXFiles(
       [XFile(file.path, mimeType: 'application/pdf')],
-      subject: 'Duggu Store invoice $shortId',
+      subject: 'Infinity invoice $shortId',
     );
   }
 
   /// The bill itself, as PDF bytes.
   static Future<List<int>> build(Order order, {String? orderLabel}) async {
     final doc =
-        pw.Document(title: 'Invoice ${order.id}', author: 'Duggu Store');
+        pw.Document(title: 'Invoice ${order.id}', author: 'Infinity');
     final discount = (order.itemsSubtotal +
             order.deliveryFee +
             order.tip -
@@ -72,7 +72,7 @@ class InvoiceService {
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Text('Duggu Store',
+                pw.Text('Infinity',
                     style: const pw.TextStyle(
                         fontSize: 24,
                         fontWeight: pw.FontWeight.bold,
@@ -153,7 +153,7 @@ class InvoiceService {
             pw.Spacer(),
             pw.Divider(color: muted),
             pw.Text(
-              'Thank you for shopping with Duggu Store. '
+              'Thank you for shopping with Infinity. '
               'This is a computer-generated bill and needs no signature.',
               style: const pw.TextStyle(fontSize: 9, color: muted),
             ),

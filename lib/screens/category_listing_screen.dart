@@ -196,7 +196,7 @@ class _CategoryListingScreenState extends State<CategoryListingScreen> {
                         fontSize: 10.5,
                         height: 1.2,
                         fontWeight:
-                            selected ? FontWeight.w700 : FontWeight.w500,
+                            selected ? FontWeight.w600 : FontWeight.w500,
                         color: selected
                             ? AppConstants.primaryColor
                             : AppConstants.textPrimaryColor,

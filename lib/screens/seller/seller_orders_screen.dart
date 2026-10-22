@@ -415,7 +415,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                           : AppConstants.primaryColor,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppRadius.button),
                     ),
                   ),
                 ),
@@ -486,16 +486,22 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
             Expanded(
               child: visibleOrders.isEmpty
                   ? RoleEmpty(
-                      icon: Iconsax.receipt,
-                      title: l10n.sellerOrdersEmptyTitle,
-                      message: l10n.sellerOrdersEmptyBody,
+                      icon: _orders.isEmpty
+                          ? Iconsax.receipt
+                          : Iconsax.search_normal_1,
+                      title: _orders.isEmpty
+                          ? l10n.sellerOrdersEmptyTitle
+                          : l10n.sellerProductsNoMatches,
+                      message: _orders.isEmpty
+                          ? l10n.sellerOrdersEmptyBody
+                          : l10n.sellerProductsNoMatchesBody,
                     )
                   : RefreshIndicator(
                       onRefresh: _load,
                       child: ListView.separated(
                         padding: const EdgeInsets.all(16),
                         itemCount: visibleOrders.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 10),
+                        separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.listGap),
                         itemBuilder: (context, index) {
                           final o = visibleOrders[index];
                           final id = o['id'] as String;
@@ -518,10 +524,10 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                             id: id,
                             seen: _seenIds,
                             child: Container(
-                              padding: const EdgeInsets.all(14),
+                              padding: const EdgeInsets.all(AppSpacing.lg),
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: AppRadius.card,
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -540,7 +546,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
-                                                fontWeight: FontWeight.w700,
+                                                fontWeight: FontWeight.w600,
                                               ),
                                             ),
                                             const SizedBox(height: 2),
@@ -570,21 +576,22 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                                       const SizedBox(width: AppSpacing.sm),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 3,
+                                          horizontal: 10,
+                                          vertical: 4,
                                         ),
                                         decoration: BoxDecoration(
                                           color: _statusColor(
                                             status,
                                           ).withOpacity(0.15),
-                                          borderRadius:
-                                              BorderRadius.circular(6),
+                                          borderRadius: BorderRadius.circular(
+                                            AppRadius.pill,
+                                          ),
                                         ),
                                         child: Text(
                                           _statusLabel(status),
                                           style: TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
                                             color: _statusColor(status),
                                           ),
                                         ),
@@ -602,9 +609,10 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                                         ' × ${item['quantity']}',
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 13,
-                                          color: Colors.grey[700],
+                                          color: AppConstants
+                                              .textSecondaryColor,
                                         ),
                                       ),
                                     ),
@@ -624,15 +632,18 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Icon(Iconsax.location,
-                                          size: 14, color: Colors.grey[500]),
+                                          size: 14,
+                                          color: AppConstants
+                                              .textSecondaryColor),
                                       const SizedBox(width: 4),
                                       Expanded(
                                         child: Text(
                                           o['delivery_address'] as String? ??
                                               '',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 12,
-                                            color: Colors.grey[600],
+                                            color: AppConstants
+                                                .textSecondaryColor,
                                           ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
@@ -646,7 +657,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
                                         (o['total_amount'] as num?) ?? 0),
                                     style: const TextStyle(
                                       fontSize: 15,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                       color: AppConstants.primaryColor,
                                     ),
                                   ),

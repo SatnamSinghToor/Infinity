@@ -103,7 +103,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.gutter,
+              AppSpacing.xs,
+              AppSpacing.gutter,
+              AppSpacing.xl,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -118,18 +124,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const AuthSkipButton(closeAllScreens: true, pill: true),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.lg),
                 Text(
                   l10n.authCreateAccount,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 19,
+                    fontWeight: FontWeight.w600,
                     color: AppConstants.textPrimaryColor,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Text(
                   l10n.authCreateBody,
                   style: const TextStyle(
@@ -138,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: AppConstants.textSecondaryColor,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: AppSpacing.xl),
                 TextField(
                   controller: _nameController,
                   textCapitalization: TextCapitalization.words,
@@ -147,11 +153,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     prefix: const Icon(Iconsax.user),
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSpacing.lg),
                 Row(
                   children: [
                     const PhoneCodeChip(),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: TextField(
                         controller: _phoneController,
@@ -161,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSpacing.lg),
                 TextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -170,7 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     prefix: const Icon(Iconsax.sms),
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSpacing.lg),
                 TextField(
                   controller: _passwordController,
                   obscureText: _obscure,
@@ -184,7 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     )),
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: AppSpacing.lg),
                 TextField(
                   controller: _codeController,
                   textCapitalization: TextCapitalization.characters,
@@ -193,7 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     prefix: const Icon(Iconsax.gift),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpacing.xl),
                 SizedBox(
                   width: double.infinity,
                   height: AppControl.lg,
@@ -202,10 +208,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onPressed: ready ? _submit : null,
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      disabledBackgroundColor: const Color(0xFFBDBDBD),
-                      disabledForegroundColor: Colors.white,
                     ),
                     child: isLoading
                         ? const SizedBox(
@@ -228,7 +232,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   )),
                 ),
                 const GoogleAuthButton(),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.md),
                 Text(
                   l10n.authRoleNote,
                   style: const TextStyle(

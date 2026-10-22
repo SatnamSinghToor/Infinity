@@ -125,7 +125,7 @@ class FestivalSections extends StatelessWidget {
                         style: GoogleFonts.playfairDisplay(
                           fontSize: 34,
                           height: 1.15,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: accent,
                         ),
                       );
@@ -318,7 +318,7 @@ class PictureCard extends StatelessWidget {
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(10),
         image: full != null
             ? DecorationImage(
                 image: CachedNetworkImageProvider(full), fit: BoxFit.cover)
@@ -392,7 +392,7 @@ class PictureCard extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontSize: 19,
                         height: 1.2,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
                     ),
@@ -417,7 +417,7 @@ class PictureCard extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.22),
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -429,7 +429,7 @@ class PictureCard extends StatelessWidget {
                               style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontSize: 12.5,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             const SizedBox(width: 4),
@@ -633,7 +633,7 @@ class _EmptyFestival extends StatelessWidget {
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               fontSize: 17,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppConstants.textPrimaryColor,
             ),
           ),

@@ -420,7 +420,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   Text(
                     l10n.searchRecent,
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                        fontSize: 16, fontWeight: FontWeight.w600),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -462,7 +462,7 @@ class _SearchScreenState extends State<SearchScreen> {
               Text(
                 l10n.searchTrySearching,
                 style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

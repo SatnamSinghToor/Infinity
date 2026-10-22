@@ -130,15 +130,15 @@ class _Group {
 }
 
 Widget sectionHeading(String text, {String? subtitle}) => Padding(
-      padding: const EdgeInsets.fromLTRB(16, 22, 16, 12),
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             text.replaceAll('/', ' & '),
             style: GoogleFonts.poppins(
-              fontSize: 21,
-              fontWeight: FontWeight.w700,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
               color: AppConstants.textPrimaryColor,
             ),
             maxLines: 1,
@@ -243,7 +243,7 @@ class _CollageCard extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(6, 6, 6, 8),
         decoration: BoxDecoration(
           color: const Color(0xFFEEF1F8),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           children: [
@@ -319,7 +319,7 @@ class _CollageCard extends StatelessWidget {
 
   Widget _thumb(String? url, int index) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(9),
+      borderRadius: BorderRadius.circular(10),
       child: ColoredBox(
         color: url == null
             ? categoryTints[index % categoryTints.length]
@@ -524,7 +524,7 @@ class _SeeAllTile extends StatelessWidget {
           height: 50,
           decoration: BoxDecoration(
             color: const Color(0xFFEEF1F8),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(color: const Color(0xFFDDE2F0)),
           ),
           child: Row(

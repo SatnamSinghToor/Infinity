@@ -156,16 +156,20 @@ class _AdminSupportScreenState extends State<AdminSupportScreen> {
                 child: ListView.separated(
                   padding: const EdgeInsets.all(16),
                   itemCount: _threads.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: AppSpacing.listGap),
                   itemBuilder: (context, i) {
                     final t = _threads[i];
                     final name = _names[t.thread] ?? t.thread.substring(0, 8);
                     return Material(
                       color: tokens.card,
-                      borderRadius: BorderRadius.circular(16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                        side: BorderSide(color: tokens.border),
+                      ),
                       child: ListTile(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(AppRadius.lg),
                         ),
                         onTap: () => Navigator.push(
                           context,
@@ -185,7 +189,7 @@ class _AdminSupportScreenState extends State<AdminSupportScreen> {
                           name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.w700),
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         subtitle: Text(
                           (t.last['body'] as String?) ?? '',
@@ -212,14 +216,15 @@ class _AdminSupportScreenState extends State<AdminSupportScreen> {
                                 ),
                                 decoration: BoxDecoration(
                                   color: tokens.primary,
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius:
+                                      BorderRadius.circular(AppRadius.pill),
                                 ),
                                 child: Text(
                                   '${t.unread}',
                                   style: const TextStyle(
                                     fontSize: 11,
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),

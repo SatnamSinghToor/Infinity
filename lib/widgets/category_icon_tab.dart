@@ -12,12 +12,18 @@ class CategoryIconTab extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
+  /// The idle ink of the icon. Each chip hands its own accent so the strip
+  /// reads as a family of coloured storefronts; the selected chip paints
+  /// the label white over the app's gradient instead.
+  final Color accent;
+
   const CategoryIconTab({
     super.key,
     required this.label,
     required this.icon,
     required this.isSelected,
     required this.onTap,
+    this.accent = const Color(0xFF6B7280),
   });
 
   @override
@@ -62,7 +68,7 @@ class CategoryIconTab extends StatelessWidget {
                   size: 24,
                   color: isSelected
                       ? Colors.white
-                      : AppConstants.primaryColor.withOpacity(0.85),
+                      : accent,
                 ),
               ),
               const SizedBox(height: 6),
@@ -74,7 +80,7 @@ class CategoryIconTab extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.poppins(
                   fontSize: 11,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   color: isSelected
                       ? AppConstants.textPrimaryColor
                       : AppConstants.textSecondaryColor,

@@ -430,7 +430,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     return Container(
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(10),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 20),
       alignment: alignment,
@@ -461,7 +461,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                   : l10n.notificationsEmptyTitle,
               style: GoogleFonts.poppins(
                 fontSize: 18,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 color: Colors.grey[600],
               ),
             ),
@@ -534,9 +534,9 @@ class _NotificationTile extends StatelessWidget {
               Colors.white,
             )
           : Colors.white,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(10),
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(10),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(14, 14, 4, 14),
@@ -565,7 +565,7 @@ class _NotificationTile extends StatelessWidget {
                             style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight:
-                                  unread ? FontWeight.w700 : FontWeight.w500,
+                                  unread ? FontWeight.w600 : FontWeight.w500,
                             ),
                           ),
                         ),

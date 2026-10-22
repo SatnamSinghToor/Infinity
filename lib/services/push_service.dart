@@ -35,7 +35,7 @@ class PushService {
   static VoidCallback? onPush;
 
   static const _channelId = 'duggu_push';
-  static const _channelName = 'Duggu Store updates';
+  static const _channelName = 'Infinity updates';
 
   /// A new order landing — for the seller whose store it's for, and the
   /// rider it gets assigned to — is the one alert either of them is
@@ -106,7 +106,7 @@ class PushService {
     if (_localReady) return;
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     await _local.initialize(
-      const InitializationSettings(android: android),
+      settings: const InitializationSettings(android: android),
       onDidReceiveNotificationResponse: (_) => _openInbox(),
     );
     final androidPlugin = _local.resolvePlatformSpecificImplementation<
@@ -160,15 +160,18 @@ class PushService {
       if (prefs.getString(_signedInKey) != recipient) return;
     }
     final notification = message.notification;
-    final title = notification?.title ?? 'Duggu Store';
-    final body = notification?.body ?? '';
-    if (title.isEmpty && body.isEmpty) return;
-    final loud = message.data['loud'] == 'true';
+    final data = message.data;
+    final shown = _presentableText(push: notification, data: data);
+    // Nothing readable anywhere — better a silent drop than a heads-up
+    // that says only "Infinity" and nothing else.
+    if (shown == null) return;
+    final (title, body) = shown;
+    final loud = data['loud'] == 'true';
     await _local.show(
-      notification?.hashCode ?? message.messageId?.hashCode ?? 0,
-      title,
-      body,
-      NotificationDetails(
+      id: notification?.hashCode ?? message.messageId?.hashCode ?? 0,
+      title: title,
+      body: body,
+      notificationDetails: NotificationDetails(
         android: loud
             ? AndroidNotificationDetails(
                 _loudChannelId,
@@ -199,6 +202,78 @@ class PushService {
     // the phone in the first place. Awaited so a background isolate isn't
     // torn down mid-sentence.
     if (loud) await _announce(title);
+  }
+
+  /// What the tray actually reads out. The order of preference mirrors how
+  /// much each source is trusted to be real text the reader can act on:
+  ///
+  /// 1. the FCM `notification` block (what the server meant for the tray),
+  /// 2. the same title/body repeated in `data` (send-push forwards both),
+  /// 3. a sentence written for the notification's `type` — the same
+  ///    lowercase types the in-app inbox keys its icons on
+  ///    (see notifications_screen.dart `_icon`).
+  ///
+  /// Returns null only when even the fallback has nothing, so the caller
+  /// can drop the message instead of showing a bare "Infinity".
+  static (String, String)? _presentableText({
+    RemoteNotification? push,
+    required Map<String, dynamic> data,
+  }) {
+    final loud = data['loud'] == 'true';
+    final (fallbackTitle, fallbackBody) = _defaultText(
+      data['type'] as String?,
+      loud: loud,
+      hasOrderId: data['order_id'] is String,
+    );
+    final title = (push?.title ?? data['title'] as String? ?? fallbackTitle)
+        .trim();
+    var body = (push?.body ?? data['body'] as String? ?? fallbackBody).trim();
+    // A title with no body reads like a bug on the lock screen — the
+    // type's own sentence is at least an explanation of what happened.
+    if (body.isEmpty) body = fallbackBody;
+    if (title.isEmpty && body.isEmpty) return null;
+    return (title, body);
+  }
+
+  /// The sentence per notification type, for the case a push arrives with
+  /// data only (no `notification` block — something sent it straight to
+  /// FCM and skipped the usual send-push path). Deliberately says what
+  /// happened *and* what to do about it, the same things the inbox card
+  /// underlines with its icon.
+  static (String, String) _defaultText(
+    String? type, {
+    required bool loud,
+    required bool hasOrderId,
+  }) {
+    switch ((type ?? '').toLowerCase()) {
+      case 'order':
+        return loud
+            ? ('New order received', 'Open the order to accept it.')
+            : ('Order update', 'Open the app to see your order details.');
+      case 'delivery':
+        return loud
+            ? ('New delivery assigned',
+                'Open the app to see the delivery details.')
+            : ('Delivery update', 'Open the app to see your delivery status.');
+      case 'stock':
+        return ('Back in stock',
+            'A product on your alert list is available again.');
+      case 'promo':
+      case 'promotion':
+        return ('New offer', 'Open the app to see what is on sale.');
+      case 'wallet':
+        return ('Wallet update', 'Open the app to see your wallet details.');
+      case 'account':
+        return ('Account update', 'Open the app to see what changed.');
+      default:
+        // The two loud titles the trigger marks are orders to act on:
+        // name them for what they are rather than the app's name.
+        return loud
+            ? ('New order received', 'Open the app to accept the order.')
+            : hasOrderId
+                ? ('Order update', 'Open the app to see your order details.')
+                : ('Infinity', 'Open the app to see the latest updates.');
+    }
   }
 
   static Future<void> _announce(String text) async {
