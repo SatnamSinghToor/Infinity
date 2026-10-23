@@ -493,7 +493,7 @@ class _ProductCardState extends State<ProductCard> {
         decoration: BoxDecoration(
           color: Colors.grey[200],
           borderRadius: BorderRadius.circular(ProductCardMetrics.controlRadius),
-          border: Border.all(color: Colors.grey[300]!, width: 1),
+          border: Border.all(color: Colors.grey[300]!, width: 0.6),
         ),
         alignment: Alignment.center,
         child: Text(
@@ -517,7 +517,7 @@ class _ProductCardState extends State<ProductCard> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(ProductCardMetrics.controlRadius),
-          border: Border.all(color: _orange, width: 1),
+          border: Border.all(color: _orange, width: 0.6),
         ),
         child: Row(
           children: [
@@ -623,7 +623,7 @@ class _ProductCardState extends State<ProductCard> {
             color: Colors.white,
             borderRadius:
                 BorderRadius.circular(ProductCardMetrics.controlRadius),
-            border: Border.all(color: _orange, width: 1),
+            border: Border.all(color: _orange, width: 0.6),
           ),
           child: ClipRRect(
             borderRadius:
@@ -684,7 +684,7 @@ class _ProductCardState extends State<ProductCard> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(ProductCardMetrics.controlRadius),
-          border: Border.all(color: _orange, width: 1),
+          border: Border.all(color: _orange, width: 0.6),
         ),
         alignment: Alignment.center,
         child: Text(
