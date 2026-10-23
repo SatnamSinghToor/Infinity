@@ -36,6 +36,10 @@ class PaymentService {
     final completer = Completer<RazorpayPaymentResult>();
     final razorpay = Razorpay();
     bool _cleanedUp = false;
+    // The Razorpay order the payment is riding on: the error event does not
+    // carry it, but a capture that succeeded while the callback was lost can
+    // only be confirmed against the order the checkout was opened with.
+    String? _orderId;
 
     void cleanup() {
       if (!_cleanedUp) {
@@ -95,13 +99,39 @@ class PaymentService {
 
     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (
       PaymentFailureResponse response,
-    ) {
+    ) async {
       timeout.cancel();
-      completer.complete(
-        RazorpayPaymentResult.failure(
-          response.message ?? 'Payment was not completed.',
-        ),
-      );
+      final message = response.message ?? 'Payment was not completed.';
+      // The known Razorpay handoff bug (razorpay-flutter #408, and seen live
+      // on our own checkout on 23-Oct: the money is captured on Razorpay's
+      // side while the "Something went wrong" dialog eats both callbacks).
+      // Before declaring the failure, ask the gateway whether it actually
+      // took this order's payment. A user backing out of the sheet already
+      // carries no charge, so it skips the extra round trip only after the
+      // claim returns paid: false.
+      if (_orderId != null && !completer.isCompleted) {
+        try {
+          final claim = await SupabaseService.client.functions.invoke(
+            'claim-razorpay-payment',
+            body: {'order_id': _orderId},
+          );
+          final paid = claim.data is Map ? claim.data['paid'] == true : false;
+          final claimedId = claim.data is Map
+              ? claim.data['payment_id'] as String?
+              : null;
+          if (paid && claimedId != null && !completer.isCompleted) {
+            completer.complete(RazorpayPaymentResult.success(claimedId));
+            cleanup();
+            return;
+          }
+        } catch (_) {
+          // The claim could not run (offline, edge function down); the failure
+          // event stands as-is rather than being swallowed.
+        }
+      }
+      if (!completer.isCompleted) {
+        completer.complete(RazorpayPaymentResult.failure(message));
+      }
       cleanup();
     });
 
@@ -129,6 +159,7 @@ class PaymentService {
           },
         );
         final data = orderResponse.data as Map;
+        _orderId = data['order_id'] as String?;
         final options = {
           'key': data['key_id'],
           'amount': data['amount'],

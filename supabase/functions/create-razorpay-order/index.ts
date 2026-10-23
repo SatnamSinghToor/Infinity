@@ -202,6 +202,11 @@ Deno.serve(async (req) => {
       currency: "INR",
       receipt,
       payment_capture: 1,
+      // The account this order was minted for, stamped on Razorpay's own copy
+      // of the order (readable by anyone holding the key secret, so it is not
+      // considered secret). claim-razorpay-payment uses it to prove that only
+      // this account can later claim a captured payment this order received.
+      notes: { user_id: userId },
     }),
   });
 
