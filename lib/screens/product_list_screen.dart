@@ -53,6 +53,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
       inStockOnly: _inStockOnly,
       sort: _sort,
     );
+    // The 96px+ bottom slot only needs to exist while the View Cart pill is
+    // up; with an empty cart it just burned a blank band under the grid.
+    final hasCartPill = context.watch<CartProvider>().itemCount > 0;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -95,7 +98,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           )
                         else
                           SliverPadding(
-                            padding: const EdgeInsets.fromLTRB(12, 4, 12, 120),
+                            padding: EdgeInsets.fromLTRB(
+                              12,
+                              4,
+                              12,
+                              // Enough to clear the card's ADD-button
+                              // overhang when no pill, the pill's own
+                              // height + its 16px float when there is one.
+                              hasCartPill ? 120 : 24,
+                            ),
                             sliver: SliverLayoutBuilder(
                               builder: (context, constraints) {
                                 return SliverGrid(
