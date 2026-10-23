@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../models/product.dart';
+import '../providers/cart_provider.dart';
 import '../providers/product_provider.dart';
 import '../utils/constants.dart';
 import '../widgets/listing_common.dart';
