@@ -202,8 +202,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
     textPrimary: Color(0xFF1A1A1A),
     textSecondary: Color(0xFF6E6E6E),
     border: Color(0xFFEBEBEB),
-    primary: Color(0xFFC9501D),
-    accent: Color(0xFF607783),
+    primary: Color(0xFFFF7A1A),
+    accent: Color(0xFF879BA5),
     danger: Color(0xFFE53935),
     success: Color(0xFF43A047),
   );
@@ -225,8 +225,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
     textPrimary: Color(0xFFF4EFE8),
     textSecondary: Color(0xFFA79C90),
     border: Color(0xFF332C28),
-    primary: Color(0xFFFF8A53),
-    accent: Color(0xFF9AAEBA),
+    primary: Color(0xFFFFA06B),
+    accent: Color(0xFFB2C0C7),
     danger: Color(0xFFEF5350),
     success: Color(0xFF66BB6A),
   );

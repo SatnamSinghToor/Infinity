@@ -8,8 +8,8 @@ class AppConstants {
   // Orange is the brand/primary-action color. Cool slate is a supporting
   // accent for secondary controls and data UI, so every surface does not read
   // as another orange callout.
-  static const Color primaryColor = Color(0xFFC9501D);
-  static const Color accentColor = Color(0xFF607783);
+  static const Color primaryColor = Color(0xFFFF7A1A);
+  static const Color accentColor = Color(0xFF879BA5);
   static const Color blackColor = Color(0xFF0B0B0F);
   static const Color backgroundColor = Color(0xFFF7F7F7); // light neutral grey
   static const Color cardColor = Colors.white;

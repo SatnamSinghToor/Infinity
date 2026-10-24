@@ -113,7 +113,7 @@ ThemeData buildAppTheme() {
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppConstants.primaryColor,
-      foregroundColor: Colors.white,
+      foregroundColor: AppConstants.textPrimaryColor,
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
@@ -160,10 +160,10 @@ ThemeData buildAppTheme() {
   );
 }
 
-/// The primary button look: solid brand orange, white text, rounded.
+/// The primary button look: bright brand orange, dark readable text, rounded.
 ButtonStyle _primaryButton() => ElevatedButton.styleFrom(
       backgroundColor: AppConstants.primaryColor,
-      foregroundColor: Colors.white,
+      foregroundColor: AppConstants.textPrimaryColor,
       disabledBackgroundColor: const Color(0xFFE4E6E8),
       disabledForegroundColor: AppConstants.textSecondaryColor,
       elevation: 0,

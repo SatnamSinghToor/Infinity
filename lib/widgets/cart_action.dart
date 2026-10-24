@@ -162,8 +162,8 @@ class CartAction extends StatelessWidget {
   static const double _iconSize = 15;
   static const double _borderRadius = 10;
 
-  /// The ± and the count on the button's fill. White reads best on it.
-  static const Color _bagGlyph = Colors.white;
+  /// Dark ink stays clear on the lighter orange and slate fills.
+  static const Color _bagGlyph = AppConstants.textPrimaryColor;
 
   bool get _large => height > _height;
 
@@ -192,7 +192,7 @@ class CartAction extends StatelessWidget {
 
   Color get _glyph {
     if (outline) return AppConstants.primaryColor;
-    return bagButton ? _bagGlyph : Colors.white;
+    return _bagGlyph;
   }
 
   Widget _addButton({required VoidCallback onTap, required bool enabled}) {
@@ -267,8 +267,7 @@ class CartAction extends StatelessWidget {
         decoration: !enabled
             ? BoxDecoration(
                 color: _fill.withOpacity(0.25),
-                borderRadius:
-                    BorderRadius.circular(_borderRadius),
+                borderRadius: BorderRadius.circular(_borderRadius),
               )
             : _decoration(),
         alignment: Alignment.center,
@@ -276,7 +275,9 @@ class CartAction extends StatelessWidget {
             ? Icon(
                 Iconsax.shopping_bag,
                 size: _large ? 20 : 17,
-                color: enabled ? Colors.white : Colors.white70,
+                color: enabled
+                    ? AppConstants.textPrimaryColor
+                    : AppConstants.textSecondaryColor,
               )
             : Text(
                 'ADD',
@@ -284,10 +285,10 @@ class CartAction extends StatelessWidget {
                   fontSize: _large ? 14 : 12,
                   fontWeight: FontWeight.w600,
                   color: !enabled
-                      ? Colors.white70
+                      ? AppConstants.textSecondaryColor
                       : outline
                           ? AppConstants.primaryColor
-                          : Colors.white,
+                          : AppConstants.textPrimaryColor,
                   letterSpacing: 0.4,
                 ),
               ),
