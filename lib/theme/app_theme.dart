@@ -19,8 +19,8 @@ const OutlineInputBorder _fieldBorder = OutlineInputBorder(
   borderRadius: AppRadius.field,
 );
 
-/// Builds the app's [ThemeData]: Poppins type, one orange button look, and
-/// the field/hover styling shared by every screen.
+/// Builds the app's [ThemeData]: orange primary actions, quiet secondary
+/// controls, and the field/hover styling shared by every screen.
 ThemeData buildAppTheme() {
   final baseTextTheme = GoogleFonts.poppinsTextTheme();
   final colorScheme = ColorScheme.fromSeed(
@@ -81,17 +81,16 @@ ThemeData buildAppTheme() {
         borderRadius: BorderRadius.circular(10),
       ),
     ),
-    // Every button in the app is the same orange, with the same shape.
-    // (Only buttons that delete or reject something are red, set where
-    // they are used.)
+    // Filled actions carry the brand color. Secondary actions stay neutral
+    // so an outlined or text button does not compete with the main CTA.
     elevatedButtonTheme: ElevatedButtonThemeData(style: _primaryButton()),
     filledButtonTheme: FilledButtonThemeData(style: _primaryButton()),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: AppConstants.primaryColor,
+        foregroundColor: AppConstants.textPrimaryColor,
         side: const BorderSide(
-          color: AppConstants.primaryColor,
-          width: 1.4,
+          color: AppConstants.cardBorder,
+          width: 1,
         ),
         minimumSize: const Size(64, AppControl.md),
         padding: AppControl.padding,
@@ -103,8 +102,13 @@ ThemeData buildAppTheme() {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: AppConstants.primaryColor,
+        foregroundColor: AppConstants.textPrimaryColor,
         textStyle: _buttonTextStyle,
+      ),
+    ),
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(
+        foregroundColor: AppConstants.textSecondaryColor,
       ),
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -156,13 +160,12 @@ ThemeData buildAppTheme() {
   );
 }
 
-/// The one button look: solid orange, white text, rounded.
+/// The primary button look: solid brand orange, white text, rounded.
 ButtonStyle _primaryButton() => ElevatedButton.styleFrom(
       backgroundColor: AppConstants.primaryColor,
       foregroundColor: Colors.white,
-      disabledBackgroundColor:
-          AppConstants.primaryColor.withOpacity(0.35),
-      disabledForegroundColor: Colors.white,
+      disabledBackgroundColor: const Color(0xFFE4E6E8),
+      disabledForegroundColor: AppConstants.textSecondaryColor,
       elevation: 0,
       minimumSize: const Size(64, AppControl.md),
       padding: AppControl.padding,

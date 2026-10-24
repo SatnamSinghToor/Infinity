@@ -158,8 +158,8 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      AppConstants.primaryColor,
-                      AppConstants.accentColor,
+                      Color(0xFF435965),
+                      Color(0xFF607783),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(10),

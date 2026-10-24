@@ -69,9 +69,7 @@ class _StoreHeader extends StatelessWidget {
             Container(
               height: 84,
               decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppConstants.primaryColor, AppConstants.accentColor],
-                ),
+                color: Color(0xFFE9EEF0),
               ),
             ),
           Padding(
@@ -85,8 +83,7 @@ class _StoreHeader extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: const Color(0xFFF2F2F2),
-                    border:
-                        Border.all(color: Colors.black.withOpacity(0.06)),
+                    border: Border.all(color: Colors.black.withOpacity(0.06)),
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: (logo != null && logo.isNotEmpty)

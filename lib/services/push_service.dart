@@ -333,14 +333,9 @@ class PushService {
     final token = _token;
     if (token == null || token.isEmpty) return;
     try {
-      // Through the server: the table's own rules only let an account touch
-      // its own rows, so the next account on this phone could never take
-      // over a token the last one registered.
-      if (user == null) {
-        // Guests are not targeted: drop any row this device left behind.
-        await SupabaseService.client
-            .rpc('release_device_token', params: {'p_token': token});
-      } else {
+      // Store tokens only for signed-in accounts; each account can claim only
+      // its own device token through the guarded server function.
+      if (user != null) {
         await SupabaseService.client.rpc('claim_device_token', params: {
           'p_token': token,
           'p_platform': defaultTargetPlatform.name,

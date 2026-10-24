@@ -5,9 +5,11 @@ class AppConstants {
   static const String tagline =
       'Same-day delivery for everything your home needs';
 
-  // Colors — Orange grocery theme
-  static const Color primaryColor = Color(0xFFFF5A00); // Mirinda orange
-  static const Color accentColor = Color(0xFFFF5A00); // Same as primary
+  // Orange is the brand/primary-action color. Cool slate is a supporting
+  // accent for secondary controls and data UI, so every surface does not read
+  // as another orange callout.
+  static const Color primaryColor = Color(0xFFC9501D);
+  static const Color accentColor = Color(0xFF607783);
   static const Color blackColor = Color(0xFF0B0B0F);
   static const Color backgroundColor = Color(0xFFF7F7F7); // light neutral grey
   static const Color cardColor = Colors.white;

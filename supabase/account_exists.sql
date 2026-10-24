@@ -21,10 +21,6 @@ as $$
   );
 $$;
 
-revoke execute on function public.account_exists_phone(text) from public;
-grant execute on function public.account_exists_phone(text)
-  to anon, authenticated;
+revoke all on function public.account_exists_phone(text) from public, anon, authenticated;
 
-revoke execute on function public.account_exists_email(text) from public;
-grant execute on function public.account_exists_email(text)
-  to anon, authenticated;
+revoke all on function public.account_exists_email(text) from public, anon, authenticated;

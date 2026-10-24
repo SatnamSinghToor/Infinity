@@ -49,14 +49,14 @@ class BottomNavWidget extends StatelessWidget {
       top: false,
       minimum: EdgeInsets.zero,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter, vertical: 8),
+        margin: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.gutter, vertical: 8),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: tokens.card,
           borderRadius: AppRadius.card,
-          border:
-              Border.all(color: Colors.black.withOpacity(0.25), width: 1),
+          border: Border.all(color: Colors.black.withOpacity(0.25), width: 1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.12),
@@ -89,24 +89,13 @@ class BottomNavWidget extends StatelessWidget {
                           scale: isSelected ? 1.1 : 1.0,
                           duration: const Duration(milliseconds: 220),
                           curve: Curves.easeOutBack,
-                          child: isSelected
-                              ? ShaderMask(
-                                  shaderCallback: (bounds) => LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [tokens.primary, tokens.accent],
-                                  ).createShader(bounds),
-                                  child: Icon(
-                                    item.icon,
-                                    color: Colors.white,
-                                    size: item.size,
-                                  ),
-                                )
-                              : Icon(
-                                  item.icon,
-                                  color: tokens.textPrimary,
-                                  size: item.size,
-                                ),
+                          child: Icon(
+                            item.icon,
+                            color: isSelected
+                                ? tokens.primary
+                                : tokens.textSecondary,
+                            size: item.size,
+                          ),
                         ),
                       ),
                     ),
@@ -116,26 +105,26 @@ class BottomNavWidget extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
-                        color: isSelected ? tokens.primary : tokens.textPrimary,
+                        color: tokens.textPrimary,
                         fontSize: 11,
                         fontWeight:
                             isSelected ? FontWeight.w600 : FontWeight.w500,
                       ),
                     ),
-                    // A small orange pointer on the bar's bottom edge, under
-                    // the chosen tab.
+                    // One restrained brand marker identifies the active tab.
                     SizedBox(
-                      height: 14,
-                      width: 26,
+                      height: 7,
+                      width: 18,
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 220),
                           curve: Curves.easeOut,
-                          height: isSelected ? 7 : 0,
-                          width: 26,
-                          child: CustomPaint(
-                            painter: _PointerPainter(tokens.primary),
+                          height: 3,
+                          width: isSelected ? 18 : 0,
+                          decoration: BoxDecoration(
+                            color: tokens.primary,
+                            borderRadius: BorderRadius.circular(999),
                           ),
                         ),
                       ),
@@ -149,27 +138,4 @@ class BottomNavWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-/// A low triangle with a rounded tip, pointing up.
-class _PointerPainter extends CustomPainter {
-  const _PointerPainter(this.color);
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final w = size.width;
-    final h = size.height;
-    final path = Path()
-      ..moveTo(0, h)
-      ..lineTo(w * 0.38, h * 0.16)
-      ..quadraticBezierTo(w * 0.5, 0, w * 0.62, h * 0.16)
-      ..lineTo(w, h)
-      ..close();
-    canvas.drawPath(path, Paint()..color = color);
-  }
-
-  @override
-  bool shouldRepaint(_PointerPainter old) => old.color != color;
 }

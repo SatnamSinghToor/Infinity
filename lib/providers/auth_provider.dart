@@ -18,6 +18,7 @@ import '../models/address.dart';
 import '../services/google_auth_service.dart';
 import '../services/location_tracking_service.dart';
 import '../services/push_service.dart';
+import '../services/pwned_password_service.dart';
 import '../services/supabase_service.dart';
 
 enum UserRole { customer, seller, delivery, admin }
@@ -258,6 +259,14 @@ class AuthProvider extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
+      final passwordStatus = await PwnedPasswordService.check(password);
+      if (passwordStatus != PwnedPasswordStatus.safe) {
+        _error = _passwordSafetyMessage(passwordStatus);
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
       final res = await SupabaseService.client.auth.signUp(
         email: email.trim(),
         password: password,
@@ -467,6 +476,10 @@ class AuthProvider extends ChangeNotifier {
   /// Returns null on success, or a message that can be shown to the user.
   Future<String?> updatePassword(String newPassword) async {
     try {
+      final passwordStatus = await PwnedPasswordService.check(newPassword);
+      if (passwordStatus != PwnedPasswordStatus.safe) {
+        return _passwordSafetyMessage(passwordStatus);
+      }
       await SupabaseService.client.auth.updateUser(
         UserAttributes(password: newPassword),
       );
@@ -478,6 +491,14 @@ class AuthProvider extends ChangeNotifier {
       return "Couldn't update the password. Please try again.";
     }
   }
+
+  String _passwordSafetyMessage(PwnedPasswordStatus status) => switch (status) {
+        PwnedPasswordStatus.breached =>
+          'This password has appeared in known data breaches. Choose a different password.',
+        PwnedPasswordStatus.unavailable =>
+          'Could not verify password safety. Check your connection and try again.',
+        PwnedPasswordStatus.safe => '',
+      };
 
   String _friendlyError(Object e) {
     final msg = e.toString();

@@ -19,15 +19,14 @@ REVOKE EXECUTE ON ALL FUNCTIONS IN SCHEMA public FROM anon, authenticated, publi
 -- 2. grant the app surface only
 DO $$
 DECLARE
-  -- callable before sign-in (guest flows): login existence check, device
-  -- token release, and is_admin() because anon-visible RLS policies call it
+  -- Callable before sign-in: is_admin() is needed by anon-visible RLS policies.
   anon_fns text[] := ARRAY[
-    'account_exists_email','account_exists_phone','release_device_token','is_admin'];
+    'is_admin'];
   -- callable after sign-in: the app's .rpc() surface + policy helpers
   authed_fns text[] := ARRAY[
     'apply_referral','claim_device_token','delete_my_account','payout_balance',
     'request_payout','wallet_debit','place_order','my_delivery_order_ids',
-    'account_exists_email','account_exists_phone','release_device_token','is_admin'];
+    'release_device_token','is_admin'];
   fn text;
   r RECORD;
   granted int := 0;

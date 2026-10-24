@@ -192,8 +192,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
     required this.success,
   });
 
-  /// The look the app ships with. Values are the ones the screens already
-  /// draw, so adopting these changes nothing on screen.
+  /// The shared light palette: brand orange for primary actions, slate for
+  /// supporting UI, and neutral surfaces for the rest of the screen.
   static const AppTokens light = AppTokens(
     surface: Color(0xFFF7F7F7),
     surfaceAlt: Color(0xFFF2F2F2),
@@ -202,8 +202,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
     textPrimary: Color(0xFF1A1A1A),
     textSecondary: Color(0xFF6E6E6E),
     border: Color(0xFFEBEBEB),
-    primary: Color(0xFFFF6A00),
-    accent: Color(0xFFF2711C),
+    primary: Color(0xFFC9501D),
+    accent: Color(0xFF607783),
     danger: Color(0xFFE53935),
     success: Color(0xFF43A047),
   );
@@ -225,8 +225,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
     textPrimary: Color(0xFFF4EFE8),
     textSecondary: Color(0xFFA79C90),
     border: Color(0xFF332C28),
-    primary: Color(0xFFFF7A1A),
-    accent: Color(0xFFFF8A3D),
+    primary: Color(0xFFFF8A53),
+    accent: Color(0xFF9AAEBA),
     danger: Color(0xFFEF5350),
     success: Color(0xFF66BB6A),
   );

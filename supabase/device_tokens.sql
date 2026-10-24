@@ -62,7 +62,7 @@ create or replace function public.claim_device_token(p_token text, p_platform te
 returns void
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, pg_temp
 as $$
 begin
   if auth.uid() is null or coalesce(trim(p_token), '') = '' then
@@ -80,14 +80,18 @@ create or replace function public.release_device_token(p_token text)
 returns void
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, pg_temp
 as $$
 begin
-  delete from device_tokens where token = trim(coalesce(p_token, ''));
+  if auth.uid() is null or coalesce(trim(p_token), '') = '' then
+    return;
+  end if;
+  delete from device_tokens
+  where token = trim(p_token) and user_id = auth.uid();
 end;
 $$;
 
 revoke all on function public.claim_device_token(text, text) from public, anon;
 grant execute on function public.claim_device_token(text, text) to authenticated;
-revoke all on function public.release_device_token(text) from public;
-grant execute on function public.release_device_token(text) to anon, authenticated;
+revoke all on function public.release_device_token(text) from public, anon;
+grant execute on function public.release_device_token(text) to authenticated;

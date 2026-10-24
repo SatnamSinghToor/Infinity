@@ -35,8 +35,7 @@ class RoleBottomNav extends StatelessWidget {
         decoration: BoxDecoration(
           color: tokens.card,
           borderRadius: AppRadius.card,
-          border:
-              Border.all(color: Colors.black.withOpacity(0.25), width: 1),
+          border: Border.all(color: Colors.black.withOpacity(0.25), width: 1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.12),
@@ -58,18 +57,7 @@ class RoleBottomNav extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   isSelected
-                      ? ShaderMask(
-                          shaderCallback: (bounds) => LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [tokens.primary, tokens.accent],
-                          ).createShader(bounds),
-                          child: Icon(
-                            item.filled,
-                            color: Colors.white,
-                            size: 21,
-                          ),
-                        )
+                      ? Icon(item.filled, color: tokens.primary, size: 21)
                       // 21px, like the icons inside the app and the
                       // customer bar.
                       : Icon(item.outline, color: tokens.textPrimary, size: 21),
@@ -79,7 +67,7 @@ class RoleBottomNav extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
-                      color: isSelected ? tokens.primary : tokens.textPrimary,
+                      color: tokens.textPrimary,
                       fontSize: 11,
                       fontWeight:
                           isSelected ? FontWeight.w600 : FontWeight.w500,

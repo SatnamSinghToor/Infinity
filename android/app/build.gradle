@@ -78,7 +78,11 @@ android {
                         "android/key.properties.example.")
                 signingConfig = signingConfigs.debug
             }
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            // Let R8 remove unused Java/Kotlin code and resources and rename
+            // the remaining Android-side symbols in production builds.
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 }

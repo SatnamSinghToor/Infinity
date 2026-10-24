@@ -7,7 +7,6 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/auth_provider.dart';
-import '../../services/supabase_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/tokens.dart';
 import '../help_screens.dart';
@@ -84,26 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     final auth = context.read<AuthProvider>();
     bool ok;
-    // Server-side existence check (supabase/account_exists.sql) routes a
-    // fresh email or number straight to sign-up. Without the function the
-    // login attempt decides and a failure offers the sign-up path.
-    bool? exists;
-    try {
-      final res = await SupabaseService.client.rpc(
-        _isEmail ? 'account_exists_email' : 'account_exists_phone',
-        params: {'p': _isEmail ? id : _phone},
-      );
-      exists = res as bool?;
-    } catch (_) {
-      exists = null;
-    }
-    if (exists == false) {
-      if (mounted) {
-        setState(() => _busy = false);
-        _goRegister();
-      }
-      return;
-    }
     ok = _isEmail
         ? await auth.signIn(
             email: id,

@@ -61,6 +61,7 @@ dependencies:
   # Backend (Supabase) — the plain Dart client (no supabase_flutter), since
   # this project only needs it to read products/categories and to sign in.
   supabase: ^2.6.0
+  crypto: ^3.0.7
   iconsax_flutter: ^1.0.1
 
   # Opens the app from the password-reset email link (com.duggustore.app://

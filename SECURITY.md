@@ -61,6 +61,11 @@ We will:
 - **Certificate pinning**: Not implemented (relying on platform trust store)
 - **CORS**: Configured per Supabase project settings
 
+### Android Release Hardening
+- Build distributable releases with `scripts/build_android_release.ps1`; it enables Flutter Dart obfuscation and the Android R8 code/resource shrinker.
+- Keep the generated files under `release-symbols/` private and backed up. They are required to decode crash traces and are not part of the app bundle.
+- Obfuscation slows reverse engineering but does not hide strings, public client keys, or endpoints. Never put service-role, Razorpay secret, or other privileged credentials in the app.
+
 ---
 
 ## Threat Model

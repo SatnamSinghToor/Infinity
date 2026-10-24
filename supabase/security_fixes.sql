@@ -181,9 +181,15 @@ $$;
 -- security-definer place_order function (which bypasses them) is the only way.
 
 -- ---------------------------------------------------------------------------
--- 6. Still to do
+-- 6. Follow-up items and 2026-10-24 audit remediation
 --
--- * Turn on "Leaked password protection" in Auth settings (dashboard).
+-- Applied 2026-10-24 (see security_remediation.sql): revoked public account-existence RPCs,
+-- owner-scoped release_device_token, fixed mutable place_order search_path,
+-- and removed API grants from the archived backup tables.
+--
+-- 7. Still to do
+--
+-- * Leaked password protection cannot be enabled on this FREE plan; dashboard says Pro and above.
 -- * Give public.can_see_order a fixed search_path.
 -- * The old place_order(uuid, uuid, text, double precision, double precision,
 --   numeric, numeric, jsonb) still exists but nobody may execute it; drop it
