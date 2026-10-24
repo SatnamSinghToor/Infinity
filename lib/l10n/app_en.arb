@@ -1517,6 +1517,30 @@
     "description": "Product detail screen: button that asks to be told when the item is back."
   },
   "productDetailNotifyOn": "We'll notify you",
+  "productDetailPriceAlert": "Alert me when the price drops",
+  "@productDetailPriceAlert": {
+    "description": "Product detail: lets a signed-in shopper opt into a one-time notification when the selling price drops."
+  },
+  "productDetailPriceAlertOn": "Price drop alert is on",
+  "@productDetailPriceAlertOn": {
+    "description": "Product detail: shown when the shopper already follows this product's price."
+  },
+  "productDetailPriceAlertSaved": "We'll let you know when the price drops.",
+  "@productDetailPriceAlertSaved": {
+    "description": "Confirmation after enabling a product price drop alert."
+  },
+  "productDetailPriceAlertRemoved": "Price drop alert removed.",
+  "@productDetailPriceAlertRemoved": {
+    "description": "Confirmation after disabling a product price drop alert."
+  },
+  "productDetailPriceAlertFailed": "Couldn't update your price alert.",
+  "@productDetailPriceAlertFailed": {
+    "description": "Product detail: shown when saving or removing a price alert fails."
+  },
+  "productDetailPriceAlertSignIn": "Sign in to track price drops.",
+  "@productDetailPriceAlertSignIn": {
+    "description": "Shown when a guest tries to create a price drop alert."
+  },
   "@productDetailNotifyOn": {
     "description": "Product detail screen: the same button once the person is on the list."
   },

@@ -14,6 +14,7 @@ import '../widgets/live_entrance.dart';
 import '../widgets/role_common.dart';
 import 'delivery/delivery_orders_screen.dart';
 import 'order_detail_screen.dart';
+import 'product_detail_screen.dart';
 import 'seller/seller_orders_screen.dart';
 import '../widgets/pressable.dart';
 
@@ -80,6 +81,11 @@ class _NotificationsScreenState extends State<NotificationsScreen>
   /// The screen that shows what a notification is about, for this role.
   /// Null when there is nothing sensible to open (no order, or admin).
   Widget? _destinationFor(AppNotification n) {
+    final productId = n.productId;
+    if (productId != null &&
+        context.read<AuthProvider>().role == UserRole.customer) {
+      return ProductDetailScreen(productId: productId);
+    }
     final orderId = n.orderId;
     if (orderId == null) return null;
     switch (context.read<AuthProvider>().role) {
@@ -264,8 +270,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
           indicatorColor: AppConstants.primaryColor,
           indicatorWeight: 3,
           labelColor: AppConstants.textPrimaryColor,
-          unselectedLabelColor:
-              AppConstants.textPrimaryColor.withOpacity(0.55),
+          unselectedLabelColor: AppConstants.textPrimaryColor.withOpacity(0.55),
           labelStyle: GoogleFonts.poppins(
             fontSize: 13,
             fontWeight: FontWeight.w600,

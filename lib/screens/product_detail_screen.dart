@@ -51,6 +51,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   String? _selectedVariantId;
   bool _isSubscribedToStock = false;
   bool _isTogglingStockAlert = false;
+  bool _isSubscribedToPriceDrop = false;
+  bool _isTogglingPriceAlert = false;
 
   @override
   void initState() {
@@ -60,6 +62,70 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     _loadReviews();
     _loadVariants();
     _loadStockAlertState();
+    _loadPriceAlertState();
+  }
+
+  Future<void> _loadPriceAlertState() async {
+    final uid = SupabaseService.client.auth.currentUser?.id;
+    if (uid == null) return;
+    try {
+      final rows = await SupabaseService.client
+          .from('price_alerts')
+          .select('id')
+          .eq('user_id', uid)
+          .eq('product_id', widget.productId)
+          .limit(1);
+      if (mounted) {
+        safeSetState(() => _isSubscribedToPriceDrop = rows.isNotEmpty);
+      }
+    } catch (_) {
+      // The price alert remains usable if its saved state could not load.
+    }
+  }
+
+  Future<void> _togglePriceAlert() async {
+    final l10n = AppLocalizations.of(context);
+    final uid = SupabaseService.client.auth.currentUser?.id;
+    if (uid == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.productDetailPriceAlertSignIn)),
+      );
+      return;
+    }
+    safeSetState(() => _isTogglingPriceAlert = true);
+    try {
+      if (_isSubscribedToPriceDrop) {
+        await SupabaseService.client
+            .from('price_alerts')
+            .delete()
+            .eq('user_id', uid)
+            .eq('product_id', widget.productId);
+      } else {
+        await SupabaseService.client.from('price_alerts').insert({
+          'user_id': uid,
+          'product_id': widget.productId,
+        });
+      }
+      if (mounted) {
+        safeSetState(
+            () => _isSubscribedToPriceDrop = !_isSubscribedToPriceDrop);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_isSubscribedToPriceDrop
+                ? l10n.productDetailPriceAlertSaved
+                : l10n.productDetailPriceAlertRemoved),
+          ),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.productDetailPriceAlertFailed)),
+        );
+      }
+    } finally {
+      if (mounted) safeSetState(() => _isTogglingPriceAlert = false);
+    }
   }
 
   Future<void> _loadStockAlertState() async {
@@ -344,6 +410,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       ),
                                     ),
                                 ],
+                              ),
+                              const SizedBox(height: 4),
+                              TextButton.icon(
+                                onPressed: _isTogglingPriceAlert
+                                    ? null
+                                    : _togglePriceAlert,
+                                icon: Icon(
+                                  _isSubscribedToPriceDrop
+                                      ? Iconsax.notification
+                                      : Iconsax.notification_bing,
+                                  size: 18,
+                                ),
+                                label: Text(_isSubscribedToPriceDrop
+                                    ? l10n.productDetailPriceAlertOn
+                                    : l10n.productDetailPriceAlert),
                               ),
                               if (product.unit.trim().isNotEmpty) ...[
                                 const SizedBox(height: 8),

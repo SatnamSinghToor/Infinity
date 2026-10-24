@@ -1175,6 +1175,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productDetailNotifyOn => 'We\'ll notify you';
 
   @override
+  String get productDetailPriceAlert => 'Alert me when the price drops';
+
+  @override
+  String get productDetailPriceAlertOn => 'Price drop alert is on';
+
+  @override
+  String get productDetailPriceAlertSaved =>
+      'We\'ll let you know when the price drops.';
+
+  @override
+  String get productDetailPriceAlertRemoved => 'Price drop alert removed.';
+
+  @override
+  String get productDetailPriceAlertFailed =>
+      'Couldn\'t update your price alert.';
+
+  @override
+  String get productDetailPriceAlertSignIn => 'Sign in to track price drops.';
+
+  @override
   String get productDetailAddToCart => 'Add to Cart';
 
   @override

@@ -79,7 +79,9 @@ as $$
 begin
   if old.stock <= 0 and new.stock > 0 then
     insert into notifications (user_id, type, title, message)
-    select sa.user_id, 'STOCK', 'Back in stock',
+    -- PROMO is an allowed notifications.type value; STOCK violates the
+    -- notifications_type_check constraint and silently loses this alert.
+    select sa.user_id, 'PROMO', 'Back in stock',
            new.name || ' is available again — order it before it sells out!'
     from stock_alerts sa
     where sa.product_id = new.id;

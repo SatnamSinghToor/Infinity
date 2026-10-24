@@ -6,6 +6,7 @@ class AppNotification {
   final bool isRead;
   final DateTime createdAt;
   final String? orderId;
+  final String? productId;
 
   /// When the user archived it (`notifications.archived_at`); null while it
   /// is still in the inbox.
@@ -19,6 +20,7 @@ class AppNotification {
     required this.isRead,
     required this.createdAt,
     this.orderId,
+    this.productId,
     this.archivedAt,
   });
 
@@ -34,6 +36,7 @@ class AppNotification {
       createdAt: DateTime.tryParse(row['created_at'] as String? ?? '') ??
           DateTime.now(),
       orderId: row['order_id'] as String?,
+      productId: row['product_id'] as String?,
       archivedAt: DateTime.tryParse(row['archived_at'] as String? ?? ''),
     );
   }
@@ -53,6 +56,7 @@ class AppNotification {
       isRead: isRead ?? this.isRead,
       createdAt: createdAt,
       orderId: orderId,
+      productId: productId,
       archivedAt: clearArchived ? null : (archivedAt ?? this.archivedAt),
     );
   }

@@ -37,6 +37,7 @@ begin
   delete from public.device_tokens where user_id = v_uid;
   delete from public.payment_methods where user_id = v_uid;
   delete from public.stock_alerts where user_id = v_uid;
+  delete from public.price_alerts where user_id = v_uid;
   delete from public.notifications where user_id = v_uid;
 
   update public.orders

@@ -2146,6 +2146,42 @@ abstract class AppLocalizations {
   /// **'We\'ll notify you'**
   String get productDetailNotifyOn;
 
+  /// Product detail: lets a signed-in shopper opt into a one-time notification when the selling price drops.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert me when the price drops'**
+  String get productDetailPriceAlert;
+
+  /// Product detail: shown when the shopper already follows this product's price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price drop alert is on'**
+  String get productDetailPriceAlertOn;
+
+  /// Confirmation after enabling a product price drop alert.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll let you know when the price drops.'**
+  String get productDetailPriceAlertSaved;
+
+  /// Confirmation after disabling a product price drop alert.
+  ///
+  /// In en, this message translates to:
+  /// **'Price drop alert removed.'**
+  String get productDetailPriceAlertRemoved;
+
+  /// Product detail: shown when saving or removing a price alert fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update your price alert.'**
+  String get productDetailPriceAlertFailed;
+
+  /// Shown when a guest tries to create a price drop alert.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to track price drops.'**
+  String get productDetailPriceAlertSignIn;
+
   /// Product detail screen: the buy bar's button.
   ///
   /// In en, this message translates to:
