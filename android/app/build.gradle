@@ -1,0 +1,96 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+// Push notifications come alive the day android/app/google-services.json
+// lands: until then the Firebase plugins find no config, so the app builds
+// and runs with PushService quietly disabled instead of failing the build.
+if (file('google-services.json').exists()) {
+    apply plugin: 'com.google.gms.google-services'
+}
+
+// The release keystore is described by android/key.properties, which is not
+// in git. When it is missing the release build falls back to the debug key
+// so CI and `flutter run --release` still work -- but an upload to the Play
+// Store needs the real keystore, or it will be rejected.
+def keystorePropertiesFile = rootProject.file('key.properties')
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
+}
+
+android {
+    namespace = "com.duggustore.app"
+    compileSdk = 36
+    // Highest NDK the plugins ask for; NDK releases are backward compatible,
+    // so one version satisfies every plugin (jni needs 28.2.13676358).
+    ndkVersion = "28.2.13676358"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        // flutter_local_notifications needs the java.time backport.
+        coreLibraryDesugaringEnabled = true
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11
+    }
+
+    defaultConfig {
+        // The app's identity on Play. It can never be changed after the
+        // first upload, and the Firebase config (google-services.json) has
+        // to name this same package.
+        applicationId = "com.duggustore.app"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        // 24: required by ML Kit subject segmentation (product background removal).
+        minSdk = 24
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    signingConfigs {
+        release {
+            if (keystorePropertiesFile.exists()) {
+                keyAlias = keystoreProperties['keyAlias']
+                keyPassword = keystoreProperties['keyPassword']
+                storeFile = keystoreProperties['storeFile'] ?
+                    file(keystoreProperties['storeFile']) : null
+                storePassword = keystoreProperties['storePassword']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.release
+            } else {
+                // A debug-signed build cannot go to Play, and a quiet wrong
+                // signature is worse than a loud one.
+                println("WARNING: android/key.properties is missing, so this " +
+                        "release build is signed with the DEBUG key. See " +
+                        "android/key.properties.example.")
+                signingConfig = signingConfigs.debug
+            }
+            // Let R8 remove unused Java/Kotlin code and resources and rename
+            // the remaining Android-side symbols in production builds.
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.4"
+}

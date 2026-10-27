@@ -1,0 +1,351 @@
+name: Flutter CI/CD
+
+on:
+  push:
+    branches: [main, master, kilo/*, claude/*, arena/*]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        shell: bash
+        run: |
+          set -o pipefail
+          flutter analyze --no-fatal-infos 2>&1 | tee analyze-output.txt
+
+      - name: Run tests
+        id: tests
+        shell: bash
+        run: |
+          set -o pipefail
+          flutter test --reporter expanded 2>&1 | tee test-output.txt
+
+      # The log archive for a run lives on a host that some sandboxes cannot
+      # reach, so the interesting lines of a failure are also published as
+      # check-run annotations, which the REST API does serve.
+      - name: Publish failures as annotations
+        if: failure()
+        shell: bash
+        run: |
+          emit() {
+            printf '%s\n' "$1" | while IFS= read -r line; do
+              echo "::error::${line}"
+            done
+          }
+          if [ -s test-output.txt ] && grep -qE "\[E\]" test-output.txt; then
+            # A failing test explains itself in the dozen lines around its
+            # [E] line. GitHub caps how many annotations a step may post, so
+            # a wider window would push the explaination off the end of the
+            # list — which is what makes a failure look like a silent crash.
+            start=$(grep -nE "\[E\]" test-output.txt | head -1 | cut -d: -f1)
+            from=$(( start > 2 ? start - 2 : 1 ))
+            emit "$(sed -n "${from},$(( start + 8 ))p" test-output.txt)"
+          elif [ -s test-output.txt ]; then
+            emit "$(tail -12 test-output.txt)"
+          fi
+          if [ -s analyze-output.txt ]; then
+            emit "$(grep -E "error|warning" analyze-output.txt | head -20)"
+          fi
+
+      # A failing widget test explains itself in a dump that sits above a
+      # stack trace hundreds of lines long, and the log host is not reachable
+      # from every sandbox. Re-running the layout test by itself puts that
+      # dump near the top, and the annotations below carry it — those the
+      # check-run API does serve.
+      - name: Explain the layout-test failure
+        if: failure()
+        shell: bash
+        run: |
+          set +e
+          emit() {
+            printf '%s\n' "$1" | while IFS= read -r line; do
+              echo "::error::${line}"
+            done
+          }
+          flutter test test/login_layout_test.dart --reporter expanded \
+            > /tmp/one.txt 2>&1
+          # The dump names every timer that is still running and the code
+          # that set it: publish it whole, frames and all.
+          at=$(grep -n "Pending timers" /tmp/one.txt | head -1 | cut -d: -f1)
+          if [ -n "$at" ]; then
+            from=$(( at > 45 ? at - 45 : 1 ))
+            emit "$(sed -n "${from},$(( at + 6 ))p" /tmp/one.txt)"
+          fi
+          emit "$(tail -4 /tmp/one.txt)"
+
+      # A widget test's explanation sits above a stack trace hundreds of
+      # lines long, which the annotations above cannot carry, and the log
+      # host is not reachable from every sandbox. The output is therefore
+      # saved as an artifact, which the API does serve.
+      - name: Upload the test and analyze output
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-output
+          path: |
+            test-output.txt
+            analyze-output.txt
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Build APK (debug)
+        shell: bash
+        run: |
+          set -o pipefail
+          flutter build apk --debug 2>&1 | tee apk-build.txt
+
+      # Gradle failures carry no check-run annotations of their own, so
+      # publish the interesting lines for sandboxes that cannot fetch logs.
+      - name: Publish APK build failure
+        if: failure() && hashFiles('apk-build.txt') != ''
+        run: |
+          sed -n '/What went wrong/,/^\* Try/p' apk-build.txt | head -40 |
+            while IFS= read -r line; do echo "::error::${line}"; done
+          grep "Duplicate class" apk-build.txt | sort -u | head -20 |
+            while IFS= read -r line; do echo "::error::${line}"; done
+
+      # The debug APK is for one thing: somebody downloads it and puts it on a
+      # phone, today. A day is long enough for that, and the short retention is
+      # not tidiness — every push to an agent branch (`arena/*`, `claude/*`,
+      # `kilo/*`) used to keep its own ~80 MB copy for a week, the free plan
+      # caps a repo at 500 MB of artifacts, and the quota ran out mid-run: a
+      # green master went red on the upload step with nothing wrong in the
+      # code. So the artifact rides master only, and does not linger there.
+      - name: Upload APK artifact
+        # PR runs build the same commit a push already built, and used to
+        # store their own 139 MB each; agent-branch pushes did the same.
+        # Only a push to master/main keeps an APK.
+        if: >-
+          github.event_name == 'push' &&
+          (github.ref_name == 'master' || github.ref_name == 'main')
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 1
+
+  build-release:
+    name: Build Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    env:
+      # Play rejects a debug-signed build, and a keystore must never be
+      # committed. Set these four repository secrets and the release build
+      # below signs itself; without them it still builds, debug-signed, and
+      # says so in the log.
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Sign with the release keystore, when the secrets are set
+        shell: bash
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_BASE64" ]; then
+            echo "No keystore secrets: the release build will be debug-signed."
+            exit 0
+          fi
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/app/duggu-release.jks
+          cat > android/key.properties <<EOF
+          storePassword=$ANDROID_STORE_PASSWORD
+          keyPassword=$ANDROID_KEY_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          storeFile=duggu-release.jks
+          EOF
+          echo "Release signing is configured."
+
+      - name: Build APK (release)
+        run: flutter build apk --release
+
+      - name: Build App Bundle (release)
+        run: flutter build appbundle --release
+
+      - name: Build iOS (release)
+        run: |
+          flutter build ios --release --no-codesign
+        continue-on-error: true
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          # A release build is worth keeping longer than a debug one, and 30
+          # days of an APK plus an AAB is a third of the quota from a single
+          # push. A week covers the device testing that a release run is for.
+          retention-days: 7
+
+      - name: Upload App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 7
+
+
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        id: fmt
+        shell: bash
+        run: |
+          set -o pipefail
+          dart format --output=none --set-exit-if-changed . 2>&1 |
+            tee format-output.txt
+
+      # dart format only names the files it would rewrite, which is not
+      # enough to fix them from a sandbox that cannot run the formatter. The
+      # fmt-report job below carries the diff itself.
+      - name: Publish the formatting failure
+        if: failure() && steps.fmt.outcome == 'failure'
+        run: |
+          grep -Ei "changed|reformat|formatted" format-output.txt |
+            head -20 |
+            while IFS= read -r line; do echo "::error::FMT ${line}"; done
+
+      - name: Run analyzer
+        run: flutter analyze --no-fatal-infos
+
+      - name: Check for TODO/FIXME
+        run: |
+          if grep -r "TODO\|FIXME" lib/ --include="*.dart" | grep -v ".g.dart"; then
+            echo "Found TODO/FIXME comments"
+            exit 1
+          fi
+  # The diff dart format wants is longer than a single check run's annotation
+  # budget carries, and a sandbox that cannot run the formatter has no other
+  # way to see it. So run the formatter again here and publish the diff
+  # gzipped, base64ed and split three ways: one check run per slice, each of
+  # which a sandbox can read back, join and unzip into the exact edit.
+  fmt-report:
+    name: Format report
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: code-quality
+    if: always() && needs.code-quality.result == 'failure'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        slice: [1, 2, 3]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Publish slice ${{ matrix.slice }}
+        shell: bash
+        run: |
+          dart format . >/dev/null
+          git --no-pager diff -U0 -- lib test > /tmp/fmt.diff
+          gzip -9c /tmp/fmt.diff | base64 -w 200 > /tmp/fmt.b64
+          n=$(wc -l < /tmp/fmt.b64)
+          per=$(( (n + 2) / 3 ))
+          from=$(( (${{ matrix.slice }} - 1) * per + 1 ))
+          to=$(( ${{ matrix.slice }} * per ))
+          echo "::error::FMT slice ${{ matrix.slice }}: encoded lines ${from}-${to} of ${n}; $(git --no-pager diff --shortstat -- lib test)"
+          nl -ba /tmp/fmt.b64 | sed -n "${from},${to}p" |
+            while IFS= read -r line; do echo "::error::FMT ${line}"; done
+
+  # iOS was never built anywhere: the release job only runs on main, and its
+  # iOS step is allowed to fail. So a broken iOS build could sit unnoticed for
+  # weeks. This job builds it on a Mac whenever main moves, or on any branch
+  # whose commit says [ios], which keeps the (expensive) macOS minutes down.
+  build-ios:
+    name: Build iOS
+    runs-on: macos-latest
+    timeout-minutes: 40
+    if: |
+      github.ref == 'refs/heads/main' ||
+      github.ref == 'refs/heads/master' ||
+      (github.event_name == 'push' &&
+       contains(github.event.head_commit.message, '[ios]'))
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build iOS (no codesign)
+        shell: bash
+        run: |
+          set -o pipefail
+          flutter build ios --debug --no-codesign 2>&1 | tee ios-build.txt
+
+      - name: Publish the iOS failure
+        if: failure()
+        run: |
+          sed -n '/Error/,/^$/p' ios-build.txt | head -40 |
+            while IFS= read -r line; do echo "::error::IOS ${line}"; done
