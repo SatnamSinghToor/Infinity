@@ -1,0 +1,52 @@
+# Backend probe — "button kaam nahi kar raha" ka jawab ek run me.
+#
+# Runs one request against the live generate-product-description edge
+# function and prints exactly what it replied — status code and body — so
+# nobody has to guess from a generic toast whether the problem is the
+# deployment, the AI key, or the app build.
+#
+# It sends the anon key (the public one shipped inside the app), which the
+# gateway accepts; what the function does with it is the answer we want:
+#
+#   {"error":"sign in first: the AI writer answers a signed-in seller only"}
+#       → the in-repo source is deployed and healthy.
+#   Anything else (500, quota text, old wording, 404)
+#       → the dashboard copy is still live, and that's the bug.
+#
+# Run it any time: Actions → Backend probe → Run workflow.
+
+name: Backend probe
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [master]
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Probe the AI description function
+        run: |
+          BASE=$(grep -oE 'https://[a-z0-9]+\.supabase\.co' \
+            lib/services/supabase_service.dart | head -1)
+          KEY=$(grep -oE 'eyJ[A-Za-z0-9._-]+' \
+            lib/services/supabase_service.dart | head -1)
+          echo "::add-mask::$KEY"
+          echo "Probing $BASE/functions/v1/generate-product-description"
+          set +e
+          REPLY=$(curl -sS -m 60 -w '\nHTTP_STATUS:%{http_code}' \
+            -X POST "$BASE/functions/v1/generate-product-description" \
+            -H "authorization: Bearer $KEY" \
+            -H "apikey: $KEY" \
+            -H 'content-type: application/json' \
+            -d '{"name":"Fresh Apples 1kg","category":"Fruits","unit":"1 kg","description":""}')
+          CURL_EXIT=$?
+          set -e
+          echo "$REPLY"
+          # The run's own logs are sometimes unreachable through the API, so
+          # the result also travels as an annotation, which always is.
+          SUMMARY=$(printf '%s' "$REPLY" | tr '\n' ' ' | cut -c1-700)
+          echo "::notice::PROBE curl_exit=$CURL_EXIT $SUMMARY"

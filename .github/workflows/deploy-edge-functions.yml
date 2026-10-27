@@ -1,0 +1,107 @@
+# Deploy edge functions — the one-click version of the dashboard surgery.
+#
+# Why this exists: the AI description button stayed broken for days because
+# the fixed source sat in git while the broken copy sat in the dashboard,
+# and deploying meant copying code by hand. This workflow deploys straight
+# from the repo, so "it's fixed in git" and "it's fixed in production"
+# become the same thing.
+#
+# One-time setup (repo Settings → Secrets and variables → Actions):
+#
+#   SUPABASE_ACCESS_TOKEN  from supabase.com/dashboard/account/tokens
+#                          (Create new token → copy it here)
+#   AI_API_KEY             any OpenAI-compatible provider key (OPENAI_API_KEY
+#                          works too — see supabase/README.md for the table).
+#                          Optional: without it the writer still answers, it
+#                          just composes from the seller's own notes.
+#   AI_BASE_URL            optional, only for a non-OpenAI provider — e.g.
+#                          https://api.groq.com/openai/v1 for Groq (free tier
+#                          at console.groq.com, finishes a page in seconds).
+#
+# Then: Actions → Deploy edge functions → Run workflow → pick this branch.
+# The run deploys the function, sets the AI key, and probes the live URL so
+# the annotation tells you which copy is serving traffic now.
+
+name: Deploy edge functions
+
+on:
+  # Also runs on every push to a PR targeting master, so it shows up in the
+  # Actions tab and the PR's checks before the branch is merged. Without a
+  # run under its belt, a workflow_dispatch-only file on a feature branch is
+  # invisible — the button to run it cannot be reached at all.
+  workflow_dispatch:
+  pull_request:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Check the access token is there
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
+            echo "::error::The SUPABASE_ACCESS_TOKEN repo secret is missing. Create one at supabase.com/dashboard/account/tokens, add it under Settings → Secrets → Actions, then re-run this job."
+            exit 1
+          fi
+
+      - name: Link the project
+        run: supabase link --project-ref rtceqrzicxrxaajfrerl
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+      - name: Deploy generate-product-description
+        run: supabase functions deploy generate-product-description
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+
+      - name: Set the AI secrets on the project
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: ${{ secrets.AI_BASE_URL }}
+        run: |
+          if [ -z "$AI_API_KEY" ]; then
+            echo "::warning::No AI_API_KEY repo secret. The deploy still works - the writer answers without a key, composing the page from the seller's own notes - but a real key writes better pages. Add the secret and run again."
+            exit 0
+          fi
+          umask 077
+          {
+            printf 'AI_API_KEY=%s\n' "$AI_API_KEY"
+            # Only for a non-OpenAI provider (Groq, OpenRouter, ...). Leaving
+            # the secret unset keeps the function's api.openai.com default.
+            if [ -n "$AI_BASE_URL" ]; then
+              printf 'AI_BASE_URL=%s\n' "$AI_BASE_URL"
+            fi
+          } > /tmp/edge-secrets.env
+          supabase secrets set --env-file /tmp/edge-secrets.env
+          rm -f /tmp/edge-secrets.env
+
+      - name: Probe what is now serving
+        run: |
+          BASE=$(grep -oE 'https://[a-z0-9]+\.supabase\.co' \
+            lib/services/supabase_service.dart | head -1)
+          KEY=$(grep -oE 'eyJ[A-Za-z0-9._-]+' \
+            lib/services/supabase_service.dart | head -1)
+          echo "::add-mask::$KEY"
+          set +e
+          REPLY=$(curl -sS -m 60 -w '\nHTTP_STATUS:%{http_code}' \
+            -X POST "$BASE/functions/v1/generate-product-description" \
+            -H "authorization: Bearer $KEY" \
+            -H "apikey: $KEY" \
+            -H 'content-type: application/json' \
+            -d '{"name":"Fresh Apples 1kg","category":"Fruits","unit":"1 kg"}')
+          CURL_EXIT=$?
+          set -e
+          echo "$REPLY"
+          SUMMARY=$(printf '%s' "$REPLY" | tr '\n' ' ' | cut -c1-700)
+          echo "::notice::AFTER-DEPLOY PROBE curl_exit=$CURL_EXIT $SUMMARY"
+          echo "'sign in first: the AI writer answers a signed-in seller only' = this repo's code is live."
+          echo "'Sign in to use AI description'  = the old dashboard copy is still serving."

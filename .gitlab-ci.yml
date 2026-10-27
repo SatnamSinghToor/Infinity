@@ -1,0 +1,81 @@
+# GitLab CI: builds the Android APK people install on a phone.
+#
+# Uses Flutter stable (matches local 3.47.x) with Java 21 + Android SDK pre-installed.
+# Builds a release APK signed with the project's own key, held in the four
+# ANDROID_* variables under Settings → CI/CD → Variables (masked, protected).
+# One key for every build is what lets a new APK install over the last one.
+#
+# Download the latest APK from main (you must be signed in):
+#   https://gitlab.com/hauntstunt13/DUGGUSTORE-master/-/jobs/artifacts/main/raw/build/app/outputs/flutter-apk/app-release.apk?job=build_apk
+
+stages:
+  - build
+
+build_apk:
+  stage: build
+  image: ghcr.io/cirruslabs/flutter:stable
+  timeout: 60 minutes
+  tags:
+    - saas-linux-medium-amd64
+  rules:
+    # Every push to main triggers this pipeline (auto APK build).
+    # Also runnable manually from GitLab web UI.
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "web"
+  variables:
+    PUB_CACHE: $CI_PROJECT_DIR/.pub-cache
+    GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle-home
+    # Gradle memory tuned for CI runner (medium = ~8GB RAM)
+    GRADLE_OPTS: "-Xmx3g -XX:MaxMetaspaceSize=1g -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false -Dorg.gradle.configureondemand=false -Dorg.gradle.caching=true"
+    # Accept Android SDK licenses non-interactively
+    ANDROID_SDK_ROOT: /opt/android-sdk
+    # Java 21 in current stable image
+    JAVA_HOME: /usr/lib/jvm/java-21-openjdk-amd64
+  cache:
+    key: "flutter-${CI_COMMIT_REF_SLUG}-${CI_JOB_NAME}"
+    paths:
+      - .pub-cache/
+      - .gradle-home/caches/
+      - .gradle-home/wrapper/
+    policy: pull-push
+  before_script:
+    - flutter --version
+    - dart --version
+    - java -version
+    - echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null 2>&1 || true
+  script:
+    - flutter pub get
+    # A keystore only when all four variables are set; otherwise the build
+    # falls back to the debug key and says so in the log.
+    - |
+      if [ -n "$ANDROID_KEYSTORE_BASE64" ] && [ -n "$ANDROID_STORE_PASSWORD" ] &&
+         [ -n "$ANDROID_KEY_PASSWORD" ] && [ -n "$ANDROID_KEY_ALIAS" ]; then
+        echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/app/release.jks
+        {
+          echo "storeFile=release.jks"
+          echo "storePassword=$ANDROID_STORE_PASSWORD"
+          echo "keyPassword=$ANDROID_KEY_PASSWORD"
+          echo "keyAlias=$ANDROID_KEY_ALIAS"
+        } > android/key.properties
+        echo "Signing with the project release key."
+      else
+        echo "WARNING: no ANDROID_* signing variables; this APK is debug-signed" \
+          "and will not install over one signed with the release key."
+      fi
+    # The pipeline's number is the build number, so every APK is newer than
+    # the one before it and the phone takes it as an update.
+    #
+    # GOOGLE_SERVER_CLIENT_ID (Settings → CI/CD → Variables, not masked — it
+    # is the Google Cloud **Web** OAuth client's public id, not a secret)
+    # turns on "Continue with Google". Unset, it builds empty and the
+    # button stays off — see lib/services/google_auth_service.dart.
+    - flutter build apk --release --build-number=$CI_PIPELINE_IID
+        --dart-define=GOOGLE_SERVER_CLIENT_ID="${GOOGLE_SERVER_CLIENT_ID:-245791582484-vjfe40uas7rs1sk0953tvri5gc26ds72.apps.googleusercontent.com}"
+    - ls -lh build/app/outputs/flutter-apk/
+  artifacts:
+    name: duggustore-${CI_COMMIT_SHORT_SHA}
+    paths:
+      - build/app/outputs/flutter-apk/app-release.apk
+    expire_in: 30 days
+  after_script:
+    - echo "Build completed. APK size:" && ls -lh build/app/outputs/flutter-apk/app-release.apk 2>/dev/null || echo "APK not found"

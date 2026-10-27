@@ -1,0 +1,17 @@
+# The app's strings, one file per language, in the repository from the start:
+# lifting 34,000 lines of English out of finished screens later is the
+# expensive way to do this. `flutter pub get` regenerates `AppLocalizations`
+# from these files (pubspec.yaml has `generate: true`), so adding a string is
+# a line in the .arb plus the place it is shown, and adding a language is
+# another `app_<code>.arb` beside `app_en.arb` — nothing else changes.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+# Generated into lib/l10n/ next to the .arb files, so screens import it as
+# `package:duggu/l10n/app_localizations.dart`. The old flutter_gen synthetic
+# package was removed from Flutter, so this path is the supported one now.
+output-dir: lib/l10n
+synthetic-package: false
+# `AppLocalizations.of(context)` hands back a value rather than a nullable
+# one, because the delegates are installed app-wide in main.dart.
+nullable-getter: false
