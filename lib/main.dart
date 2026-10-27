@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:duggu/l10n/app_localizations.dart';
+import 'package:duggu/diwali/diwali_config.dart';
+import 'package:duggu/diwali/diwali_home.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart_provider.dart';
@@ -169,6 +171,12 @@ class MyApp extends StatelessWidget {
               ),
             ),
           );
+        },
+        // The Diwali storefront is also a named route, so a deep link,
+        // notification or admin banner can open it directly. Inside the app
+        // it is reachable from the "Diwali" chip on Home.
+        routes: {
+          kDiwaliRoute: (_) => const DiwaliPage(),
         },
         home: const SplashScreen(),
       ),

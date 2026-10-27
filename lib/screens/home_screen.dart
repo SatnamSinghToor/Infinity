@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:duggu/l10n/app_localizations.dart';
+import 'package:duggu/diwali/diwali_home.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
@@ -115,6 +116,13 @@ class _HomeScreenState extends State<HomeScreen> {
   bool get _onFestivalTab =>
       context.read<ProductProvider>().selectedCategory ==
       FestivalSections.category;
+
+  /// The Diwali storefront is a full-bleed Home tab of its own. Selecting its
+  /// chip swaps the whole scrolling body for the festive page while keeping
+  /// the chip strip pinned, so "All" is always one tap away.
+  bool get _onDiwaliTab =>
+      context.read<ProductProvider>().selectedCategory == 'Diwali';
+
   bool get _dark => _night && !_onFestivalTab;
 
   /// The Home strip, minus the Festival chip outside its own window: a week
@@ -424,6 +432,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // top of the bottom bar.
     final pillRoom = cartProvider.itemCount > 0 ? 70.0 : 0.0;
 
+    if (_onDiwaliTab) return _buildDiwaliTab(context);
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       // Status bar glyphs follow the banner behind them; the three-key strip
       // below stays solid white on every light or dark headline.
@@ -535,6 +545,93 @@ class _HomeScreenState extends State<HomeScreen> {
               // above it too, the last row needs that much more room.
               child: SizedBox(
                 height: 96 + pillRoom + MediaQuery.of(context).padding.bottom,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// The Diwali tab: a pinned chip strip plus the full Flutter storefront.
+  ///
+  /// The strip is the same [CategoryIconTab] family as the normal Home
+  /// header, so switching between "All", "Diwali" and the other storefronts
+  /// feels like one continuous Home screen rather than a pushed page.
+  Widget _buildDiwaliTab(BuildContext context) {
+    final provider = context.read<ProductProvider>();
+    final chips = _visibleChips;
+    final l10n = AppLocalizations.of(context);
+    final padding = MediaQuery.paddingOf(context);
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarDividerColor: Colors.transparent,
+        systemNavigationBarContrastEnforced: false,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          children: [
+            SafeArea(
+              bottom: false,
+              child: _fixedText(
+                context,
+                Container(
+                  height: 84,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(color: Color(0xFFEEE9DC)),
+                    ),
+                  ),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    itemCount: chips.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == chips.length) {
+                        return CategoryIconTab(
+                          label: l10n.homeSeeAll,
+                          icon: LucideIcons300.layoutGrid,
+                          accent: const Color(0xFF6B7280),
+                          isSelected: false,
+                          onTap: () => MainShell.tab.value =
+                              MainShell.categories,
+                        );
+                      }
+                      final chip = chips[index];
+                      return CategoryIconTab(
+                        label: chip.name,
+                        icon: chip.icon,
+                        accent: chip.accent,
+                        isSelected: provider.selectedCategory == chip.name,
+                        onTap: () {
+                          provider.setBrand(null);
+                          provider.setCategory(chip.name);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              // The chip strip already consumed the status-bar inset; the
+              // storefront must not add it a second time.
+              child: MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  padding: padding.copyWith(top: 0),
+                ),
+                child: DiwaliHomePage(
+                  showBottomNav: false,
+                  onExit: () => provider.setCategory('All'),
+                ),
               ),
             ),
           ],

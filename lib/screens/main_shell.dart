@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../diwali/diwali_config.dart';
+import '../diwali/diwali_home.dart';
 import '../utils/constants.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/listing_common.dart';
@@ -80,7 +82,11 @@ class _MainShellState extends State<MainShell>
     _profile,
   ];
 
-  static Widget _home(BuildContext _) => const HomeScreen();
+  /// Flip `kDiwaliAsHome` in lib/diwali/diwali_config.dart to make the
+  /// festive storefront *be* the Home tab instead of a chip inside it.
+  static Widget _home(BuildContext _) => kDiwaliAsHome
+      ? DiwaliPage(onNavigate: (i) => MainShell.tab.value = i)
+      : const HomeScreen();
   static Widget _categories(BuildContext _) => const CategoriesScreen();
   static Widget _cart(BuildContext _) => const CartScreen();
   static Widget _profile(BuildContext _) => const ProfileScreen();
@@ -115,9 +121,12 @@ class _MainShellState extends State<MainShell>
           bottomNavigationBar: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (index == MainShell.home || index == MainShell.categories)
+              // The standalone Diwali page draws its own cart pill and bar.
+              if (!kDiwaliAsHome &&
+                  (index == MainShell.home || index == MainShell.categories))
                 const ViewCartPill(),
-              if (index != MainShell.cart)
+              if (index != MainShell.cart &&
+                  !(kDiwaliAsHome && index == MainShell.home))
                 BottomNavWidget(
                   currentIndex: index,
                   onTap: (i) => MainShell.tab.value = i,
