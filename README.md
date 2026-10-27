@@ -333,7 +333,7 @@ lib/
 ## Key Features
 
 ### Customer App
-- **Home Screen**: Dynamic chip strip (All, Festival, Electronics, Beauty, Pharmacy, Gifting, Decor, Kids, Imported), auto-sliding promo carousel, brand/store sections, festival sections
+- **Home Screen**: Dynamic chip strip (All, **Diwali**, Festival, Electronics, Beauty, Pharmacy, Gifting, Decor, Kids, Imported), auto-sliding promo carousel, brand/store sections, festival sections
 - **Search**: Text search, **voice search** (speech-to-text), **visual search** (ML Kit image labeling + OCR)
 - **Product Variants**: Multiple sizes/packs per product with individual pricing & stock
 - **Cart**: Persistent (Supabase), guest merge on login, coupon support, wallet apply, tip for delivery
@@ -343,6 +343,18 @@ lib/
 - **Wishlist**: Save products, add all to cart
 - **Notifications**: In-app inbox with archive/delete, realtime updates, push with loud channel for orders
 - **Multi-language**: Flutter gen-l10n, currently English (extensible)
+
+### Diwali Storefront (Home tab)
+
+A full festive storefront built with Flutter widgets and Dart — no HTML or
+WebView. Open it from the **Diwali** chip on Home or the `/diwali` named
+route. It has the dark fairy-light hero, six arch tiles, sticky light header,
+18 content sections, product carousels, editorial banners, gifting filters,
+cart/stepper, wishlist, live search, hover states, scroll reveals and three
+responsive layouts (phone / tablet / desktop). Everything is local assets and
+bundled fonts, so it works offline. See [`lib/diwali/README.md`](lib/diwali/README.md)
+for the architecture, integration switch and CI checks. The static design
+reference lives in [`festive-ui/`](festive-ui/README.md).
 
 ### Seller Dashboard
 - **Overview**: Stats cards (orders, products, balance, rating, sold out, low stock), 7-day sales chart, category distribution

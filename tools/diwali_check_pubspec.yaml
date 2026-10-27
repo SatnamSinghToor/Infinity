@@ -1,0 +1,39 @@
+# Pubspec for the throwaway package used by
+# .github/workflows/diwali-analyze.yml. It intentionally declares only
+# Flutter's own SDK packages: lib/diwali/ has no third-party imports, so the
+# analyzer can check it without resolving the host app's dependency graph.
+name: diwali_check
+description: Isolated static check for the Diwali storefront module.
+publish_to: none
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  assets:
+    - assets/diwali/
+    - assets/fonts/
+  fonts:
+    - family: DiwaliSerif
+      fonts:
+        - asset: assets/fonts/DiwaliSerif-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/DiwaliSerif-Italic.ttf
+          weight: 400
+          style: italic
+    - family: DiwaliDisplay
+      fonts:
+        - asset: assets/fonts/DiwaliDisplay-Regular.ttf
+          weight: 400
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400

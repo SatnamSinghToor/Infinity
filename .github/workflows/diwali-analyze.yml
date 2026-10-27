@@ -1,0 +1,160 @@
+# The main Flutter CI is pinned to Flutter 3.24 / Dart 3.5 while several app
+# dependencies (cloud_firestore, flutter_lints 6, …) now require newer SDKs,
+# so `flutter pub get` fails before the analyzer ever sees our code.
+#
+# lib/diwali/ deliberately imports only Flutter's own libraries. That lets us
+# copy the module into a tiny throwaway package and run a real `flutter
+# analyze` + `flutter test` against it on current stable Flutter, independent
+# of the host app's dependency graph. Nothing is installed into the repo.
+
+name: Diwali storefront check
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master, 'arena/*']
+    paths:
+      - 'lib/diwali/**'
+      - 'test/diwali_storefront_test.dart'
+      - 'assets/diwali/**'
+      - 'assets/fonts/Diwali*'
+      - 'tools/diwali_check_pubspec.yaml'
+      - '.github/workflows/diwali-analyze.yml'
+  pull_request:
+    paths:
+      - 'lib/diwali/**'
+      - 'test/diwali_storefront_test.dart'
+      - 'assets/diwali/**'
+      - 'assets/fonts/Diwali*'
+      - 'tools/diwali_check_pubspec.yaml'
+      - '.github/workflows/diwali-analyze.yml'
+
+jobs:
+  analyze-and-test:
+    name: Analyze and test the Flutter module
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Assemble an isolated package
+        shell: bash
+        run: |
+          set -euo pipefail
+          PKG="$RUNNER_TEMP/diwali_check"
+          mkdir -p "$PKG/lib/diwali" "$PKG/test" "$PKG/assets"
+          cp -R lib/diwali/. "$PKG/lib/diwali/"
+          cp -R assets/diwali "$PKG/assets/diwali"
+          cp -R assets/fonts "$PKG/assets/fonts"
+          cp tools/diwali_check_pubspec.yaml "$PKG/pubspec.yaml"
+          # The test imports package:duggu/...; in the isolated package the
+          # module is published under package:diwali_check/... instead.
+          sed 's|package:duggu/|package:diwali_check/|g' \
+            test/diwali_storefront_test.dart > "$PKG/test/diwali_storefront_test.dart"
+          echo "DIWALI_PKG=$PKG" >> "$GITHUB_ENV"
+          echo "Isolated package ready:"
+          find "$PKG" -maxdepth 2 -type d | sort
+
+      - name: Get dependencies
+        shell: bash
+        run: cd "$DIWALI_PKG" && flutter pub get
+
+      - name: Analyze
+        shell: bash
+        run: |
+          cd "$DIWALI_PKG"
+          # GitHub's bash shell runs with -e, so capture the analyzer's own
+          # non-zero exit instead of letting it abort before we publish the
+          # diagnostics as annotations.
+          flutter analyze --no-fatal-infos > analyze.txt 2>&1 || true
+          cat analyze.txt
+          # GitHub caps workflow-command annotations at ten per step, so pack
+          # every diagnostic into one message with escaped newlines.
+          python3 - <<'PY'
+          import re
+          text = open('analyze.txt', encoding='utf-8', errors='replace').read()
+          lines = [l.strip() for l in text.splitlines() if ' \u2022 ' in l]
+          problems = [l for l in lines if re.search(r'\b(error|warning) \u2022 ', l)]
+          infos = [l for l in lines if l.startswith('info \u2022 ')]
+          print('::notice::analyzer: %d problems, %d infos, %s' % (
+              len(problems), len(infos), (text.strip().splitlines() or [''])[-1]))
+          def esc(s):
+              return s.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          if problems:
+              print('::error::' + esc('\n'.join(problems)))
+          PY
+          if grep -qE '(error|warning) •' analyze.txt; then exit 1; fi
+
+      - name: Test
+        shell: bash
+        run: |
+          cd "$DIWALI_PKG"
+          STATUS=0
+          flutter test test/diwali_storefront_test.dart --reporter expanded > test.txt 2>&1 || STATUS=$?
+          cat test.txt
+          python3 - <<'PY'
+          import re
+          text = open('test.txt', encoding='utf-8', errors='replace').read()
+          lines = text.splitlines()
+          pattern = re.compile(
+              r'overflowed by|error-causing widget|file:///.*\.dart:\d+'
+              r'|\[E\]|Some tests failed|Failing tests|All tests passed'
+              r'|Timer is still pending|Failed assertion|EXCEPTION CAUGHT')
+          keep = [l.strip() for l in lines if pattern.search(l)]
+          def esc(s):
+              return s.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          print('::error::' + esc('\n'.join(keep[:110])))
+          print('::notice::' + esc('\n'.join(l.strip() for l in lines[-8:])))
+          PY
+          exit $STATUS
+
+  host-app-integration:
+    # Checks the four host-app files the storefront is wired into. This job
+    # is informational: the imported app has its own long-standing analyzer
+    # findings, so only errors touching our integration are fatal here.
+    name: Analyze the host-app wiring
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Get dependencies
+        shell: bash
+        run: flutter pub get
+
+      - name: Analyze integration
+        shell: bash
+        run: |
+          flutter analyze --no-fatal-infos > integration-analyze.txt 2>&1 || true
+          cat integration-analyze.txt
+          python3 - <<'PY'
+          import re
+          text = open('integration-analyze.txt', encoding='utf-8', errors='replace').read()
+          lines = [l.strip() for l in text.splitlines() if ' \u2022 ' in l]
+          errors = [l for l in lines if re.search(r'\berror \u2022 ', l)]
+          ours = ('lib/diwali/', 'lib/main.dart', 'lib/screens/home_screen.dart',
+                  'lib/screens/main_shell.dart', 'lib/providers/product_provider.dart')
+          relevant = [l for l in errors if any(p in l for p in ours)]
+          def esc(s):
+              return s.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          print('::notice::full-app analyzer: %d errors, %d of them in files touched by the Diwali work, %s' % (
+              len(errors), len(relevant), (text.strip().splitlines() or [''])[-1]))
+          if errors:
+              print('::error::' + esc('\n'.join(errors[:60])))
+          if relevant:
+              raise SystemExit(1)
+          PY

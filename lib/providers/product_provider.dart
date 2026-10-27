@@ -25,6 +25,10 @@ class HomeChip {
 const homeChips = [
   HomeChip('All', LucideIcons300.layoutGrid,
       accent: Color(0xFFF97316)),
+  // The full festive storefront lives on this Home tab. It is built with
+  // Flutter widgets in lib/diwali/ and needs no products from the backend.
+  HomeChip('Diwali', LucideIcons300.sparkles,
+      accent: Color(0xFFA80B4B)),
   HomeChip('Festival', LucideIcons300.sparkles,
       accent: Color(0xFF8B5CF6)),
   HomeChip('Electronics', LucideIcons300.smartphone,

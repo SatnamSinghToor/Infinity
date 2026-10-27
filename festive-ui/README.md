@@ -1,5 +1,11 @@
 # Diwali Storefront — Home & Diwali screens
 
+> **This folder is the static visual reference, not the app screen.** The
+> design that actually runs inside the Flutter app lives in
+> [`lib/diwali/`](../lib/diwali/README.md) — it is built from Flutter widgets
+> and Dart, reachable from the **Diwali** chip on Home and from `/diwali`.
+> This folder is kept as the design source and for the standalone preview.
+
 A pixel-faithful, production-style web recreation of the two attached mobile
 screens: the **festive Home screen** (deep-wine delivery header, fairy lights,
 "Get ready for Diwali" hero and six arch tiles) and the long **Diwali store
