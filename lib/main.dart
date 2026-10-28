@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:duggu/l10n/app_localizations.dart';
 import 'package:duggu/diwali/diwali_config.dart';
 import 'package:duggu/diwali/diwali_home.dart';
+import 'package:duggu/diwali_festive/festive.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart_provider.dart';
@@ -177,6 +178,9 @@ class MyApp extends StatelessWidget {
         // it is reachable from the "Diwali" chip on Home.
         routes: {
           kDiwaliRoute: (_) => const DiwaliPage(),
+          // The Blinkit-style festival home screen: push this route (or use
+          // the widget directly) to open it.
+          kDiwaliFestiveRoute: (_) => const DiwaliFestiveScreen(),
         },
         home: const SplashScreen(),
       ),

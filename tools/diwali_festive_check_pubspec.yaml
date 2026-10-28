@@ -1,0 +1,42 @@
+# Pubspec for the throwaway package used by
+# .github/workflows/diwali-festive-analyze.yml.
+#
+# lib/diwali_festive/ imports only Flutter's own libraries, so the module can
+# be analysed and tested on current stable Flutter without resolving the host
+# app's dependency graph (which needs a newer Dart SDK than the repo's main CI
+# pins).
+name: diwali_festive_check
+description: Isolated static check for the Diwali festival home screen.
+publish_to: none
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  assets:
+    - assets/diwali/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins-ExtraBold.ttf
+          weight: 800
+    - family: PlayfairDisplay
+      fonts:
+        - asset: assets/fonts/PlayfairDisplay-Bold.ttf
+          weight: 700
